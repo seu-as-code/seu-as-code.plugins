@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2015 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@ package de.qaware.seu.as.code.plugins.credentials.impl;
 
 /**
  * Encrypts and decrypts data.
+ *
+ * @author phxql
  */
 public interface Encryptor {
     /**

@@ -28,7 +28,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * A test spec for the JDBC H2 datastore provider.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class JdbcH2DatastoreProviderSpec extends Specification {
 

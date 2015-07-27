@@ -24,7 +24,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Test specification for the SeuacExtension. Especially for all the magic closures.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacExtensionSpec extends Specification {
     SeuacExtension extension

@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2015 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,8 @@ import java.io.IOException;
 
 /**
  * Get and set credentials.
+ *
+ * @author phxql
  */
 public interface Credentials {
     /**

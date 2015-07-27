@@ -22,7 +22,7 @@ import org.gradle.api.file.FileTree
  * The base class for different SEU as Code data store providers. The providers
  * are responsible to persist and query the SEU configuration.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 abstract class DatastoreProvider {
     final String url

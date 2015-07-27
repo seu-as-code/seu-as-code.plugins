@@ -23,7 +23,7 @@ import org.gradle.api.Project
  * The SEU as Code subversion plugin. Registers the subversion extension and creates checkout and
  * update tasks for all defined repos.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SvnPlugin implements Plugin<Project> {
 

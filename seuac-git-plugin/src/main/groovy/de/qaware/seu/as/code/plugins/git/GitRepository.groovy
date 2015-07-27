@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.git
 /**
  * The GitRepository class is the value holder object for named Git domain objects.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitRepository {
     final String name

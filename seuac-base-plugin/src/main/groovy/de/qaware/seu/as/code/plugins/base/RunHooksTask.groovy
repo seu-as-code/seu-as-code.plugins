@@ -25,7 +25,7 @@ import org.gradle.api.tasks.TaskAction
  * This task will run all provided hooks that might be available after
  * installing software packages.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class RunHooksTask extends DefaultTask {
     @Input

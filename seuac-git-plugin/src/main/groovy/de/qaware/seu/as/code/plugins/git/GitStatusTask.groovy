@@ -23,7 +23,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  * The task implementation to perform a Git status operation.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitStatusTask extends AbstractGitTask {
 

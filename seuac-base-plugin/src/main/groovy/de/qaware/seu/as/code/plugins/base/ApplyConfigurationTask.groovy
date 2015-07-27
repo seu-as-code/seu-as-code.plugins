@@ -25,7 +25,7 @@ import org.gradle.api.tasks.TaskAction
  * The main task to apply a software configuration it a SEU. This includes installing new
  * and removing old software.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class ApplyConfigurationTask extends DefaultTask {
 

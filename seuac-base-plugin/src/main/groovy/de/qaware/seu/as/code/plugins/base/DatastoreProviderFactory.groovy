@@ -20,7 +20,7 @@ import org.gradle.api.GradleException
 /**
  * The factory singleton to get PersistenceService instances for a given SeuacDatastore configuration.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 @Singleton
 class DatastoreProviderFactory {

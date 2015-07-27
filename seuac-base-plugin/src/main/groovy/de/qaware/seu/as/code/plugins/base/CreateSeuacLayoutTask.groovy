@@ -23,7 +23,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  * A simple tasks to create the SEU as Code directory layout.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class CreateSeuacLayoutTask extends DefaultTask {
 

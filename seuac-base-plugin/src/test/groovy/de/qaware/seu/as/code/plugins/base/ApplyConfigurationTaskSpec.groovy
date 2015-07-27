@@ -24,7 +24,7 @@ import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
 /**
  * Test specification for the ApplyConfigurationTask functionality.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class ApplyConfigurationTaskSpec extends Specification {
 

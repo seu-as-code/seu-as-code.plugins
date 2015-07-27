@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2015 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,8 @@ import java.io.InputStreamReader;
  * Invoke with 'gradle setCredentials --key [Name of the key]'
  * <p/>
  * The task will query the user on the console to input the value of the credentials.
+ *
+ * @author phxql
  */
 public class SetCredentialsTask extends DefaultTask {
     /**

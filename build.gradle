@@ -17,6 +17,10 @@ subprojects {
 
     license {
         includes(["**/*.java", "**/*.groovy"])
+        mapping {
+            java = 'SLASHSTAR_STYLE'
+            groovy = 'SLASHSTAR_STYLE'
+        }
     }
 
     sourceCompatibility = 1.6

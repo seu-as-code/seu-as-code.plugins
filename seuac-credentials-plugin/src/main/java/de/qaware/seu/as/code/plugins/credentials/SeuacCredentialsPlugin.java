@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2015 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,8 @@ import java.io.IOException;
  * SEU as Code Credentials plugin.
  * <p/>
  * Provides the 'credentials' object to get credentials and the 'setCredentials' task to set credentials.
+ *
+ * @author phxql
  */
 public class SeuacCredentialsPlugin implements Plugin<Project> {
     /**

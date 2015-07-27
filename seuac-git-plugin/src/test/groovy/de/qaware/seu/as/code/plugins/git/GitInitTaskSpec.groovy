@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Basic test specification for the GitInitTask.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitInitTaskSpec extends Specification {
     static final String TEST_GIT_INIT = 'testGitInit'

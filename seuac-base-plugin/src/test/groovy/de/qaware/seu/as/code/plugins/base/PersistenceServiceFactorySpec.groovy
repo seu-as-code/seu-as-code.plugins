@@ -26,7 +26,7 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * Test specification for the PersistenceServiceFactory.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class PersistenceServiceFactorySpec extends Specification {
     SeuacDatastore datastore

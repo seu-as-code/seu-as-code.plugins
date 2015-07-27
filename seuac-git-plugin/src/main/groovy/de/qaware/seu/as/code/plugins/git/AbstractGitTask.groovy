@@ -24,7 +24,7 @@ import org.gradle.api.tasks.OutputDirectory
 /**
  * Base class for all concrete Git tasks.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 abstract class AbstractGitTask extends DefaultTask {
 

@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Basic test specification for the GitStatusTask.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitStatusTaskSpec extends Specification {
     static final String TEST_GIT_STATUS = 'testGitStatus'

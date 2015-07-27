@@ -26,7 +26,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Test specification to check the basic SvnUpdateTask behaviour.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SvnUpdateTaskSpec extends Specification {
     static final String TEST_SVN_UPDATE = 'testSvnUpdate'

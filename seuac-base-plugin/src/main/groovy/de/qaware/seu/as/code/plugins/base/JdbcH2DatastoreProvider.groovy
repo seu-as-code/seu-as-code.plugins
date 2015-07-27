@@ -22,7 +22,7 @@ import org.gradle.api.file.FileTree
 /**
  * This data store provider uses SQL and an embedded H2 DB to persist the SEU configuration.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class JdbcH2DatastoreProvider extends DatastoreProvider {
 

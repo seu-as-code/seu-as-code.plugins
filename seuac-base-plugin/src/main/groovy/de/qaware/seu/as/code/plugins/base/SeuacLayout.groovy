@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.base
 /**
  * Simple data type to represent the directory layout of a SEU.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacLayout {
     File codebase

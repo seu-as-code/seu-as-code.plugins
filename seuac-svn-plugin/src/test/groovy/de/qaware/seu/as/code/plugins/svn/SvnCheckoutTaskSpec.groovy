@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Test specification to check the basic SvnCheckoutTask behaviour.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SvnCheckoutTaskSpec extends Specification {
     static final String TEST_SVN_CHECKOUT = 'testSvnCheckout'

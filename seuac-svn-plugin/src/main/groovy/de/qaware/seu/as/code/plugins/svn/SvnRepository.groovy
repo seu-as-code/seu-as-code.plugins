@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.svn
 /**
  * The SvnRepository class is the value holder object for named SVN domain objects.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SvnRepository {
     final String name

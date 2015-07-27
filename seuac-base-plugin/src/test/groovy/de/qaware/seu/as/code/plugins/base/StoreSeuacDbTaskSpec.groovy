@@ -24,7 +24,7 @@ import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
 /**
  * Test specification for the StoreSeuacDbTask.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class StoreSeuacDbTaskSpec extends Specification {
 

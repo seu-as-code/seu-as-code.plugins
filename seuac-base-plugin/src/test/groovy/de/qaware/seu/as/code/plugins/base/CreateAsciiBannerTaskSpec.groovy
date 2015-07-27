@@ -24,7 +24,7 @@ import static de.qaware.seu.as.code.plugins.base.SeuacBanner.defaultBanner
 /**
  * Test specification for the CreateAsciiBannerTask functionality.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class CreateAsciiBannerTaskSpec extends Specification {
 

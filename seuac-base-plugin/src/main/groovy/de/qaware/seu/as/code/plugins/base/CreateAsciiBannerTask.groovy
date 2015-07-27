@@ -26,7 +26,7 @@ import static groovyx.net.http.ContentType.HTML
 /**
  * This tasks creates an ASCII art banner and saves it to a file.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class CreateAsciiBannerTask extends DefaultTask {
 

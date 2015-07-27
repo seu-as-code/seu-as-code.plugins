@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * Basic test specification for the CreateSeuacLayoutTask.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class CreateSeuacLayoutTaskSpec extends Specification {
     static final String TEST_CREATE_SEUAC_LAYOUT = 'testCreateSeuacLayout'

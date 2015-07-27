@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.base
 /**
  * Simple data type to represent the ASCII art banner configuration.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacBanner {
     String font = 'slant'

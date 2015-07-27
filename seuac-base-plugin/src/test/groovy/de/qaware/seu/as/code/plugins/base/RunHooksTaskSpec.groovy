@@ -22,7 +22,7 @@ import spock.lang.Specification
 /**
  * Test specification to check correct execution of hooks.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class RunHooksTaskSpec extends Specification {
     Project project

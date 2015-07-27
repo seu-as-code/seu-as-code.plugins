@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Basic test specification for the GitCommitTask.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitCommitTaskSpec extends Specification {
     static final String TEST_GIT_COMMIT = 'testGitCommit'

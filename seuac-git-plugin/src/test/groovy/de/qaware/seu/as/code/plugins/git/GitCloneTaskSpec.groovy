@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Basic test specification for the GitCloneTask.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitCloneTaskSpec extends Specification {
     static final String TEST_GIT_CLONE = 'testGitClone'

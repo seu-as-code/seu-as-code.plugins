@@ -29,7 +29,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil
 /**
  * Base class for all concrete SVN tasks.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 abstract class AbstractSvnTask extends DefaultTask {
 

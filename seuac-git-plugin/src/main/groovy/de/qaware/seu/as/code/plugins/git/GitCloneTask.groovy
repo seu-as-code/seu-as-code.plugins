@@ -24,7 +24,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  * The task implementation to perform a Git clone.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitCloneTask extends AbstractGitTask {
     @Input

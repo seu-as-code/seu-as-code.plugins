@@ -26,7 +26,7 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * The test specification for the GitPlugin behaviour.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitPluginSpec extends Specification {
     Project project

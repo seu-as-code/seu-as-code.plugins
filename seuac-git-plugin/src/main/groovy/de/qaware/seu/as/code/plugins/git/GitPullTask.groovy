@@ -24,7 +24,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  * The task implementation to perform a Git pull operation.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitPullTask extends AbstractGitTask {
 

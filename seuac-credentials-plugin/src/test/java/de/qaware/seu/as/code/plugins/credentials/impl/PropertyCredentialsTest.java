@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2015 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Basic unit test for the PropertyCredentials.
+ *
+ * @author phxql
+ */
 public class PropertyCredentialsTest {
     private File file;
 

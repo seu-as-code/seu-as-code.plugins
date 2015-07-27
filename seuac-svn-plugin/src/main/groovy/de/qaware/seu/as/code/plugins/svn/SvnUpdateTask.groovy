@@ -22,7 +22,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision
 /**
  * The task implementation class to update a given SVN repository.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SvnUpdateTask extends AbstractSvnTask {
     @TaskAction

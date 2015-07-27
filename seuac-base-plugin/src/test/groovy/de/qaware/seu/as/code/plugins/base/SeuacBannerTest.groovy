@@ -25,7 +25,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Simple unit test for the SeuacBanner.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacBannerTest extends Specification {
     SeuacBanner banner

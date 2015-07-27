@@ -25,7 +25,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Test specification for the SeuacDatastore conventation.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacDatastoreSpec extends Specification {
     SeuacDatastore datastore

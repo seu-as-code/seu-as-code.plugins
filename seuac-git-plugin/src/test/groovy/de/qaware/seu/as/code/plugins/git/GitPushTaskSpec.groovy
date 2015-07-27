@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Basic test specification for the GitPushTask.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitPushTaskSpec extends Specification {
     static final String TEST_GIT_PUSH = 'testGitPush'

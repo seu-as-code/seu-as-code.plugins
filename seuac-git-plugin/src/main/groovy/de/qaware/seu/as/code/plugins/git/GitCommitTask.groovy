@@ -22,7 +22,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  * The task implementation to perform a Git commit.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitCommitTask extends AbstractGitTask {
 

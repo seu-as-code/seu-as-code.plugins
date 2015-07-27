@@ -27,7 +27,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * The test specification for the MapDbDatastoreProvider.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class MapDbDatastoreProviderSpec extends Specification {
 

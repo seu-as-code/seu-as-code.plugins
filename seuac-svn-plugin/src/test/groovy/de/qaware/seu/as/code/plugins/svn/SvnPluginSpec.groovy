@@ -25,7 +25,7 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * The test specification for the SvnPlugin behaviour.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SvnPluginSpec extends Specification {
     Project project

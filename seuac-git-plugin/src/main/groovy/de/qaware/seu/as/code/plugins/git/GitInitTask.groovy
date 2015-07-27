@@ -22,7 +22,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  * The task implementation to perform a Git init.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class GitInitTask extends AbstractGitTask {
     @TaskAction

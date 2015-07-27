@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2015 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,23 +27,15 @@ import java.util.Properties;
 
 /**
  * Stores the credentials in a property file.
+ *
+ * @author phxql
  */
 public class PropertyCredentials implements Credentials {
-    /**
-     * UTF-8 charset.
-     */
+
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    /**
-     * Properties.
-     */
+
     private final Properties properties;
-    /**
-     * Properties file.
-     */
     private final File credentialsFile;
-    /**
-     * Encryptor.
-     */
     private final Encryptor encryptor;
 
     /**

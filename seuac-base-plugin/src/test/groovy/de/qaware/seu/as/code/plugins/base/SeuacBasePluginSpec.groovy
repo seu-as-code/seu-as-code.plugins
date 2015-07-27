@@ -26,7 +26,7 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * Test specification for the SeuacBasePlugin.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacBasePluginSpec extends Specification {
 

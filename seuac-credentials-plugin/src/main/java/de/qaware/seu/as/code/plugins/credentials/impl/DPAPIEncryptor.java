@@ -1,4 +1,4 @@
-/**
+/*
  *    Copyright 2015 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,8 @@ import com.sun.jna.platform.win32.Crypt32Util;
 
 /**
  * Uses DPAPI to encrypt/decrypt data.
+ *
+ * @author phxql
  */
 public class DPAPIEncryptor implements Encryptor {
     @Override

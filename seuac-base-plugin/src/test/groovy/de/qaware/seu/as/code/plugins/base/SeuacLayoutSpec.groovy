@@ -26,7 +26,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * Test specification for SeuacLayout class.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacLayoutSpec extends Specification {
     File seuHome

@@ -22,7 +22,7 @@ import org.gradle.api.Task
 /**
  * The SEU as Code base plugin takes care of creating and updating an SEU installation.
  *
- * @author mario-leander.reimer
+ * @author lreimer
  */
 class SeuacBasePlugin implements Plugin<Project> {
     /**
