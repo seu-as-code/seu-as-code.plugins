@@ -1,0 +1,9 @@
+apply plugin: 'maven'
+
+dependencies {
+    compile 'net.java.dev.jna:jna:4.1.0'
+    compile 'net.java.dev.jna:jna-platform:4.1.0'
+    compile 'commons-codec:commons-codec:1.10'
+
+    testCompile 'org.mockito:mockito-all:1.10.19'
+}
