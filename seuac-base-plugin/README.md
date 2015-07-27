@@ -110,3 +110,11 @@ seuAsCode {
     }
 }
 ```
+
+## Maintainer
+
+M.-Leander Reimer (@lreimer), <mario-leander.reimer@qaware.de>
+
+## License
+
+This software is provided under the Apache License, Version 2.0 license. See the `LICENSE` file for details.
