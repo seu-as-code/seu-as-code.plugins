@@ -1,6 +1,6 @@
 # SEU as Code Base Plugin
 
-The Gradle plugin to create SEU installations from code. Provides basic tasks to bootstrap and update the SEU and to
+A Gradle plugin to create SEU installations from code. Provides basic tasks to bootstrap and update the SEU and to
 install and update the software packages. The SEU can be configured and customized using the `seuAsCode` extension.
 
 ## Usage
@@ -20,7 +20,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu:seuac-base-plugin:1.1.0'
+        classpath 'de.qaware.seu:seuac-base-plugin:2.1.0'
     }
 }
 

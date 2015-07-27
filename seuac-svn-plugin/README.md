@@ -20,7 +20,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu:seuac-svn-plugin:1.1.2'
+        classpath 'de.qaware.seu:seuac-svn-plugin:2.1.2'
 		classpath 'org.tmatesoft.svnkit:svnkit:1.8.5'
     }
 }
