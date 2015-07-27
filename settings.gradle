@@ -1,2 +1,3 @@
 include 'seuac-base-plugin'
 include 'seuac-svn-plugin'
+include 'seuac-git-plugin'

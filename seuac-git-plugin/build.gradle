@@ -1,0 +1,5 @@
+dependencies {
+    compile 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r'
+    compile 'org.eclipse.jgit:org.eclipse.jgit.ant:3.4.1.201406201815-r'
+    compile 'com.jcraft:jsch:0.1.51'
+}
