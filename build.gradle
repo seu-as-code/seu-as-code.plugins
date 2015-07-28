@@ -1,8 +1,11 @@
 plugins {
 	id "com.github.hierynomus.license" version "0.11.0"
+    id "com.jfrog.bintray" version "1.2"
 }
 
 allprojects {
+    group = 'de.qaware.seu.as.code'
+
     repositories {
         mavenCentral()
 		jcenter()
@@ -14,6 +17,8 @@ subprojects {
     apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'com.github.hierynomus.license'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
 
     license {
         includes(["**/*.java", "**/*.groovy"])
@@ -43,6 +48,28 @@ subprojects {
 			html.enabled = true
 		}
 	}
+
+    // This disables the pedantic doclint feature of JDK8
+    if (JavaVersion.current().isJava8Compatible()) {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
 }
 
 task wrapper(type: Wrapper) {

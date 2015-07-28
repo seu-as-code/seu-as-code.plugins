@@ -3,3 +3,88 @@ dependencies {
     compile 'org.eclipse.jgit:org.eclipse.jgit.ant:3.4.1.201406201815-r'
     compile 'com.jcraft:jsch:0.1.51'
 }
+
+def pomConfig = {
+    name project.name
+    description project.description
+    url project.websiteUrl
+    inceptionYear '2015'
+
+    scm {
+        connection "scm:git:${project.scmUrl}"
+        developerConnection "scm:git:${project.scmUrl}"
+        url project.websiteUrl
+    }
+
+    issueManagement {
+        system 'GitHub'
+        url project.issueTrackerUrl
+    }
+
+    licenses {
+        license([:]) {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+        }
+    }
+
+    organisation {
+        name 'QAware GmbH'
+        url 'https://www.qaware.de'
+    }
+
+    developers {
+        developer {
+            id 'lreimer'
+            name 'Mario-Leander Reimer'
+            email 'mario-leander.reimer@qaware.de'
+            organization 'QAware GmbH'
+            roles { role 'Developer' }
+        }
+    }
+}
+
+publishing {
+    publications {
+        gitPlugin(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                asNode().children().last() + pomConfig
+            }
+        }
+    }
+}
+
+// 'bintrayUsername' and 'bintrayApiKey' must defined in the ~/.gradle/gradle.properties
+// or on the command line via -P options
+if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = 'unknown'
+if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = 'unknown'
+
+bintray {
+    user = project.bintrayUsername
+    key = project.bintrayApiKey
+    publications = ['gitPlugin']
+    pkg {
+        repo = project.bintrayRepo
+        name = project.name
+        desc = project.description
+        licenses = ['Apache-2.0']
+        labels = ['gradle', 'plugin', 'git', 'scm', 'seu-as-code']
+        websiteUrl = project.websiteUrl
+        issueTrackerUrl = project.issueTrackerUrl
+        vcsUrl = project.scmUrl
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+            released = new Date()
+            vcsTag = project.version
+            attributes = [
+                    'gradle-plugin': ['de.qaware.seu.as.code.git', project.group, project.name].join(':')
+            ]
+        }
+    }
+}
