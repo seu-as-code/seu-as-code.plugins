@@ -42,10 +42,10 @@ class SeuacLayoutSpec extends Specification {
     }
 
     def "Mkdirs for default SEU layout"() {
-        when:
+        when: "we make all SEU layout directories"
         layout.mkdirs()
 
-        then:
+        then: "we epxect all directories to exist"
         notThrown(IOException)
         expect layout.codebase.exists(), is(true)
         expect layout.docbase.exists(), is(true)
@@ -56,7 +56,7 @@ class SeuacLayoutSpec extends Specification {
     }
 
     def "Check the default SEU layout"() {
-        expect:
+        expect: "the default values to be set"
         that layout, notNullValue()
         that layout.codebase, notNullValue()
         that layout.docbase, notNullValue()

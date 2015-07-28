@@ -35,65 +35,70 @@ class SeuacBannerTest extends Specification {
     }
 
     def "Setting Font with setter and convenience mathod"() {
-        when:
+        when: "we set the font to Arial"
         banner.font = 'Arial'
-        then:
+        then: "the font is Arial"
         expect banner.font, equalTo('Arial')
-        when:
+
+        when: "we set the font to Times"
         banner.font 'Times'
-        then:
+        then: "the font is Times"
         expect banner.font, equalTo('Times')
     }
 
     def "Setting Reflection with setter and convenience method"() {
-        when:
+        when: "we set the reflection to yes"
         banner.reflection = 'yes'
-        then:
+        then: "the reflection is yes"
         expect banner.reflection, equalTo('yes')
-        when:
+
+        when: "we set the reflection to no"
         banner.reflection 'no'
-        then:
+        then: "the reflections is no"
         expect banner.reflection, equalTo('no')
     }
 
     def "Setting Adjustment with setter and convenience method"() {
-        when:
+        when: "we set the adjustment to left"
         banner.adjustment = 'left'
-        then:
+        then: "the adjustment is left"
         expect banner.adjustment, equalTo('left')
-        when:
+
+        when: "we set the adjustment to right"
         banner.adjustment 'right'
-        then:
+        then: "the adjustment is right"
         expect banner.adjustment, equalTo('right')
     }
 
     def "Setting Stretch with setter and convenience method"() {
-        when:
+        when: "we set the stretch to no"
         banner.stretch = 'no'
-        then:
+        then: "the stretch is no"
         expect banner.stretch, equalTo('no')
-        when:
+
+        when: "we set the stretch to yes"
         banner.stretch 'yes'
-        then:
+        then: "the stretch is yes"
         expect banner.stretch, equalTo('yes')
     }
 
     def "Setting Width with setter and convenience method"() {
-        when:
+        when: "we set the width to 123"
         banner.width = 123
-        then:
+        then: "the width is 123"
         expect banner.width, equalTo(123)
-        when:
+
+        when: "we set the width to 235"
         banner.width 235
-        then:
+        then: "the width is 235"
         expect banner.width, equalTo(235)
     }
 
     def "Check Default banner creation and settings"() {
-        given:
+        given: "a default banner instance"
         banner = SeuacBanner.defaultBanner()
 
-        expect:
+        expect: "the default values to be set"
         that banner, notNullValue()
         that banner.width, equalTo(80)
         that banner.font, equalTo('slant')

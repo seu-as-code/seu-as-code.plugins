@@ -35,10 +35,10 @@ class SeuacDatastoreSpec extends Specification {
     }
 
     def "Validate default datastore"() {
-        given:
+        given: "a default data store"
         datastore = SeuacDatastore.defaultDatastore()
 
-        expect:
+        expect: "the default values"
         that datastore, notNullValue()
         that datastore.url, equalTo('jdbc:h2:seuac')
         that datastore.user, equalTo('sa')
@@ -46,24 +46,24 @@ class SeuacDatastoreSpec extends Specification {
     }
 
     def "Basic property setter assignment"() {
-        when:
+        when: "we initialize the data store using setters"
         datastore.url = 'url'
         datastore.user = 'user'
         datastore.password = 'password'
 
-        then:
+        then: "we expect the correct values"
         expect datastore.url, equalTo('url')
         expect datastore.user, equalTo('user')
         expect datastore.password, equalTo('password')
     }
 
     def "Basic property method assignment"() {
-        when:
+        when: "we initialize the data store using methods"
         datastore.url 'url'
         datastore.user 'user'
         datastore.password 'password'
 
-        then:
+        then: "we expect the correct values"
         expect datastore.url, equalTo('url')
         expect datastore.user, equalTo('user')
         expect datastore.password, equalTo('password')

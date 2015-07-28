@@ -50,15 +50,15 @@ class StoreSeuacDbTaskSpec extends Specification {
     }
 
     def "Define StoreSeuacDbTask and storeSeuacDb"() {
-        given:
+        given: "a configured StoreSeuacDbTask"
         StoreSeuacDbTask task = project.task("storeSeuacDb", type: StoreSeuacDbTask) {
             datastore = defaultDatastore
         }
 
-        when:
+        when: "we store the DB"
         task.storeSeuacDb()
 
-        then:
+        then: "the DB should contain all files for all configurations"
         notThrown(Exception)
         findAllFiles('software').size() == 3
         findAllFiles('home').size() == 3

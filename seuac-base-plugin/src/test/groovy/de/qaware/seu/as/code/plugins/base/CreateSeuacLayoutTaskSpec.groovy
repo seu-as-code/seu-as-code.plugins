@@ -31,6 +31,7 @@ import static spock.util.matcher.HamcrestSupport.expect
  */
 class CreateSeuacLayoutTaskSpec extends Specification {
     static final String TEST_CREATE_SEUAC_LAYOUT = 'testCreateSeuacLayout'
+
     Project project
     File seuHome
     SeuacLayout testLayout
@@ -42,16 +43,16 @@ class CreateSeuacLayoutTaskSpec extends Specification {
     }
 
     def "Define CreateSeuacLayoutTask and mkdirs"() {
-        given:
+        given: "a configured CreateSeuacLayoutTask"
         CreateSeuacLayoutTask task = project.task(TEST_CREATE_SEUAC_LAYOUT, type: CreateSeuacLayoutTask) {
             layout = testLayout
             directories = testLayout.directories
         }
 
-        when:
+        when: "we create the layout directories"
         task.mkdirs()
 
-        then:
+        then: "we expect all directories to exist"
         notThrown(IOException)
         expect project.tasks.testCreateSeuacLayout, notNullValue()
 

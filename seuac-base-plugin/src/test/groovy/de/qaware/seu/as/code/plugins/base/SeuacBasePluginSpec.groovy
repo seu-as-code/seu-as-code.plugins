@@ -45,7 +45,7 @@ class SeuacBasePluginSpec extends Specification {
     }
 
     def "Apply SeuacBasePlugin and check tasks"() {
-        setup:
+        setup: "the plugin, apply it and configure the convention"
         project.apply plugin: 'seuac-base'
 
         project.dependencies.add('seuac', ':h2:1.3.176')
@@ -57,10 +57,10 @@ class SeuacBasePluginSpec extends Specification {
             layout = defaultLayout
         }
 
-        when:
+        when: "we evaluate the project"
         project.evaluate()
 
-        then:
+        then: "the extentions and all tasks are registered"
         expect project.extensions.findByName(SeuacBasePlugin.EXTENSION_NAME), notNullValue()
         expect project.tasks.bootstrapSeu, notNullValue()
         expect project.tasks.updateSeu, notNullValue()

@@ -55,68 +55,68 @@ class JdbcH2DatastoreProviderSpec extends Specification {
     }
 
     def "Check for correct dependencyId"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-base'
         dependency.version >> '1.0.0'
 
-        expect:
+        expect: "the correct dependency ID to be returned"
         that provider.getDependencyId(dependency), equalTo('de.qaware.seu:seuac-base:1.0.0')
     }
 
     def "Store software dependency"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-test'
         dependency.version >> '1.0.0'
         def ids = [provider.getDependencyId(dependency)]
 
-        when:
+        when: "we store the software dependency"
         provider.storeDependency(dependency, [project.zipTree(testFile)], 'software')
 
-        then:
+        then: "we expect to find 3 files for the ID"
         expect provider.findAllFiles(ids as Set<String>, 'software'), hasSize(3)
     }
 
     def "Find all files for IDs"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-base'
         dependency.version >> '1.0.0'
         def ids = [provider.getDependencyId(dependency)]
 
-        when:
+        when: "we find alle file for the given software IDs"
         Set<String> files = provider.findAllFiles(ids as Set<String>, 'software')
 
-        then:
+        then: "we expect the correct files for the dependency"
         expect files, hasSize(1)
         expect files, hasItem('set-env.cmd')
     }
 
     def "Find all obsolete dependencies"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-test'
         dependency.version >> '1.0.0'
 
-        when:
+        when: "we find all obsolete dependencies"
         Set<String> deps = provider.findAllObsoleteDeps([dependency] as Set<Dependency>, 'software')
 
-        then:
+        then: "we expect the old seuac-base version to be found"
         expect deps, hasSize(1)
         expect deps, hasItem('de.qaware.seu:seuac-base:1.0.0')
     }
 
     def "Find all incoming dependencies"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-test'
         dependency.version >> '1.0.0'
 
-        when:
+        when: "we find all incoming dependencies"
         Set<Dependency> deps = provider.findAllIncomingDeps([dependency] as Set<Dependency>, 'software')
 
-        then:
+        then: "we expect the mock dependency to be found"
         expect deps, hasSize(1)
         expect deps, hasItem(dependency)
     }

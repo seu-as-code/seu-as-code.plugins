@@ -37,17 +37,17 @@ class CreateAsciiBannerTaskSpec extends Specification {
     }
 
     def "Define CreateAsciiBannerTask and doCreateAsciiBanner"() {
-        given:
+        given: "a configured CreateAsciiBannerTask"
         CreateAsciiBannerTask task = project.task("createAsciiBanner", type: CreateAsciiBannerTask) {
             projectName = 'SEU-as-Code'
             bannerFile = new File(seuHome, CreateAsciiBannerTask.DEFAULT_FILENAME)
             settings = defaultBanner()
         }
 
-        when:
+        when: "we create the ASCII banner"
         task.doCreateAsciiBanner()
 
-        then:
+        then: "we expect the banner file to exist with the correct content"
         notThrown(Exception)
         fileExists()
         fileEndsWith('QAware GmbH')

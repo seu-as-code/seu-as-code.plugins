@@ -54,7 +54,7 @@ class ApplyConfigurationTaskSpec extends Specification {
     }
 
     def "Define ApplyConfigurationTask and doApply"() {
-        given:
+        given: "a configured ApplyConfigurationTask"
         ApplyConfigurationTask task = project.task("applySoftware", type: ApplyConfigurationTask) {
             source = project.configurations.software
             target = seuHome
@@ -62,10 +62,10 @@ class ApplyConfigurationTaskSpec extends Specification {
             withEmptyDirs = false
         }
 
-        when:
+        when: "we apply the software configuration"
         task.doApply()
 
-        then:
+        then: "we expect that the following files exist"
         notThrown(Exception)
         fileExists('ascii-art.txt')
         fileExists('set-env.cmd')

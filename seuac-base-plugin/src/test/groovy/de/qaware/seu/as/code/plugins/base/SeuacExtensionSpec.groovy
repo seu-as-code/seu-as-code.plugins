@@ -34,7 +34,7 @@ class SeuacExtensionSpec extends Specification {
     }
 
     def "Default extension initialization"() {
-        expect:
+        expect: "that the default values are OK"
         that extension.seuHome, equalTo('S:')
         that extension.projectName, equalTo('Spock SEU')
         that extension.layout, notNullValue()
@@ -49,13 +49,13 @@ class SeuacExtensionSpec extends Specification {
     }
 
     def "Initialize extension by setter"() {
-        when:
+        when: "we initialize the extension manually via setters"
         extension.seuHome = 'S:'
         extension.projectName = 'By method name'
         extension.layout = new SeuacLayout()
         extension.datastore = new SeuacDatastore()
 
-        then:
+        then: "we expect the correct extension values"
         that extension.seuHome, equalTo('S:')
         that extension.projectName, equalTo('By method name')
         that extension.layout, notNullValue()
@@ -64,13 +64,13 @@ class SeuacExtensionSpec extends Specification {
     }
 
     def "Initialize extension by method"() {
-        when:
+        when: "we initialize the extension manually via method"
         extension.seuHome 'S:'
         extension.projectName 'By method name'
         extension.layout new SeuacLayout()
         extension.datastore new SeuacDatastore()
 
-        then:
+        then: "we expect the correct extension values"
         that extension.seuHome, equalTo('S:')
         that extension.projectName, equalTo('By method name')
         that extension.layout, notNullValue()
@@ -78,7 +78,7 @@ class SeuacExtensionSpec extends Specification {
     }
 
     def "Initialize layout with closure"() {
-        when:
+        when: "we initialize the extension layout via closure"
         extension.layout {
             codebase new File("codebase")
             docbase new File("docbase")
@@ -88,7 +88,7 @@ class SeuacExtensionSpec extends Specification {
             temp new File("temp")
         }
 
-        then:
+        then: "all values should be set correctly"
         expect extension.layout, notNullValue()
         expect extension.layout.codebase, notNullValue()
         expect extension.layout.docbase, notNullValue()
@@ -99,14 +99,14 @@ class SeuacExtensionSpec extends Specification {
     }
 
     def "Initialize datastore with closure"() {
-        when:
+        when: "we initialize the extension datastore via closure"
         extension.datastore {
             url 'aUrl'
             user 'aUser'
             password 'aPassword'
         }
 
-        then:
+        then: "all values should be set correctly"
         expect extension.datastore, notNullValue()
         expect extension.datastore.url, equalTo('aUrl')
         expect extension.datastore.user, equalTo('aUser')

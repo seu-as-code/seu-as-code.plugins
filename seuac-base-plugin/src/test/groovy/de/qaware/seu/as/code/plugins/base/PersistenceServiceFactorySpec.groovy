@@ -36,38 +36,38 @@ class PersistenceServiceFactorySpec extends Specification {
     }
 
     def "Create a JDBC H2 PersistenceService instance"() {
-        given:
+        given: "a default H2 data store"
         datastore = defaultDatastore()
         datastore.url = 'jdbc:h2:build/seuac'
 
-        when:
+        when: "we get the data store provider instance"
         DatastoreProvider service = DatastoreProviderFactory.instance.get(datastore)
 
-        then:
+        then: "we expect the correct H2 data store provider"
         expect service, notNullValue()
         expect service, instanceOf(JdbcH2DatastoreProvider)
     }
 
     def "Create a MapDB PersistenceService instance"() {
-        given:
+        given: "a MapDP data store URL"
         datastore.url = 'file:mapdb:build/seuac.dbmap'
 
-        when:
+        when: "we get the data store provider instance"
         DatastoreProvider service = DatastoreProviderFactory.instance.get(datastore)
 
-        then:
+        then: "we expect the correct MapDB data store provider"
         expect service, notNullValue()
         expect service, instanceOf(MapDbDatastoreProvider)
     }
 
     def "Create unknown PersistenceService instance"() {
-        given:
+        given: "an unsupported datastore URL"
         datastore.url = 'unknown:db:seuac'
 
-        when:
+        when: "we get the data store provider instance"
         DatastoreProviderFactory.instance.get(datastore)
 
-        then:
+        then: "we expect a GradleException"
         thrown(GradleException)
     }
 }

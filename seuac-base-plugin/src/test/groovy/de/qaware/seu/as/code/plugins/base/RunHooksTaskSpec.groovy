@@ -34,7 +34,7 @@ class RunHooksTaskSpec extends Specification {
     }
 
     def "Define RunSoftwareHooksTask and runHooks"() {
-        given:
+        given: "a configured RunHooksTask"
         RunHooksTask task = project.task("runSoftwareHooks", type: RunHooksTask) {
             seuHome = 'S:'
             projectName = 'Base Plugin Test'
@@ -42,10 +42,10 @@ class RunHooksTaskSpec extends Specification {
             deleteHooks = false
         }
 
-        when:
+        when: "we run the hooks"
         task.runHooks()
 
-        then:
+        then: "we expect no exceptions and an existing hooks dir"
         notThrown(Exception)
         assert new File(classesDir, 'META-INF/hooks/').exists()
     }

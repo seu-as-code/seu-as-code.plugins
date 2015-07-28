@@ -53,83 +53,85 @@ class MapDbDatastoreProviderSpec extends Specification {
     }
 
     def "Init datastore"() {
-        when:
+        when: "we call init"
         provider.init()
-        then:
+
+        then: "we do not expect any interactions"
         0 * _._
     }
 
     def "Clear datastore"() {
-        when:
+        when: "we call clear"
         provider.clear()
-        then:
+
+        then: "then we expect the DB to be empty"
         provider.database.getHashSet('software').isEmpty()
         provider.database.getHashSet('home').isEmpty()
     }
 
     def "Check for correct dependencyId"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-base'
         dependency.version >> '1.0.0'
 
-        expect:
+        expect: "we expect the correct dependency ID"
         that provider.getDependencyId(dependency), equalTo('de.qaware.seu:seuac-base:1.0.0')
     }
 
     def "Store software dependency"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-test'
         dependency.version >> '1.0.0'
         def ids = [provider.getDependencyId(dependency)]
 
-        when:
+        when: "we store the software dependency"
         provider.storeDependency(dependency, [project.zipTree(testFile)], 'software')
 
-        then:
+        then: "we expect to find 3 files"
         expect provider.findAllFiles(ids as Set<String>, 'software'), hasSize(3)
     }
 
     def "Find all obsolete dependencies"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-test'
         dependency.version >> '1.0.0'
 
-        when:
+        when: "we find all obsolete dependencies"
         Set<String> deps = provider.findAllObsoleteDeps([dependency] as Set<Dependency>, 'software')
 
-        then:
+        then: "we expect one dependency to be found"
         expect deps, hasSize(1)
         expect deps, hasItem('de.qaware.seu:seuac-base:1.0.0')
     }
 
     def "Find all files for IDs"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-base'
         dependency.version >> '1.0.0'
         def ids = [provider.getDependencyId(dependency)]
 
-        when:
+        when: "we find all files for the dependencies"
         Set<String> files = provider.findAllFiles(ids as Set<String>, 'software')
 
-        then:
+        then: "we expect 1 file to be found"
         expect files, hasSize(1)
         expect files, hasItem('set-env.cmd')
     }
 
     def "Find all incoming dependencies"() {
-        setup:
+        setup: "the mock behaviour"
         dependency.group >> 'de.qaware.seu'
         dependency.name >> 'seuac-test'
         dependency.version >> '1.0.0'
 
-        when:
+        when: "we find all incoming dependencies"
         Set<Dependency> deps = provider.findAllIncomingDeps([dependency] as Set<Dependency>, 'software')
 
-        then:
+        then: "we expect one dependency to be found"
         expect deps, hasSize(1)
         expect deps, hasItem(dependency)
     }
