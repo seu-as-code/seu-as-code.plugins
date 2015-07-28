@@ -69,8 +69,6 @@ publishing {
     }
 }
 
-// 'bintrayUsername' and 'bintrayApiKey' must defined in the ~/.gradle/gradle.properties
-// or on the command line via -P options
 if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = 'unknown'
 if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = 'unknown'
 
