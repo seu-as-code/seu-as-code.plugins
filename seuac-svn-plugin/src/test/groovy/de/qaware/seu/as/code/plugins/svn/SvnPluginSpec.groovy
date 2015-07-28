@@ -35,7 +35,7 @@ class SvnPluginSpec extends Specification {
     }
 
     def "Apply plugin to project"() {
-        when:
+        when: "we apply the SVN plugin and configure it"
         project.apply plugin: 'seuac-svn'
         project.subversion {
             test1 {
@@ -53,7 +53,7 @@ class SvnPluginSpec extends Specification {
         }
         project.evaluate()
 
-        then:
+        then: "the SVN extension is defined and all tasks are present"
         expect project.extensions.findByName(SvnPlugin.EXTENSION_NAME), notNullValue()
 
         def svnCheckoutAll = project.tasks.svnCheckoutAll

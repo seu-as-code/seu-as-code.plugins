@@ -38,10 +38,10 @@ class SvnCheckoutTaskSpec extends Specification {
     }
 
     def "Define SvnCheckoutTask"() {
-        expect:
+        expect: "the SVN checkout task to be undefined"
         that project.tasks.findByName(TEST_SVN_CHECKOUT), is(nullValue())
 
-        when:
+        when: "we defined the tasks with dummy parameters"
         project.task(TEST_SVN_CHECKOUT, type: SvnCheckoutTask) {
             url = 'http://www.qaware.de/development'
             directory = new File("build")
@@ -49,7 +49,7 @@ class SvnCheckoutTaskSpec extends Specification {
             password = 'pwd'
         }
 
-        then:
+        then: "we find the taks and the parameters have been set correctly"
         SvnCheckoutTask task = project.tasks.findByName(TEST_SVN_CHECKOUT)
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
@@ -60,19 +60,21 @@ class SvnCheckoutTaskSpec extends Specification {
     }
 
     def "Execute SvnCheckoutTask with wrong URL"() {
-        expect:
+        expect: "the SVN checkout task to be undefined"
         that project.tasks.findByName(TEST_SVN_CHECKOUT), is(nullValue())
 
-        when:
+        when: "we defined the tasks with a wrong URL"
         SvnCheckoutTask task = project.task(TEST_SVN_CHECKOUT, type: SvnCheckoutTask) {
             url = 'wrongUrl'
             directory = new File("build")
             username = 'user'
             password = 'pwd'
         }
+
+        and: "we perform a SVN checkout"
         task.doCheckout()
 
-        then:
+        then: "the task is defined but we receive a GradleException"
         expect project.tasks.findByName(TEST_SVN_CHECKOUT), notNullValue()
         thrown(GradleException)
     }

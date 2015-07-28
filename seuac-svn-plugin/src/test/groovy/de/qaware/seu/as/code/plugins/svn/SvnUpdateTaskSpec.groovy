@@ -37,17 +37,17 @@ class SvnUpdateTaskSpec extends Specification {
     }
 
     def "Define SvnUpdateTask"() {
-        expect:
+        expect: "the SVN update task to be undefined"
         that project.tasks.findByName(TEST_SVN_UPDATE), is(nullValue())
 
-        when:
+        when: "we defined the tasks with dummy parameters"
         project.task(TEST_SVN_UPDATE, type: SvnUpdateTask) {
             directory = new File("build")
             username = 'user'
             password = 'pwd'
         }.doUpdate()
 
-        then:
+        then: "we find the taks and the parameters have been set correctly"
         SvnUpdateTask task = project.tasks.findByName(TEST_SVN_UPDATE)
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
