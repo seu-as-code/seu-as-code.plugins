@@ -37,7 +37,7 @@ Property name | Type | Default value | Description
 --- | --- | --- | ---
 `credentials` | Credentials | - | Object to query credentials. Invoke the `String get(String key)` method to get the credentials with the key `key`.
 
-## Example
+## Full Example
 
 First add the credentials with the key `nexusUsername` and `nexusPassword` by invoking
 `gradle setCredentials --key nexusUsername` and `gradle setCredentials --key nexusPassword`.
@@ -53,8 +53,6 @@ First add the credentials with the key `nexusUsername` and `nexusPassword` by in
         }
     }
 ```
-
-See the `example` folders for an example project.
 
 ## How does this work?
 

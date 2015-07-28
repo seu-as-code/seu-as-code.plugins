@@ -49,7 +49,7 @@ Task name | Description
 `software` | Used for software dependencies that will be installed in the software directory.
 `home` | Used for dependencies that will be installed in the home directory.
 
-### Example
+### Dependencies
 
 ```groovy
 dependencies {
@@ -76,7 +76,7 @@ Property name | Type | Default value | Description
 `datastore` | SeuacDatastore | - | Optional. Defines the datastore used to persist the SEU configuration. Currently H2 (use jdbc:h2:seuac as URL) and MapDB (use file:mapdb:seuac as URL) are supported.
 `banner` | SeuacBanner | - | Optional. Defines the ASCII banner configuration.
 
-### Example
+### Full Example
 
 ```groovy
 seuAsCode {

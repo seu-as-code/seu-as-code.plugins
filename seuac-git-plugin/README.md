@@ -54,7 +54,7 @@ Property name | Type | Default value | Description
 `username` | String | - | The username used for authentication.
 `password` | String | - | The password used for authentication.
 
-### Example
+### Full Example
 
 ```groovy
 git {
