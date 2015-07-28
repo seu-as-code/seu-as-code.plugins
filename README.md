@@ -6,6 +6,8 @@
 The SEU-as-Code plugins are plain Gradle plugins to enable developer provisioning using Gradle. The plugins provide
 convenient configuration conventions and common SEU tasks for your daily work as a developer.
 
+[![Build Status](https://travis-ci.org/seu-as-code/seu-as-code.plugins.svg?branch=master)](https://travis-ci.org/seu-as-code/seu-as-code.plugins)
+
 ## Building
 
 To build the plugins all you have to do is to issue the following command:
