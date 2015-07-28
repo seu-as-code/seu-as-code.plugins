@@ -4,6 +4,16 @@ dependencies {
     compile 'commons-codec:commons-codec:1.10'
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
 def pomConfig = {
     name project.name
     description project.description

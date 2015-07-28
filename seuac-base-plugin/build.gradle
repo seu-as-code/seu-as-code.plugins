@@ -21,6 +21,16 @@ task copyTestResources(type: Copy) {
 }
 processTestResources.dependsOn copyTestResources
 
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'javadoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives groovydocJar
+}
+
 def pomConfig = {
     name project.name
     description project.description
@@ -67,7 +77,7 @@ publishing {
         basePlugin(MavenPublication) {
             from components.java
             artifact sourcesJar
-            artifact javadocJar
+            artifact groovydocJar
 
             pom.withXml {
                 asNode().children().last() + pomConfig
