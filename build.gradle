@@ -1,6 +1,7 @@
 plugins {
 	id "com.github.hierynomus.license" version "0.11.0"
     id "com.jfrog.bintray" version "1.2"
+    id "com.gradle.plugin-publish" version "0.9.1"
 }
 
 allprojects {
@@ -19,6 +20,8 @@ subprojects {
     apply plugin: 'com.github.hierynomus.license'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
+    apply plugin: 'com.gradle.plugin-publish'
+
 
     license {
         includes(["**/*.java", "**/*.groovy"])
@@ -60,7 +63,6 @@ subprojects {
         classifier = 'sources'
         from sourceSets.main.allSource
     }
-    
 }
 
 task wrapper(type: Wrapper) {

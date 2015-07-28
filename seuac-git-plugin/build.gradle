@@ -98,3 +98,16 @@ bintray {
         }
     }
 }
+
+pluginBundle {
+    website = project.websiteUrl
+    vcsUrl = project.scmUrl
+
+    gitPlugin {
+        id = 'de.qaware.seu.as.code.git'
+        displayName = 'Gradle Git plugin'
+        description = project.description
+        tags = ['git', 'scm', 'seu-as-code']
+        version = project.version
+    }
+}

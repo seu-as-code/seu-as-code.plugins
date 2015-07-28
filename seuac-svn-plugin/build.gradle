@@ -96,3 +96,16 @@ bintray {
         }
     }
 }
+
+pluginBundle {
+    website = project.websiteUrl
+    vcsUrl = project.scmUrl
+
+    svnPlugin {
+        id = 'de.qaware.seu.as.code.svn'
+        displayName = 'Gradle SVN plugin'
+        description = project.description
+        tags = ['svn', 'scm', 'seu-as-code']
+        version = project.version
+    }
+}

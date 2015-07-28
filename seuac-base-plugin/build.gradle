@@ -115,3 +115,16 @@ bintray {
         }
     }
 }
+
+pluginBundle {
+    website = project.websiteUrl
+    vcsUrl = project.scmUrl
+
+    basePlugin {
+        id = 'de.qaware.seu.as.code.base'
+        displayName = 'SEU-as-Code Base plugin'
+        description = project.description
+        tags = ['seu-as-code', 'provisioning']
+        version = project.version
+    }
+}
