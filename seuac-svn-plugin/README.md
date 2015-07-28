@@ -10,18 +10,12 @@ To use the plugin, include in your build script:
 ```groovy
 buildscript {
     repositories {
-        mavenCentral()
         maven {
-            credentials {
-                username qawareUsername
-                password qawarePassword
-            }
-            url "https://www.qaware.de:443/nexus/content/repositories/qaware-seu/"
+            url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
         classpath 'de.qaware.seu:seuac-svn-plugin:2.1.2'
-		classpath 'org.tmatesoft.svnkit:svnkit:1.8.5'
     }
 }
 

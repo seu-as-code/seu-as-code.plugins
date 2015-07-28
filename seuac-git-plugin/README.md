@@ -10,13 +10,8 @@ To use the plugin, include in your build script:
 ```groovy
 buildscript {
     repositories {
-        mavenCentral()
         maven {
-            credentials {
-                username qawareUsername
-                password qawarePassword
-            }
-            url "https://www.qaware.de:443/nexus/content/repositories/qaware-seu/"
+            url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
