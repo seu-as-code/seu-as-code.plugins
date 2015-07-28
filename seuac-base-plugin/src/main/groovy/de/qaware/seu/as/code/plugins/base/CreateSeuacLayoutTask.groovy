@@ -21,7 +21,7 @@ import org.gradle.api.tasks.OutputDirectories
 import org.gradle.api.tasks.TaskAction
 
 /**
- * A simple tasks to create the SEU as Code directory layout.
+ * A simple tasks to create the SEU-as-Code directory layout.
  *
  * @author lreimer
  */
@@ -36,7 +36,7 @@ class CreateSeuacLayoutTask extends DefaultTask {
      * Initialize the group and description for this task.
      */
     CreateSeuacLayoutTask() {
-        group = 'SEU as Code'
+        group = 'SEU-as-Code'
         description = 'Creates the SEU directory layout.'
     }
 

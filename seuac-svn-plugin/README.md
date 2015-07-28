@@ -1,4 +1,4 @@
-# SEU as Code SVN Plugin
+# SEU-as-Code SVN Plugin
 
 A Gradle plugin for handling SVN repositories. Provides basic tasks to checkout SVN repositories and update 
 local directories. The repositories can be configured using an extension.

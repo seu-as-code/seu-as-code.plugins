@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * SEU as Code Credentials plugin.
+ * SEU-as-Code Credentials plugin.
  * <p/>
  * Provides the 'credentials' object to get credentials and the 'setCredentials' task to set credentials.
  *

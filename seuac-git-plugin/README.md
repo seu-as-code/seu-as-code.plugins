@@ -1,4 +1,4 @@
-# SEU as Code Git Plugin
+# SEU-as-Code Git Plugin
 
 A Gradle plugin for handling Git repositories. Provides basic tasks to init and clone Git repositories.
 The repositories can be configured using an extension.

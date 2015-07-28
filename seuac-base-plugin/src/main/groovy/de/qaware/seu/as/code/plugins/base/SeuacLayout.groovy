@@ -151,7 +151,7 @@ class SeuacLayout {
     }
 
     /**
-     * Factory method to create a defaut SEU as Code layout for the given SEU home.
+     * Factory method to create a defaut SEU-as-Code layout for the given SEU home.
      *
      * @param seuHome the SEU home
      * @return the default instance

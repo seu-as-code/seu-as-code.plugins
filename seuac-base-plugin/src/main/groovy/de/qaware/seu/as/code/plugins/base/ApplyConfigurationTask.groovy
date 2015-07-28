@@ -39,7 +39,7 @@ class ApplyConfigurationTask extends DefaultTask {
      * Initialize the group for this task.
      */
     ApplyConfigurationTask() {
-        group = 'SEU as Code'
+        group = 'SEU-as-Code'
         description = 'Apply the given configuration to the SEU.'
     }
 

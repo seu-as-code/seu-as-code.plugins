@@ -23,7 +23,7 @@ import org.mapdb.DBMaker
 /**
  * This data store provider used MapDB to persist the SEU configuration.
  *
- * @author alex.christ
+ * @author lreimer
  */
 class MapDbDatastoreProvider extends DatastoreProvider {
 

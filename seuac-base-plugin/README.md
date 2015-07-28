@@ -1,4 +1,4 @@
-# SEU as Code Base Plugin
+# SEU-as-Code Base Plugin
 
 A Gradle plugin to create SEU installations from code. Provides basic tasks to bootstrap and update the SEU and to
 install and update the software packages. The SEU can be configured and customized using the `seuAsCode` extension.
@@ -81,7 +81,7 @@ Property name | Type | Default value | Description
 ```groovy
 seuAsCode {
     seuHome 'S:'
-    projectName 'SEU as Code'
+    projectName 'SEU-as-Code'
     layout {
         codebase "S:/codebase/"
         docbase "S:/docbase/"

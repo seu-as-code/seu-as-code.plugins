@@ -1,4 +1,4 @@
-# SEU as Code Credentials Plugin
+# SEU-as-Code Credentials Plugin
 
 A Gradle plugin for the secure storage of your credentials using the Windows Data Protection API (DPAPI).
 
