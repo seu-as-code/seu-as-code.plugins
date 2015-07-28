@@ -108,7 +108,7 @@ seuAsCode {
 
 ## Maintainer
 
-M.-Leander Reimer (@lreimer), <mario-leander.reimer@qaware.de>
+M.-Leander Reimer (@lreimer)
 
 ## License
 

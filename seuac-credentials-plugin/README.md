@@ -68,7 +68,7 @@ As the plugin uses DPAPI to encrypt the credentials, this plugin only works with
 
 ## Maintainer
 
-Moritz Kammerer (@phxql), <moritz.kammerer@qaware.de>
+Moritz Kammerer (@phxql)
 
 ## License
 

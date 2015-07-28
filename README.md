@@ -16,7 +16,7 @@ To build the plugins all you have to do is to issue the following command:
 
 ## Maintainer
 
-M.-Leander Reimer (@lreimer), <mario-leander.reimer@qaware.de>
+M.-Leander Reimer (@lreimer)
 
 ## License
 
