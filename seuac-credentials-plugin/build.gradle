@@ -110,11 +110,13 @@ pluginBundle {
     website = project.websiteUrl
     vcsUrl = project.scmUrl
 
-    credentialsPlugin {
-        id = 'de.qaware.seu.as.code.credentials'
-        displayName = 'Gradle Credentials plugin'
-        description = project.description
-        tags = ['credentials', 'security', 'seu-as-code']
-        version = project.version
+    plugins {
+        credentialsPlugin {
+            id = 'de.qaware.seu.as.code.credentials'
+            displayName = 'Gradle Credentials plugin'
+            description = project.description
+            tags = ['credentials', 'security', 'seu-as-code']
+            version = project.version
+        }
     }
 }
