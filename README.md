@@ -3,9 +3,8 @@
   * SEU: German for software development environment (Software EntwicklungsUmgebung)
   * as Code: to be able to configure, build and program the SEU as source code
   
-The SEU-as-Code plugins are plain Gradle plugins to enable developer provisiong   even more convenience. These plugins provide
-configuration conventions and common SEU tasks like working with your SCM or updating your local
-development environment.
+The SEU-as-Code plugins are plain Gradle plugins to enable developer provisioning using Gradle. These plugins provide
+configuration conventions and common SEU tasks for your daily work as a developer.
 
 ## Building
 
