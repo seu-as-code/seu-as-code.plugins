@@ -18,7 +18,6 @@ package de.qaware.seu.as.code.plugins.base
 import groovyx.net.http.HTTPBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
 import static groovyx.net.http.ContentType.HTML
@@ -37,7 +36,6 @@ class CreateAsciiBannerTask extends DefaultTask {
 
     @Input
     String projectName
-    @OutputFile
     File bannerFile
 
     SeuacBanner settings
@@ -46,7 +44,7 @@ class CreateAsciiBannerTask extends DefaultTask {
      * Initialize the group for this task.
      */
     CreateAsciiBannerTask() {
-        group = 'SEU as Code'
+        group = 'SEU-as-Code'
         description = 'Create an ASCII art banner file from the project name.'
     }
 
@@ -71,9 +69,9 @@ class CreateAsciiBannerTask extends DefaultTask {
                         WIDT: settings.width
                 ])
 
-        // empty existing banner file
+        // delete existing banner file
         if (bannerFile.exists()) {
-            bannerFile.write('')
+            bannerFile.delete()
         }
 
         // here we strangely already have text
@@ -92,5 +90,6 @@ class CreateAsciiBannerTask extends DefaultTask {
         def now = Calendar.instance
         def copyright = "(c) ${now.get(Calendar.YEAR)} QAware GmbH"
         bannerFile << copyright.padLeft(settings.width - copyright.length() / 2)
+        bannerFile << separator
     }
 }
