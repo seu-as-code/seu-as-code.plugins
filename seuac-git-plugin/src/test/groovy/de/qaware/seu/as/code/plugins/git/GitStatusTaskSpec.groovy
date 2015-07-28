@@ -44,15 +44,15 @@ class GitStatusTaskSpec extends Specification {
     }
 
     def "Define GitStatusTask"() {
-        expect:
+        expect: "the status task to be undefined"
         that project.tasks.findByName(TEST_GIT_STATUS), is(nullValue())
 
-        when:
+        when: "we define and configure the task on the project"
         project.task(TEST_GIT_STATUS, type: GitStatusTask) {
             directory = this.directory
         }
 
-        then:
+        then: "we expect to find the task correctly configured"
         GitStatusTask task = project.tasks.findByName(TEST_GIT_STATUS)
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
@@ -60,16 +60,16 @@ class GitStatusTaskSpec extends Specification {
     }
 
     def "Invoke doStatus"() {
-        expect:
+        expect: "the status task to be undefined"
         that project.tasks.findByName(TEST_GIT_STATUS), is(nullValue())
 
-        when:
+        when: "we define and invoke the status task"
         GitStatusTask task = project.task(TEST_GIT_STATUS, type: GitStatusTask) {
             directory = this.directory
         }
         task.doStatus()
 
-        then:
+        then: "the task is defined by threw an exception"
         expect project.tasks.testGitStatus, notNullValue()
         thrown(GradleException)
     }

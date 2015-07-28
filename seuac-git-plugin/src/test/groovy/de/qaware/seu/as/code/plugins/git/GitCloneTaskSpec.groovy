@@ -44,10 +44,10 @@ class GitCloneTaskSpec extends Specification {
     }
 
     def "Define GitCloneTask"() {
-        expect:
+        expect: "the clone task to be undefined"
         that project.tasks.findByName(TEST_GIT_CLONE), is(nullValue())
 
-        when:
+        when: "we defined and configure the clone task"
         project.task(TEST_GIT_CLONE, type: GitCloneTask) {
             url = "https://github.com/qaware/QAseuac.git"
             directory = this.directory
@@ -56,7 +56,7 @@ class GitCloneTaskSpec extends Specification {
             password = 'secret'
         }
 
-        then:
+        then: "we expect to find the task correctly configured"
         GitCloneTask task = project.tasks.findByName(TEST_GIT_CLONE)
 
         expect task, notNullValue()
@@ -69,10 +69,10 @@ class GitCloneTaskSpec extends Specification {
     }
 
     def "Invoke doClone"() {
-        expect:
+        expect: "the clone task to be undefined"
         that project.tasks.findByName(TEST_GIT_CLONE), is(nullValue())
 
-        when:
+        when: "we create the task and invoke clone"
         project.configurations.create('jgit')
         GitCloneTask task = project.task(TEST_GIT_CLONE, type: GitCloneTask) {
             url = "https://github.com/qaware/QAseuac.git"
@@ -80,7 +80,7 @@ class GitCloneTaskSpec extends Specification {
         }
         task.doClone()
 
-        then:
+        then: "the task is defined but threw an exception"
         expect project.tasks.testGitClone, notNullValue()
         thrown(GradleException)
     }

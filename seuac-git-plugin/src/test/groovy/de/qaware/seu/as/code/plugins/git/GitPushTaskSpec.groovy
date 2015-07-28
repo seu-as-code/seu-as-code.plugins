@@ -44,10 +44,10 @@ class GitPushTaskSpec extends Specification {
     }
 
     def "Define GitPushTask"() {
-        expect:
+        expect: "the push task to be undefined"
         that project.tasks.findByName(TEST_GIT_PUSH), is(nullValue())
 
-        when:
+        when: "we define and configure the task for the project"
         project.task(TEST_GIT_PUSH, type: GitPushTask) {
             directory = this.directory
             username = 'user'
@@ -55,7 +55,7 @@ class GitPushTaskSpec extends Specification {
             remote = 'test'
         }
 
-        then:
+        then: "we expect to find the task correctly configured"
         GitPushTask task = project.tasks.findByName(TEST_GIT_PUSH)
 
         expect task, notNullValue()
@@ -67,16 +67,16 @@ class GitPushTaskSpec extends Specification {
     }
 
     def "Invoke doPush"() {
-        expect:
+        expect: "the push task to be undefined"
         that project.tasks.findByName(TEST_GIT_PUSH), is(nullValue())
 
-        when:
+        when: "we define and invoke the task on the project"
         GitPushTask task = project.task(TEST_GIT_PUSH, type: GitPushTask) {
             directory = this.directory
         }
         task.doPush()
 
-        then:
+        then: "the task is defined by threw an exception"
         expect project.tasks.testGitPush, notNullValue()
         thrown(GradleException)
     }

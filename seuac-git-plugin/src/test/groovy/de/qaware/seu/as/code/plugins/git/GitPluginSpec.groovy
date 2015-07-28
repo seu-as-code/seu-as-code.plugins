@@ -42,7 +42,7 @@ class GitPluginSpec extends Specification {
     }
 
     def "Apply Git plugin to project"() {
-        when:
+        when: "we apply and configure the plugin via its convention"
         project.apply plugin: 'seuac-git'
         project.git {
             code {
@@ -59,7 +59,7 @@ class GitPluginSpec extends Specification {
         }
         project.evaluate()
 
-        then:
+        then: "the extension is registered and all tasks are defined correctly"
         expect project.extensions.findByName(GitPlugin.EXTENSION_NAME), notNullValue()
 
         Task gitInitAll = project.tasks.gitInitAll

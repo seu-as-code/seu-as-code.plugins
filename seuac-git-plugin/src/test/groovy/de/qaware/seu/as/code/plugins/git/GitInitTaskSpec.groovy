@@ -44,15 +44,15 @@ class GitInitTaskSpec extends Specification {
     }
 
     def "Define GitInitTask"() {
-        expect:
+        expect: "the init task to be undefined"
         that project.tasks.findByName(TEST_GIT_INIT), is(nullValue())
 
-        when:
+        when: "we defined and configure the init task"
         project.task(TEST_GIT_INIT, type: GitInitTask) {
             directory = this.directory
         }
 
-        then:
+        then: "we expect to find the task correctly configured"
         GitInitTask task = project.tasks.findByName(TEST_GIT_INIT)
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
@@ -60,17 +60,17 @@ class GitInitTaskSpec extends Specification {
     }
 
     def "Invoke doInit"() {
-        expect:
+        expect: "the init task to be undefined"
         that project.tasks.findByName(TEST_GIT_INIT), is(nullValue())
 
-        when:
+        when: "we create and invoke the init task"
         project.configurations.create('jgit')
         GitInitTask task = project.task(TEST_GIT_INIT, type: GitInitTask) {
             directory = this.directory
         }
         task.doInit()
 
-        then:
+        then: "the task is defined and a new repo has been initialized"
         expect project.tasks.testGitInit, notNullValue()
         notThrown(GradleException)
         expect new File(directory, ".git").exists(), is(true)

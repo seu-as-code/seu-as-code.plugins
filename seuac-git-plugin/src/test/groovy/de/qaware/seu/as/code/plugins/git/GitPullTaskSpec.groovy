@@ -44,10 +44,10 @@ class GitPullTaskSpec extends Specification {
     }
 
     def "Define GitPullTask"() {
-        expect:
+        expect: "the pull task to be undefined"
         that project.tasks.findByName(TEST_GIT_PULL), is(nullValue())
 
-        when:
+        when: "we we defined and configure the task"
         project.task(TEST_GIT_PULL, type: GitPullTask) {
             directory = this.directory
             username = 'user'
@@ -55,7 +55,7 @@ class GitPullTaskSpec extends Specification {
             remote = 'test'
         }
 
-        then:
+        then: "we expect to find the task correctly configured"
         GitPullTask task = project.tasks.findByName(TEST_GIT_PULL)
 
         expect task, notNullValue()
@@ -67,16 +67,16 @@ class GitPullTaskSpec extends Specification {
     }
 
     def "Invoke doPull"() {
-        expect:
+        expect: "the pull task to be undefined"
         that project.tasks.findByName(TEST_GIT_PULL), is(nullValue())
 
-        when:
+        when: "we defined and invoke the pull task"
         GitPullTask task = project.task(TEST_GIT_PULL, type: GitPullTask) {
             directory = this.directory
         }
         task.doPull()
 
-        then:
+        then: "the task is defined but threw an exception"
         expect project.tasks.testGitPull, notNullValue()
         thrown(GradleException)
     }

@@ -44,17 +44,17 @@ class GitCommitTaskSpec extends Specification {
     }
 
     def "Define GitCommitTask"() {
-        expect:
+        expect: "the commit task to be undefined"
         that project.tasks.findByName(TEST_GIT_COMMIT), is(nullValue())
 
-        when:
+        when: "we define and configure the commit task"
         project.task(TEST_GIT_COMMIT, type: GitCommitTask) {
             directory = this.directory
             username = 'user'
             password = 'secret'
         }
 
-        then:
+        then: "the we expect to find the task to be correctly configured"
         GitCommitTask task = project.tasks.findByName(TEST_GIT_COMMIT)
 
         expect task, notNullValue()
@@ -65,16 +65,16 @@ class GitCommitTaskSpec extends Specification {
     }
 
     def "Invoke doCommit"() {
-        expect:
+        expect: "the commit task to be undefined"
         that project.tasks.findByName(TEST_GIT_COMMIT), is(nullValue())
 
-        when:
+        when: "we define and invoke the commit task"
         GitCommitTask task = project.task(TEST_GIT_COMMIT, type: GitCommitTask) {
             directory = this.directory
         }
         task.doCommit()
 
-        then:
+        then: "the task is defined but threw an exception"
         expect project.tasks.testGitCommit, notNullValue()
         thrown(GradleException)
     }
