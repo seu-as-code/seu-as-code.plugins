@@ -19,7 +19,8 @@ To build the plugins all you have to do is to issue the following command:
 ## Contributing
 
 Is there anything missing? Do you have ideas for new features or improvements? You are highly welcome to contribute
-your improvements, plugins or packages to the SEU-as-Code projects as pull requests.
+your improvements, plugins or packages to the SEU-as-Code projects. All you have to do is to fork this repository,
+improve the code and issue a pull request.
 
 ## Maintainer
 
