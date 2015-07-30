@@ -33,6 +33,8 @@ class RunHooksTask extends DefaultTask {
 
     String projectName
 
+    SeuacLayout seuLayout
+
     @InputDirectory
     File target
 
@@ -56,6 +58,7 @@ class RunHooksTask extends DefaultTask {
         if (hooks.exists()) {
             Binding binding = new Binding();
             binding.setVariable('seuHome', seuHome)
+            binding.setVariable('seuLayout', seuLayout)
             binding.setVariable('projectName', projectName)
             binding.setVariable('directory', target)
             binding.setVariable('logger', logger)

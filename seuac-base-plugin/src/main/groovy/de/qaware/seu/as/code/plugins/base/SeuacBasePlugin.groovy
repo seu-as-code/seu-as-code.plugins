@@ -67,12 +67,14 @@ class SeuacBasePlugin implements Plugin<Project> {
 
             Task runSoftwareHooks = project.task('runSoftwareHooks', type: RunHooksTask) {
                 seuHome = seuAsCode.seuHome
+                seuLayout = seuAsCode.layout
                 projectName = seuAsCode.projectName
                 target = seuAsCode.layout.software
             }
 
             Task runHomeHooks = project.task('runHomeHooks', type: RunHooksTask) {
                 seuHome = seuAsCode.seuHome
+                seuLayout = seuAsCode.layout
                 projectName = seuAsCode.projectName
                 target = seuAsCode.layout.home
             }

@@ -37,6 +37,7 @@ class RunHooksTaskSpec extends Specification {
         given: "a configured RunHooksTask"
         RunHooksTask task = project.task("runSoftwareHooks", type: RunHooksTask) {
             seuHome = 'S:'
+            seuLayout = SeuacLayout.defaultLayout('S:')
             projectName = 'Base Plugin Test'
             target = classesDir
             deleteHooks = false
