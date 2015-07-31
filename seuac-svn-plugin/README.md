@@ -1,3 +1,10 @@
+[![Build Status](https://travis-ci.org/seu-as-code/seu-as-code.plugins.svg?branch=master)](https://travis-ci.org/seu-as-code/seu-as-code.plugins)
+[![Download](https://api.bintray.com/packages/seu-as-code/gradle-plugins/seuac-svn-plugin/images/download.svg) ](https://bintray.com/seu-as-code/gradle-plugins/seuac-svn-plugin/_latestVersion)
+[![Stories in Ready](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=ready&title=Ready)](https://waffle.io/seu-as-code/seu-as-code.plugins)
+[![Stories in Progress](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=in%20progress&title=In%20Progress)](https://waffle.io/seu-as-code/seu-as-code.plugins)
+[![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/seu-as-code/seu-as-code.plugins/blob/master/LICENSE)
+[![Join on Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/seu-as-code/seu-as-code?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # SEU-as-Code SVN Plugin
 
 A Gradle plugin for handling SVN repositories. Provides basic tasks to checkout SVN repositories and update 
@@ -5,21 +12,27 @@ local directories. The repositories can be configured using an extension.
 
 ## Usage
 
-To use the plugin, include in your build script:
-
+Build script snippet for use in all Gradle versions, using the Bintray Maven repository:
 ```groovy
 buildscript {
     repositories {
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url 'https://dl.bintray.com/seu-as-code/gradle-plugins'
         }
     }
     dependencies {
-        classpath 'de.qaware.seu:seuac-svn-plugin:2.1.2'
+        classpath 'de.qaware.seu.as.code:seuac-svn-plugin:2.1.2'
     }
 }
 
-apply plugin: 'seuac-svn'
+apply plugin: 'de.qaware.seu.as.code.svn'
+```
+
+Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
+```groovy
+plugins {
+    id 'de.qaware.seu.as.code.svn' version '2.1.2'
+}
 ```
 
 ## Tasks
@@ -47,19 +60,15 @@ Property name | Type | Default value | Description
 
 ### Example
 
+The following example defines the SVN repository of the SEU-as-Code plugins. The example did not hardcode the
+username and password properties, instead you should use project properties or the credentials plugin.
 ```groovy
 subversion {
-    code {
-        url 'https://www.qaware.de/development/BMW-IAP-AIR/codebase/trunk'
-        directory file("$seuHome/codebase/")
-        username qawareUsername
-        password qawarePassword
-    }
-    docs {
-        url 'https://www.qaware.de/development/BMW-IAP-AIR/sebase/trunk'
-        directory "$seuHome/docbase/"
-        username qawareUsername
-        password qawarePassword
+    SeuAsCodePlugins {
+        url 'https://github.com/seu-as-code/seu-as-code.plugins'
+        directory file("$seuHome/codebase/seu-as-code.plugins/")
+        username svnUsername
+        password svnPassword
     }
 }
 ```

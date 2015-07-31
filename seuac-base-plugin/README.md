@@ -1,3 +1,10 @@
+[![Build Status](https://travis-ci.org/seu-as-code/seu-as-code.plugins.svg?branch=master)](https://travis-ci.org/seu-as-code/seu-as-code.plugins)
+[![Download](https://api.bintray.com/packages/seu-as-code/gradle-plugins/seuac-base-plugin/images/download.svg) ](https://bintray.com/seu-as-code/gradle-plugins/seuac-base-plugin/_latestVersion)
+[![Stories in Ready](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=ready&title=Ready)](https://waffle.io/seu-as-code/seu-as-code.plugins)
+[![Stories in Progress](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=in%20progress&title=In%20Progress)](https://waffle.io/seu-as-code/seu-as-code.plugins)
+[![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/seu-as-code/seu-as-code.plugins/blob/master/LICENSE)
+[![Join on Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/seu-as-code/seu-as-code?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # SEU-as-Code Base Plugin
 
 A Gradle plugin to create SEU installations from code. Provides basic tasks to bootstrap and update the SEU and to
@@ -5,21 +12,27 @@ install and update the software packages. The SEU can be configured and customiz
 
 ## Usage
 
-To use the plugin, include in your build script:
-
+Build script snippet for use in all Gradle versions, using the Bintray Maven repository:
 ```groovy
 buildscript {
     repositories {
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url 'https://dl.bintray.com/seu-as-code/gradle-plugins'
         }
     }
     dependencies {
-        classpath 'de.qaware.seu:seuac-base-plugin:2.1.0'
+        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.1.0'
     }
 }
 
-apply plugin: 'seuac-base'
+apply plugin: 'de.qaware.seu.as.code.base'
+```
+
+Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
+```groovy
+plugins {
+    id 'de.qaware.seu.as.code.base' version '2.1.0'
+}
 ```
 
 ## Tasks
@@ -38,7 +51,6 @@ Task name | Depends on | Type | Description
 `createAsciiBanner` | - | CreateAsciiBannerTask | Creates the ASCII banner file.
 `storeSeuacDb` | - | StoreSeuacDbTask | Store the current SEU software package configuration.
 
-
 ## Configurations
 
 The plugin defines the following configurations:
@@ -51,20 +63,28 @@ Task name | Description
 
 ### Dependencies
 
+The configurations are used for the software package dependencies. You also have to specify a Maven repository where
+the dependencies are located, in this case we used Bintray.
 ```groovy
+repositories {
+	maven { url 'https://dl.bintray.com/seu-as-code/maven' }
+}
 dependencies {
+    // dependencies for the Groovy root classloader
     seuac 'org.codehaus.groovy.modules.scriptom:scriptom:1.6.0'
     seuac 'com.h2database:h2:1.3.176'
 
-    home 'de.qaware.seu:seuac-home:1.1'
-    software 'de.qaware.seu:seuac-base:1.5'
-    
-	software 'de.qaware.seu:intellij:13.1.3'
-	software 'de.qaware.seu:jdk:1.7.0_60'
+    // mandatory dependencies for basic SEU setup
+    home 'de.qaware.seu.as.code:seuac-home:2.0.0'
+    software 'de.qaware.seu.as.code:seuac-environment:2.0.0:jdk8'
+
+    // additional dependencies for a Groovy development environment
+    software 'org.gradle:gradle:2.5'
+    software 'org.groovy-lang:groovy:2.4.4'
 }
 ```
 
-## Extension properties
+## Extension Properties
 
 The plugin defines the following extension properties in the `seuAsCode` closure:
 
@@ -76,19 +96,20 @@ Property name | Type | Default value | Description
 `datastore` | SeuacDatastore | - | Optional. Defines the datastore used to persist the SEU configuration. Currently H2 (use jdbc:h2:seuac as URL) and MapDB (use file:mapdb:seuac as URL) are supported.
 `banner` | SeuacBanner | - | Optional. Defines the ASCII banner configuration.
 
-### Full Example
+### Example
 
+The following example show the full extension configuration:
 ```groovy
 seuAsCode {
     seuHome 'S:'
     projectName 'SEU-as-Code'
     layout {
-        codebase "S:/codebase/"
-        docbase "S:/docbase/"
-        home "S:/home/"
-        repository "S:/repository/"
-        software "S:/software/"
-        temp "S:/temp/"
+        codebase 'S:/codebase/'
+        docbase 'S:/docbase/'
+        home 'S:/home/'
+        repository 'S:/repository/'
+        software 'S:/software/'
+        temp 'S:/temp/'
     }
     datastore {
         url 'jdbc:h2:seuac'
