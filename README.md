@@ -14,7 +14,7 @@ convenient configuration conventions and common SEU tasks for your daily work as
 
 ## Development
 
-For details on building and developing SEU-as-Code plugin, please see the [Wiki](https://github.com/seu-as-code/seu-as-code.plugins/wiki/Development).
+For details on building and developing SEU-as-Code plugins, please see the [Wiki](https://github.com/seu-as-code/seu-as-code.plugins/wiki/Development).
 
 ## Contributing
 
