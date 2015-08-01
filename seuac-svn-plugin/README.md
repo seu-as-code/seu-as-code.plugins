@@ -16,6 +16,7 @@ Build script snippet for use in all Gradle versions, using the Bintray Maven rep
 ```groovy
 buildscript {
     repositories {
+        mavenCentral()
         maven {
             url 'https://dl.bintray.com/seu-as-code/gradle-plugins'
         }
