@@ -69,7 +69,7 @@ def pomConfig = {
             roles { role 'Developer' }
         }
         developer {
-            id phxql
+            id 'phxql'
             name 'Moritz Kammerer'
             email 'moritz.kammerer@qaware.de'
             organization 'QAware GmbH'
@@ -119,14 +119,15 @@ bintray {
         publish = true
         version {
             name = project.version
+            desc = project.description
             released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
-            vcsTag = project.version
+            vcsTag = "v${project.version}"
             attributes = [
                     'gradle-plugin': ['de.qaware.seu.as.code.credentials', project.group, project.name].join(':')
             ]
 
             mavenCentralSync {
-                sync = false
+                sync = true
             }
         }
     }

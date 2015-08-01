@@ -110,14 +110,14 @@ bintray {
         publish = true
         version {
             name = project.version
+            desc = project.description
             released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
-            vcsTag = project.version
+            vcsTag = "v${project.version}"
             attributes = [
                     'gradle-plugin': ['de.qaware.seu.as.code.svn', project.group, project.name].join(':')
             ]
-
             mavenCentralSync {
-                sync = false
+                sync = true
             }
         }
     }

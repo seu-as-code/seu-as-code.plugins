@@ -121,7 +121,7 @@ bintray {
         name = project.name
         desc = project.description
         licenses = ['Apache-2.0']
-        labels = ['gradle', 'plugin', 'base', 'seu-as-code']
+        labels = ['gradle', 'plugin', 'base', 'seu-as-code', 'provisioning']
         websiteUrl = project.websiteUrl
         issueTrackerUrl = project.issueTrackerUrl
         vcsUrl = project.scmUrl
@@ -129,14 +129,14 @@ bintray {
         publish = true
         version {
             name = project.version
+            desc = project.description
             released = new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
-            vcsTag = project.version
+            vcsTag = "v${project.version}"
             attributes = [
                     'gradle-plugin': ['de.qaware.seu.as.code.base', project.group, project.name].join(':')
             ]
-
             mavenCentralSync {
-                sync = false
+                sync = true
             }
         }
     }
