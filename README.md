@@ -12,18 +12,15 @@
 The SEU-as-Code plugins are plain Gradle plugins for lightweight developer provisioning using Gradle. The plugins provide
 convenient configuration conventions and common SEU tasks for your daily work as a developer.
 
-## Building
+## Development
 
-To build the plugins all you have to do is to issue the following command:
-```groovy
-	gradlew clean build
-```
+For details on building and developing SEU-as-Code plugin, please see the [Wiki](https://github.com/seu-as-code/seu-as-code.plugins/wiki/Development).
 
 ## Contributing
 
 Is there anything missing? Do you have ideas for new features or improvements? You are highly welcome to contribute
 your improvements, plugins or packages to the SEU-as-Code projects. All you have to do is to fork this repository,
-improve the code and issue a pull request.
+improve the code and issue a pull request. You can also have a look at the [Contributor Guide](https://github.com/seu-as-code/seu-as-code.plugins/wiki/Contributor-Guide)
 
 ## Maintainer
 
