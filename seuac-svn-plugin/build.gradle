@@ -97,6 +97,8 @@ bintray {
     user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
     publications = ['svnPlugin']
+    dryRun = false
+    publish = true
     pkg {
         repo = project.bintrayRepo
         name = project.name
@@ -107,7 +109,6 @@ bintray {
         issueTrackerUrl = project.issueTrackerUrl
         vcsUrl = project.scmUrl
         publicDownloadNumbers = true
-        publish = true
         version {
             name = project.version
             desc = project.description
