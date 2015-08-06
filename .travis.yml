@@ -5,5 +5,12 @@ jdk:
   - oraclejdk7
   - oraclejdk8
 
+env:
+  - TERM=dumb
+
 before_install:
   - chmod +x gradlew
+
+script: ./gradlew clean build jacocoTestReport
+
+after_success: ./gradlew jacocoRootReport coveralls

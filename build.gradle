@@ -1,27 +1,34 @@
 buildscript {
     repositories {
-        mavenCentral()
         jcenter()
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
+        classpath 'com.gradle.publish:plugin-publish-plugin:0.9.1'
     }
 }
 
 plugins {
-    id "com.github.hierynomus.license" version "0.11.0"
-    id "com.jfrog.bintray" version "1.2"
+    id 'com.github.hierynomus.license' version '0.11.0'
+    id 'com.jfrog.bintray' version '1.2'
+    id 'com.github.kt3k.coveralls' version '2.4.0'
 }
 
 allprojects {
+    apply plugin: 'jacoco'
+
     group = 'de.qaware.seu.as.code'
 
     repositories {
+        jcenter()
         mavenCentral()
-		jcenter()
+    }
+
+    jacoco {
+        toolVersion = '0.7.2.201409121644'
     }
 }
 
@@ -42,8 +49,8 @@ subprojects {
         }
     }
 
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
+    sourceCompatibility = JavaVersion.VERSION_1_6
+    targetCompatibility = JavaVersion.VERSION_1_6
 
     dependencies {
         compile gradleApi()
@@ -74,6 +81,52 @@ subprojects {
         classifier = 'sources'
         from sourceSets.main.allSource
     }
+
+    jacocoTestReport {
+        group = 'Coverage'
+        description = 'Generate Jacoco coverage report for subproject'
+
+        additionalSourceDirs = project.files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = project.files(sourceSets.main.allSource.srcDirs)
+        classDirectories =  project.files(sourceSets.main.output)
+
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+    }
+}
+
+task jacocoRootReport(type: JacocoReport, group: 'Coverage') {
+    description = 'Generates aggregate Jacoco coverage report from all subprojects'
+    dependsOn(subprojects.test)
+
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
+
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
+
+    doFirst {
+        executionData = files(executionData.findAll { it.exists() })
+    }
+}
+
+coveralls {
+    sourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+}
+
+tasks.coveralls {
+    group = 'Coverage'
+    description = 'Upload aggregate Jacoco coverage report to Coveralls'
+
+    dependsOn jacocoRootReport
+    onlyIf { System.env.'CI_NAME' }
 }
 
 task wrapper(type: Wrapper) {
