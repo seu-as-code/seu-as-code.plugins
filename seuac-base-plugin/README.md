@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/seu-as-code/seu-as-code.plugins.svg?branch=master)](https://travis-ci.org/seu-as-code/seu-as-code.plugins)
+[![Coverage Status](https://coveralls.io/repos/seu-as-code/seu-as-code.plugins/badge.svg?branch=master&service=github)](https://coveralls.io/github/seu-as-code/seu-as-code.plugins?branch=master)
 [![Download](https://api.bintray.com/packages/seu-as-code/gradle-plugins/seuac-base-plugin/images/download.svg) ](https://bintray.com/seu-as-code/gradle-plugins/seuac-base-plugin/_latestVersion)
 [![Stories in Ready](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=ready&title=Ready)](https://waffle.io/seu-as-code/seu-as-code.plugins)
 [![Stories in Progress](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=in%20progress&title=In%20Progress)](https://waffle.io/seu-as-code/seu-as-code.plugins)
@@ -22,7 +23,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.0.0'
+        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.0.1'
     }
 }
 
@@ -32,7 +33,7 @@ apply plugin: 'de.qaware.seu.as.code.base'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.base' version '2.0.0'
+    id 'de.qaware.seu.as.code.base' version '2.0.1'
 }
 ```
 
