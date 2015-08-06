@@ -66,4 +66,36 @@ class SeuacLayoutSpec extends Specification {
         that layout.temp, notNullValue()
     }
 
+    def "Manually initialize"() {
+        given: "a manually initialized layout"
+        layout = new SeuacLayout();
+        layout.codebase(new File(seuHome, 'code').absolutePath)
+        layout.docbase(new File(seuHome, 'docs').absolutePath)
+        layout.home(new File(seuHome, 'home').absolutePath)
+        layout.repository(new File(seuHome, 'repo').absolutePath)
+        layout.software(new File(seuHome, 'programs').absolutePath)
+        layout.temp(new File(seuHome, 'temp').absolutePath)
+
+        when: "we create directories"
+        layout.mkdirs()
+
+        then: "we want to have 6 dirs"
+        layout.directories.size() == 6
+    }
+
+    def "No directories for empty layout"() {
+        expect: "no directories when uninitialized"
+        new SeuacLayout().directories.size() == 0
+    }
+
+    def "No directories created"() {
+        given: "an empty layout"
+        layout = new SeuacLayout()
+
+        when: "creating the layout"
+        layout.mkdirs()
+
+        then: "we wont get any exceptions"
+        notThrown(IOException)
+    }
 }

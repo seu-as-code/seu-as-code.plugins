@@ -137,17 +137,12 @@ class SeuacLayout {
     }
 
     /**
-     * Utility method to create the directories for this layout instance.
+     * Utility method to create the missing directories for this layout instance.
      *
      * @throws IOException in case if I/O problems
      */
     void mkdirs() throws IOException {
-        if (codebase && !codebase.exists()) codebase.mkdirs()
-        if (docbase && !docbase.exists()) docbase.mkdirs()
-        if (home && !home.exists()) home.mkdirs()
-        if (repository && !repository.exists()) repository.mkdirs()
-        if (software && !software.exists()) software.mkdirs()
-        if (temp && !temp.exists()) temp.mkdirs()
+        getMissingDirectories().each { File d -> d.mkdirs() }
     }
 
     /**
@@ -175,12 +170,30 @@ class SeuacLayout {
     def getDirectories() {
         def directories = []
 
-        // if (codebase) directories << codebase
+        if (codebase) directories << codebase
         if (docbase) directories << docbase
         if (home) directories << home
         if (repository) directories << repository
         if (software) directories << software
         if (temp) directories << temp
+
+        directories
+    }
+
+    /**
+     * Returns the list of missing directories for this layout.
+     *
+     * @return the directory list
+     */
+    def getMissingDirectories() {
+        def directories = []
+
+        if (codebase && !codebase.exists()) directories << codebase
+        if (docbase && !docbase.exists()) directories << docbase
+        if (home && !home.exists()) directories << home
+        if (repository && !repository.exists()) directories << repository
+        if (software && !software.exists()) directories << software
+        if (temp && !temp.exists()) directories << temp
 
         directories
     }

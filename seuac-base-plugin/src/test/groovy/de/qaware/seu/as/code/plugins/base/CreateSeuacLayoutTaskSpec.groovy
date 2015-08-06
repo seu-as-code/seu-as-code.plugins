@@ -46,7 +46,7 @@ class CreateSeuacLayoutTaskSpec extends Specification {
         given: "a configured CreateSeuacLayoutTask"
         CreateSeuacLayoutTask task = project.task(TEST_CREATE_SEUAC_LAYOUT, type: CreateSeuacLayoutTask) {
             layout = testLayout
-            directories = testLayout.directories
+            directories = testLayout.missingDirectories
         }
 
         when: "we create the layout directories"
@@ -63,6 +63,6 @@ class CreateSeuacLayoutTaskSpec extends Specification {
         expect testLayout.software.exists(), is(true)
         expect testLayout.temp.exists(), is(true)
 
-        expect task.outputs.files.files.size(), is(5)
+        expect task.outputs.files.files.size(), is(6)
     }
 }

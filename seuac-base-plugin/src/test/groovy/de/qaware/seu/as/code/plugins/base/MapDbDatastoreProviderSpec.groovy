@@ -135,4 +135,14 @@ class MapDbDatastoreProviderSpec extends Specification {
         expect deps, hasSize(1)
         expect deps, hasItem(dependency)
     }
+
+    def "HashCode and Equals"() {
+        given: "two equal ETs"
+        def et1 = new MapDbDatastoreProvider.DependencyEt(dependency: 'de.qaware.seu:seuac-home:1.0.0', file: '.bashrc')
+        def et2 = new MapDbDatastoreProvider.DependencyEt(dependency: 'de.qaware.seu:seuac-home:1.0.0', file: '.bashrc')
+
+        expect: "the contract to be OK"
+        et1 == et2
+        et1.hashCode() == et2.hashCode()
+    }
 }

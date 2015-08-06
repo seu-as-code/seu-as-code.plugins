@@ -49,7 +49,7 @@ class SeuacBasePlugin implements Plugin<Project> {
 
             Task createSeuacLayout = project.task('createSeuacLayout', type: CreateSeuacLayoutTask) {
                 layout = seuAsCode.layout
-                directories = seuAsCode.layout.directories
+                directories = seuAsCode.layout.missingDirectories
             }
 
             Task applySoftware = project.task('applySoftware', type: ApplyConfigurationTask) {
