@@ -121,12 +121,13 @@ coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
+def isCI = System.env.'CI' == 'true'
 tasks.coveralls {
     group = 'Coverage'
     description = 'Upload aggregate Jacoco coverage report to Coveralls'
 
     dependsOn jacocoRootReport
-    onlyIf { System.env.'CI_NAME' }
+    onlyIf { isCI }
 }
 
 task wrapper(type: Wrapper) {
