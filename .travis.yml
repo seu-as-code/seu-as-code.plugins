@@ -13,4 +13,4 @@ before_install:
 
 script: ./gradlew clean build jacocoTestReport
 
-after_success: ./gradlew jacocoRootReport coveralls
+after_success: ./gradlew jacocoRootReport coveralls assembleReleaseDist

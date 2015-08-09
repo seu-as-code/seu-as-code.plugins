@@ -8,17 +8,17 @@ buildscript {
     }
     dependencies {
         classpath 'com.gradle.publish:plugin-publish-plugin:0.9.1'
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
     }
 }
 
-plugins {
-    id 'com.github.hierynomus.license' version '0.11.0'
-    id 'com.jfrog.bintray' version '1.2'
-    id 'com.github.kt3k.coveralls' version '2.4.0'
-}
+apply plugin: 'distribution'
 
 allprojects {
     apply plugin: 'jacoco'
+    apply plugin: 'com.github.kt3k.coveralls'
 
     group = 'de.qaware.seu.as.code'
 
@@ -38,8 +38,8 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'com.github.hierynomus.license'
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
     apply plugin: 'com.gradle.plugin-publish'
+    apply plugin: 'com.jfrog.bintray'
 
     license {
         includes(["**/*.java", "**/*.groovy"])
@@ -128,6 +128,26 @@ tasks.coveralls {
 
     dependsOn jacocoRootReport
     onlyIf { isCI }
+}
+
+distributions {
+    release {
+        baseName = 'seuac-plugins'
+        contents {
+            from ('seuac-base-plugin/build/libs') {
+                include '*.jar'
+            }
+            from ('seuac-credentials-plugin/build/libs') {
+                include '*.jar'
+            }
+            from ('seuac-git-plugin/build/libs') {
+                include '*.jar'
+            }
+            from ('seuac-svn-plugin/build/libs') {
+                include '*.jar'
+            }
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {
