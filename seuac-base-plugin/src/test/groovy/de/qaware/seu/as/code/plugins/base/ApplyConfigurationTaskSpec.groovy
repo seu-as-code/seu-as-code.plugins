@@ -47,7 +47,7 @@ class ApplyConfigurationTaskSpec extends Specification {
         seuHome = File.createTempDir()
 
         defaultDatastore = defaultDatastore()
-        defaultDatastore.url = 'jdbc:h2:build/seuac'
+        defaultDatastore.url = 'jdbc:h2:./build/seuac'
 
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
         provider.reset()

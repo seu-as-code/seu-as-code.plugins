@@ -38,7 +38,7 @@ class PersistenceServiceFactorySpec extends Specification {
     def "Create a JDBC H2 PersistenceService instance"() {
         given: "a default H2 data store"
         datastore = defaultDatastore()
-        datastore.url = 'jdbc:h2:build/seuac'
+        datastore.url = 'jdbc:h2:./build/seuac'
 
         when: "we get the data store provider instance"
         DatastoreProvider service = DatastoreProviderFactory.instance.get(datastore)
@@ -50,7 +50,7 @@ class PersistenceServiceFactorySpec extends Specification {
 
     def "Create a MapDB PersistenceService instance"() {
         given: "a MapDP data store URL"
-        datastore.url = 'file:mapdb:build/seuac.dbmap'
+        datastore.url = 'file:mapdb:./build/seuac.dbmap'
 
         when: "we get the data store provider instance"
         DatastoreProvider service = DatastoreProviderFactory.instance.get(datastore)

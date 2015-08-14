@@ -21,8 +21,8 @@ dependencies {
 	compile 'org.codehaus.groovy.modules.scriptom:scriptom:1.6.0'
     compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
 	
-    compile 'org.mapdb:mapdb:1.0.5'
-    compile 'com.h2database:h2:1.3.176'
+    compile 'org.mapdb:mapdb:1.0.8'
+    compile 'com.h2database:h2:1.4.188'
 
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.3'
 	testCompile 'org.hamcrest:hamcrest-library:1.3'

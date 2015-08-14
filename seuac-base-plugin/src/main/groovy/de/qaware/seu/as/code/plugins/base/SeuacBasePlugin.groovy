@@ -116,7 +116,7 @@ class SeuacBasePlugin implements Plugin<Project> {
     private void initSeuacClassLoader(Project project) {
         // causes the test to fail, can not be resolved by ivy
         // for now this needs to be set by the user, which is OK
-        // project.dependencies.add('seuac', 'com.h2database:h2:1.3.176')
+        // project.dependencies.add('seuac', 'com.h2database:h2:1.4.188')
 
         def classLoader = project.gradle.class.classLoader
         project.configurations.seuac.each { File f -> classLoader.addURL(f.toURI().toURL()) }

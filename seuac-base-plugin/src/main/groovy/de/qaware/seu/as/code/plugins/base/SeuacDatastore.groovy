@@ -59,6 +59,6 @@ class SeuacDatastore {
      * @return a datastore configuration instance
      */
     static SeuacDatastore defaultDatastore() {
-        new SeuacDatastore(url: 'jdbc:h2:seuac', user: 'sa', password: 'sa')
+        new SeuacDatastore(url: 'jdbc:h2:./seuac;mv_store=false', user: 'sa', password: 'sa')
     }
 }

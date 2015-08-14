@@ -22,7 +22,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.0.1'
+        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.1.0'
     }
 }
 
@@ -32,7 +32,7 @@ apply plugin: 'de.qaware.seu.as.code.base'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.base' version '2.0.1'
+    id 'de.qaware.seu.as.code.base' version '2.1.0'
 }
 ```
 
@@ -73,7 +73,7 @@ repositories {
 dependencies {
     // dependencies for the Groovy root classloader
     seuac 'org.codehaus.groovy.modules.scriptom:scriptom:1.6.0'
-    seuac 'com.h2database:h2:1.3.176'
+    seuac 'com.h2database:h2:1.4.188'
 
     // mandatory dependencies for basic SEU setup
     home 'de.qaware.seu.as.code:seuac-home:2.0.0'
@@ -113,8 +113,13 @@ seuAsCode {
         temp 'S:/temp/'
     }
     datastore {
-        url 'jdbc:h2:seuac'
-        // url 'file:mapdb:seuac'
+        // this is for backwards compatibility to H2 1.3.x
+        // for latest H2 1.4.x you can enable the MVStore
+        url 'jdbc:h2:./seuac;mv_store=false'
+
+        // use this URL if you want to store things with MapDB
+        // url 'file:mapdb:./seuac'
+
         user 'sa'
         password 'sa'
     }

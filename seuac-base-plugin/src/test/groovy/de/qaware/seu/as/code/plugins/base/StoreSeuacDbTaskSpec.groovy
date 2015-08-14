@@ -45,7 +45,7 @@ class StoreSeuacDbTaskSpec extends Specification {
         project.dependencies.add('home', ':seuac-test:1.0.0@zip')
 
         defaultDatastore = defaultDatastore()
-        defaultDatastore.url = 'jdbc:h2:build/seuac'
+        defaultDatastore.url = 'jdbc:h2:./build/seuac'
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
     }
 

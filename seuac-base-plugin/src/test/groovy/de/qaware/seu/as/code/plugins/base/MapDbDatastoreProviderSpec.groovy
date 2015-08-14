@@ -41,7 +41,7 @@ class MapDbDatastoreProviderSpec extends Specification {
         dependency = Mock(Dependency)
         testFile = new File(RunHooksTaskSpec.getResource("/seuac-test-1.0.0.zip").toURI())
 
-        provider = (MapDbDatastoreProvider) DatastoreProviderFactory.instance.get(new SeuacDatastore(url: 'file:mapdb:build/seuac', password: 'test'))
+        provider = (MapDbDatastoreProvider) DatastoreProviderFactory.instance.get(new SeuacDatastore(url: 'file:mapdb:./build/seuac', password: 'test'))
         provider.reset()
 
         def et = new MapDbDatastoreProvider.DependencyEt(dependency: 'de.qaware.seu:seuac-base:1.0.0', file: 'set-env.cmd')

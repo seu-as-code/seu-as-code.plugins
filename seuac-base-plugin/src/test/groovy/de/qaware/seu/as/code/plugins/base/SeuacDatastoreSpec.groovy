@@ -40,7 +40,7 @@ class SeuacDatastoreSpec extends Specification {
 
         expect: "the default values"
         that datastore, notNullValue()
-        that datastore.url, equalTo('jdbc:h2:seuac')
+        that datastore.url, equalTo('jdbc:h2:./seuac;mv_store=false')
         that datastore.user, equalTo('sa')
         that datastore.password, equalTo('sa')
     }
