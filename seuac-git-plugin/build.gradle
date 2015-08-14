@@ -15,9 +15,9 @@
  */
 
 dependencies {
-    compile 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r'
-    compile 'org.eclipse.jgit:org.eclipse.jgit.ant:3.4.1.201406201815-r'
-    compile 'com.jcraft:jsch:0.1.51'
+    compile 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'
+    compile 'org.eclipse.jgit:org.eclipse.jgit.ant:3.7.1.201504261725-r'
+    compile 'com.jcraft:jsch:0.1.53'
 }
 
 task groovydocJar(type: Jar, dependsOn: groovydoc) {

@@ -37,9 +37,9 @@ class GitPlugin implements Plugin<Project> {
         project.extensions.git = repos
 
         project.configurations.create('jgit')
-        project.dependencies.add('jgit', 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r')
-        project.dependencies.add('jgit', 'org.eclipse.jgit:org.eclipse.jgit.ant:3.4.1.201406201815-r')
-        project.dependencies.add('jgit', 'com.jcraft:jsch:0.1.51')
+        project.dependencies.add('jgit', 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r')
+        project.dependencies.add('jgit', 'org.eclipse.jgit:org.eclipse.jgit.ant:3.7.1.201504261725-r')
+        project.dependencies.add('jgit', 'com.jcraft:jsch:0.1.53')
 
         project.task('gitInitAll', description: 'Init all Git repositories', group: 'Version Control')
         project.task('gitCloneAll', description: 'Clone all Git repositories', group: 'Version Control')
