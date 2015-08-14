@@ -15,7 +15,7 @@
  */
 
 dependencies {
-    compile 'org.tmatesoft.svnkit:svnkit:1.8.5'
+    compile 'org.tmatesoft.svnkit:svnkit:1.8.10'
 }
 
 task groovydocJar(type: Jar, dependsOn: groovydoc) {

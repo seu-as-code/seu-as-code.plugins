@@ -35,7 +35,7 @@ class SvnPlugin implements Plugin<Project> {
         project.extensions.subversion = repos
 
         project.configurations.create('svnkit')
-        project.dependencies.add('svnkit', 'org.tmatesoft.svnkit:svnkit:1.8.5')
+        project.dependencies.add('svnkit', 'org.tmatesoft.svnkit:svnkit:1.8.10')
 
         project.task('svnCheckoutAll', description: 'Checkout all SVN repositories', group: 'Version Control')
         project.task('svnUpdateAll', description: 'Update all SVN repositories', group: 'Version Control')
