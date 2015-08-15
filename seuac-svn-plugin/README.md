@@ -22,7 +22,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-svn-plugin:2.1.0'
+        classpath 'de.qaware.seu.as.code:seuac-svn-plugin:2.1.1'
     }
 }
 
@@ -32,7 +32,7 @@ apply plugin: 'de.qaware.seu.as.code.svn'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.svn' version '2.1.0'
+    id 'de.qaware.seu.as.code.svn' version '2.1.1'
 }
 ```
 
