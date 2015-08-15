@@ -29,9 +29,7 @@ artifacts {
 }
 
 def pomConfig = {
-    name project.name
-    description project.description
-    url project.websiteUrl
+
     inceptionYear '2015'
 
     scm {
@@ -78,7 +76,7 @@ publishing {
             artifact groovydocJar
 
             pom.withXml {
-                asNode().appendNode('name', project.name)
+                asNode().appendNode('name', project.displayName)
                 asNode().appendNode('description', project.description)
                 asNode().appendNode('url', project.websiteUrl)
 

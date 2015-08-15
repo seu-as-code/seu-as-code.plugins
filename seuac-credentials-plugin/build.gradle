@@ -32,6 +32,8 @@ artifacts {
 
 def pomConfig = {
 
+    inceptionYear '2015'
+
     scm {
         connection "scm:git:${project.scmUrl}"
         developerConnection "scm:git:${project.scmUrl}"
@@ -84,7 +86,7 @@ publishing {
             artifact javadocJar
 
             pom.withXml {
-                asNode().appendNode('name', project.name)
+                asNode().appendNode('name', project.displayName)
                 asNode().appendNode('description', project.description)
                 asNode().appendNode('url', project.websiteUrl)
 
