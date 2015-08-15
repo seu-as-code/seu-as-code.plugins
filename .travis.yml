@@ -11,7 +11,7 @@ env:
 before_install:
   - chmod +x gradlew
 
-script: ./gradlew clean build jacocoTestReport
+script: ./gradlew build jacocoTestReport
 
 after_success: ./gradlew jacocoRootReport coveralls assembleReleaseDist
 

@@ -147,6 +147,8 @@ tasks.coveralls {
 }
 
 distributions {
+    main {
+    }
     release {
         baseName = 'seuac-plugins'
         contents {
