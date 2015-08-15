@@ -48,10 +48,6 @@ artifacts {
 }
 
 def pomConfig = {
-    name project.name
-    description project.description
-    url project.websiteUrl
-    inceptionYear '2015'
 
     scm {
         connection "scm:git:${project.scmUrl}"
@@ -83,6 +79,7 @@ def pomConfig = {
             name 'Mario-Leander Reimer'
             email 'mario-leander.reimer@qaware.de'
             organization 'QAware GmbH'
+            organizationUrl 'https://www.qaware.de'
             roles { role 'Developer' }
         }
     }
@@ -96,6 +93,10 @@ publishing {
             artifact groovydocJar
 
             pom.withXml {
+                asNode().appendNode('name', project.name)
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', project.websiteUrl)
+
                 asNode().children().last() + pomConfig
             }
         }
@@ -150,7 +151,7 @@ pluginBundle {
     plugins {
         basePlugin {
             id = 'de.qaware.seu.as.code.base'
-            displayName = 'SEU-as-Code Base plugin'
+            displayName = project.displayName
             description = project.description
             tags = ['seu-as-code', 'provisioning']
             version = project.version

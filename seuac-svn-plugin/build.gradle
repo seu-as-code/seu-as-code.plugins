@@ -64,6 +64,7 @@ def pomConfig = {
             name 'Mario-Leander Reimer'
             email 'mario-leander.reimer@qaware.de'
             organization 'QAware GmbH'
+            organizationUrl 'https://www.qaware.de'
             roles { role 'Developer' }
         }
     }
@@ -77,6 +78,10 @@ publishing {
             artifact groovydocJar
 
             pom.withXml {
+                asNode().appendNode('name', project.name)
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', project.websiteUrl)
+
                 asNode().children().last() + pomConfig
             }
         }
@@ -131,7 +136,7 @@ pluginBundle {
     plugins {
         svnPlugin {
             id = 'de.qaware.seu.as.code.svn'
-            displayName = 'Gradle SVN plugin'
+            displayName = project.displayName
             description = project.description
             tags = ['svn', 'scm', 'seu-as-code']
             version = project.version
