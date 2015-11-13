@@ -64,9 +64,10 @@ Property name | Type | Default value | Description
 `git` | NamedDomainObjectContainer<GitRepository> | - | Contains the named Git repository definitions.
 `url` | String | - | The URL of the named Git repository. Include username and password in the URL.
 `directory` | File | - | The local directory of the named Git repository.
-`branch` | String | - | The branch name to use. Defaults to HEAD.
+`branch` | String | - | The branch name to use. Defaults to HEAD. If `singleBranch` is `true` this must be a valid refspec like `refs/heads/BRANCHNAME`.
 `username` | String | - | The username used for authentication.
 `password` | String | - | The password used for authentication.
+`singleBranch` | Boolean | `false` | Should only clone the specified branch.
 
 ### Example
 
@@ -80,6 +81,7 @@ git {
         branch 'HEAD'
         username gitUsername
         password gitPassword
+        singleBranch false
     }
 }
 ```

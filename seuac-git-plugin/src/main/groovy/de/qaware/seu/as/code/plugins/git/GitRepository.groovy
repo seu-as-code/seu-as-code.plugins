@@ -27,6 +27,7 @@ class GitRepository {
     File directory
     String username
     String password
+    boolean singleBranch = false
 
     /**
      * Required to construct by name.
@@ -89,5 +90,14 @@ class GitRepository {
      */
     void password(String aPassword) {
         this.password = aPassword
+    }
+
+    /**
+     * Shorthand method to set the single branch only option.
+     *
+     * @param singleBranch only clone the single branch
+     */
+    void singleBranch(boolean singleBranch) {
+        this.singleBranch = singleBranch
     }
 }
