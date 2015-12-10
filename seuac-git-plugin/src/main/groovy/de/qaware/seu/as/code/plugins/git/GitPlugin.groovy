@@ -118,6 +118,7 @@ class GitPlugin implements Plugin<Project> {
             branch = repo.branch
             username = repo.username
             password = repo.password
+            singleBranch = repo.singleBranch
         }
         project.tasks.gitCloneAll.dependsOn gitClone
     }

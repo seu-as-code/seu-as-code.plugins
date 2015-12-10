@@ -31,6 +31,8 @@ class GitCloneTask extends AbstractGitTask {
     String url
     @Input
     String branch
+    @Input
+    boolean singleBranch
 
     @TaskAction
     def doClone() {
@@ -42,6 +44,12 @@ class GitCloneTask extends AbstractGitTask {
 
             clone.setURI(url).setDirectory(directory).setBranch(branch).setBare(false)
             clone.setCredentialsProvider(createCredentialsProvider())
+
+            if (singleBranch && branch.startsWith("refs/")) {
+                clone.cloneAllBranches = false
+                clone.branchesToClone = [branch]
+            }
+
             repository = clone.call().getRepository()
         } always {
             if (repository) {
@@ -49,5 +57,4 @@ class GitCloneTask extends AbstractGitTask {
             }
         }
     }
-
 }

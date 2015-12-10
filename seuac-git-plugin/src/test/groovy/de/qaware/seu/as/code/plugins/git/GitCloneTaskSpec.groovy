@@ -84,4 +84,23 @@ class GitCloneTaskSpec extends Specification {
         expect project.tasks.testGitClone, notNullValue()
         thrown(GradleException)
     }
+
+    def "Invoke doClone with single task"() {
+        expect:
+        that project.tasks.findByName(TEST_GIT_CLONE), is(nullValue())
+
+        when:
+        project.configurations.create('jgit')
+        GitCloneTask task = project.task(TEST_GIT_CLONE, type: GitCloneTask) {
+            url = "https://github.com/qaware/QAseuac.git"
+            directory = this.directory
+            singleBranch = true
+            branch = "refs/heads/base-plugin"
+        }
+        task.doClone()
+
+        then:
+        expect project.tasks.testGitClone, notNullValue()
+        thrown(GradleException)
+    }
 }
