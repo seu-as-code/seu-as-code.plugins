@@ -46,7 +46,7 @@ Task name | Depends on | Type | Description
 
 ## Extension Properties
 
-The plugin defines the following extension properties:
+The plugin defines the following extra extension properties:
 
 Property name | Type | Default value | Description
 --- | --- | --- | ---
@@ -63,8 +63,8 @@ First add the credentials using the key `nexusUsername` and `nexusPassword` by i
         maven {
             url nexusUrl
             credentials {
-                username credentials.get('nexusUsername')
-                password credentials.get('nexusPassword')
+                username project.credentials.get('nexusUsername')
+                password project.credentials.get('nexusPassword')
             }
         }
     }
