@@ -15,8 +15,6 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import org.gradle.api.DefaultTask;
-import org.gradle.api.internal.tasks.options.Option;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.BufferedReader;
@@ -32,44 +30,7 @@ import java.io.InputStreamReader;
  *
  * @author phxql
  */
-public class SetCredentialsTask extends DefaultTask {
-    /**
-     * Credential key.
-     */
-    private String key;
-
-    /**
-     * Credentials.
-     */
-    private Credentials credentials;
-
-    /**
-     * Sets the credentials.
-     *
-     * @param credentials Credentials.
-     */
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
-    }
-
-    /**
-     * Gets the key.
-     *
-     * @return Key.
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key.
-     *
-     * @param key Key.
-     */
-    @Option(option = "key", description = "The credentials key.")
-    public void setKey(String key) {
-        this.key = key;
-    }
+public class SetCredentialsTask extends AbstractCredentialsTask {
 
     /**
      * Is executed from gradle when running the 'setCredentials' task.
@@ -84,7 +45,7 @@ public class SetCredentialsTask extends DefaultTask {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String value = reader.readLine();
 
-        credentials.set(getKey(), value);
-        credentials.save();
+        getCredentials().set(getKey(), value);
+        getCredentials().save();
     }
 }
