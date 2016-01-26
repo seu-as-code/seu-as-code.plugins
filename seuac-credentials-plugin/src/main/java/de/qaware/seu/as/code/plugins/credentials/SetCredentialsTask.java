@@ -33,6 +33,14 @@ import java.io.InputStreamReader;
 public class SetCredentialsTask extends AbstractCredentialsTask {
 
     /**
+     * Constructor initializing the tasks meta data.
+     */
+    public SetCredentialsTask() {
+        this.setDescription("Stores credentials.");
+        this.setGroup("SEU-as-Code");
+    }
+
+    /**
      * Is executed from gradle when running the 'setCredentials' task.
      *
      * @throws IOException If something went wrong while setting credentials.
