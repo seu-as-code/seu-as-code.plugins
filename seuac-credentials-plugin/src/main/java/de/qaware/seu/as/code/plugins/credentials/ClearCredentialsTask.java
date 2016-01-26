@@ -15,7 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import org.apache.commons.lang3.StringUtils;
+import de.qaware.seu.as.code.plugins.credentials.util.StringUtils;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.BufferedReader;
@@ -32,6 +32,15 @@ import java.io.InputStreamReader;
  */
 public class ClearCredentialsTask extends AbstractCredentialsTask {
 
+
+    /**
+     * Constructor initializing the tasks meta data.
+     */
+    public ClearCredentialsTask() {
+        this.setDescription("Clears stored credentials.");
+        this.setGroup("SEU-as-Code");
+    }
+
     /**
      * Is executed from gradle when running the 'clearCredentials' task.
      *
@@ -47,12 +56,12 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
     }
 
     /**
-     * Promts the user if all credentials shall be deleted and clears them accordingly.
+     * Prompts the user if all credentials shall be deleted and clears them accordingly.
      *
      * @throws IOException If I/O fails.
      */
     private void clearAllCredentials() throws IOException {
-        System.out.print("All stored credentials will be removed. Are you sure (y/n)?: n");
+        System.out.print("Remove all credentials (y/N)? ");
         System.out.flush();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -64,6 +73,9 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
         if ("y".equalsIgnoreCase(answer)) {
             getCredentials().clear();
             getCredentials().save();
+            System.out.println("All credentials removed successfully.");
+        } else {
+            System.out.println("Aborted. No credentials removed.");
         }
     }
 
@@ -74,7 +86,13 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
      * @throws IOException If I/O fails.
      */
     private void removeCredentialWithKey(String key) throws IOException {
-        System.out.printf("Stored credentials for key '%s' will be removed. Are you sure (y/n)?: n", key);
+        if (getCredentials().get(key) == null) {
+            System.out.println("Credential with key '" + key + "' does not exist. Nothing to do.");
+            System.out.flush();
+            return;
+        }
+
+        System.out.print("Remove credential with key '" + key + "' (y/N)? ");
         System.out.flush();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -86,6 +104,9 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
         if ("y".equalsIgnoreCase(answer)) {
             getCredentials().remove(key);
             getCredentials().save();
+            System.out.printf("Credential with key '%s' removed successfully.", key);
+        } else {
+            System.out.println("Aborted. No credentials removed.");
         }
     }
 }

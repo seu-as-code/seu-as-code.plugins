@@ -18,7 +18,6 @@ dependencies {
     compile 'net.java.dev.jna:jna:4.1.0'
     compile 'net.java.dev.jna:jna-platform:4.1.0'
     compile 'commons-codec:commons-codec:1.10'
-    compile 'org.apache.commons:commons-lang3:3.4'
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
