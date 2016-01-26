@@ -53,7 +53,7 @@ public class SeuacCredentialsPlugin implements Plugin<Project> {
         SetCredentialsTask setCredentialsTask = project.getTasks().create("setCredentials", SetCredentialsTask.class);
         setCredentialsTask.setCredentials(credentials);
 
-        ClearCredentialsTask clearCredentialsTask = project.getTasks().create("clearAllCredentials", ClearCredentialsTask.class);
+        ClearCredentialsTask clearCredentialsTask = project.getTasks().create("clearCredentials", ClearCredentialsTask.class);
         clearCredentialsTask.setCredentials(credentials);
     }
 }
