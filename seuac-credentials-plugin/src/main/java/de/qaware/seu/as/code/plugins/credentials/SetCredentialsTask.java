@@ -17,9 +17,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Task to set credentials.
@@ -50,8 +48,7 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
         System.out.print("Enter value for credentials with key '" + getKey() + "': ");
         System.out.flush();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String value = reader.readLine();
+        String value = getIoSupport().readLine();
 
         getCredentials().set(getKey(), value);
         getCredentials().save();

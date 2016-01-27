@@ -18,9 +18,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 import de.qaware.seu.as.code.plugins.credentials.util.StringUtils;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Task to to remove stored credentials.
@@ -31,7 +29,6 @@ import java.io.InputStreamReader;
  * @author clboettcher
  */
 public class ClearCredentialsTask extends AbstractCredentialsTask {
-
 
     /**
      * Constructor initializing the tasks meta data.
@@ -64,8 +61,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
         System.out.print("Remove all credentials (y/N)? ");
         System.out.flush();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String answer = reader.readLine();
+        String answer = getIoSupport().readLine();
         if (StringUtils.isBlank(answer)) {
             answer = "n";
         }
@@ -95,8 +91,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
         System.out.print("Remove credential with key '" + key + "' (y/N)? ");
         System.out.flush();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String answer = reader.readLine();
+        String answer = getIoSupport().readLine();
         if (StringUtils.isBlank(answer)) {
             answer = "n";
         }

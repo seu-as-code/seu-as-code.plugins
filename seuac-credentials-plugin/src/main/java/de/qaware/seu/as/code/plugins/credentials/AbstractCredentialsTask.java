@@ -15,6 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
+import de.qaware.seu.as.code.plugins.credentials.util.IOSupport;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.internal.tasks.options.Option;
 
@@ -35,6 +36,11 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
      * Credentials.
      */
     private Credentials credentials;
+
+    /**
+     * I/O support.
+     */
+    private IOSupport ioSupport;
 
     /**
      * Sets the credentials.
@@ -64,11 +70,26 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
         this.key = key;
     }
 
+    /**
+     * Sets the {@link IOSupport} instance.
+     *
+     * @param ioSupport The I/O support.
+     */
+    public void setIoSupport(IOSupport ioSupport) {
+        this.ioSupport = ioSupport;
+    }
 
     /**
      * @return The {@link Credentials}.
      */
     /* package-private */ Credentials getCredentials() {
         return credentials;
+    }
+
+    /**
+     * @return The {@link IOSupport}.
+     */
+    /* package-private */ IOSupport getIoSupport() {
+        return ioSupport;
     }
 }
