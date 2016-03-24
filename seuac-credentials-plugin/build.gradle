@@ -75,6 +75,14 @@ def pomConfig = {
             organizationUrl 'https://www.qaware.de'
             roles { role 'Developer' }
         }
+        developer {
+            id 'clboettcher'
+            name 'Claudius Boettcher'
+            email 'claudius.boettcher@qaware.de'
+            organization 'QAware GmbH'
+            organizationUrl 'https://www.qaware.de'
+            roles { role 'Developer' }
+        }
     }
 }
 

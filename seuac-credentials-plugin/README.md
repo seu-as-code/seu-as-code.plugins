@@ -43,6 +43,7 @@ The plugin defines the following tasks:
 Task name | Depends on | Type | Description
 --- | --- | --- | ---
 `setCredentials`| - | - | Sets a credential. Invoke with `--key [Key of the credentials]` parameter.
+`clearCredentials`|-|-|Clears a credential. Invoke with `--key [Key of the credentials]` parameter. Invoke without `--key` parameter to clear all stored credentials. User confirmation is required in any case.
 
 ## Extension Properties
 

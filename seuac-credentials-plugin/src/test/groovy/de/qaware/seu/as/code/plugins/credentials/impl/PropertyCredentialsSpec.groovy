@@ -21,6 +21,7 @@ import spock.lang.Specification
 import spock.lang.Stepwise
 
 import static org.hamcrest.Matchers.is
+import static org.hamcrest.Matchers.nullValue
 import static spock.util.matcher.HamcrestSupport.expect
 import static spock.util.matcher.HamcrestSupport.that
 
@@ -59,7 +60,7 @@ class PropertyCredentialsSpec extends Specification {
         expect props.get('key'), is('value')
     }
 
-    def "2. Check credentials in properties are Bas64"() {
+    def "2. Check credentials in properties are Base64"() {
         given: "a fresh properties loaded from file"
         Properties properties = new Properties()
         FileInputStream fileInputStream = new FileInputStream(file)
@@ -71,5 +72,42 @@ class PropertyCredentialsSpec extends Specification {
 
         expect: "a Base64 encoded value"
         that properties.getProperty("key"), is(Base64.encodeBase64String("value".getBytes("UTF-8")))
+    }
+
+    def "3. Remove a single credential"() {
+        given: "a credentials store"
+        def encryptor = Stub(Encryptor)
+        encryptor.decrypt('value'.getBytes("UTF-8")) >> 'value'.getBytes("UTF-8")
+        encryptor.encrypt('value'.getBytes("UTF-8")) >> 'value'.getBytes("UTF-8")
+
+        def props = new PropertyCredentials(file, encryptor)
+        props.set('key', 'value')
+        props.set('delete', 'me')
+        props.save()
+
+        when: "we remove one credential"
+        props.remove('delete')
+        props.save()
+
+        then: "the credential is removed, other credentials are not touched, the file still exists"
+        expect props.get('delete'), nullValue()
+        expect props.get('key'), is('value')
+        expect file.exists(), is(true)
+    }
+
+    def "4. Remove all credentials"() {
+        given: "a credentials store"
+        def encryptor = Stub(de.qaware.seu.as.code.plugins.credentials.impl.Encryptor)
+        def props = new PropertyCredentials(file, encryptor)
+        props.set('delete', 'me')
+        props.save()
+
+        when: "we remove all credentials"
+        props.clear()
+        props.save()
+
+        then: "all credentials and the file are removed"
+        expect props.get('delete'), nullValue()
+        expect file.exists(), is(false)
     }
 }

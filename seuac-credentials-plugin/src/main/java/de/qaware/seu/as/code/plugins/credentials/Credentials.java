@@ -18,11 +18,12 @@ package de.qaware.seu.as.code.plugins.credentials;
 import java.io.IOException;
 
 /**
- * Get and set credentials.
+ * Get, set and remove credentials.
  *
  * @author phxql
  */
 public interface Credentials {
+
     /**
      * Returns the credential with the given key. Returns null, if no credential with the given key could be found.
      *
@@ -38,6 +39,18 @@ public interface Credentials {
      * @param value Value.
      */
     void set(String key, String value);
+
+    /**
+     * Removes the credential with the given {@code key}.
+     *
+     * @param key The Key.
+     */
+    void remove(String key) throws IOException;
+
+    /**
+     * Clears all credentials.
+     */
+    void clear() throws IOException;
 
     /**
      * Saves the credentials.

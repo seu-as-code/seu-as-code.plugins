@@ -17,6 +17,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 
 import de.qaware.seu.as.code.plugins.credentials.impl.DPAPIEncryptor;
 import de.qaware.seu.as.code.plugins.credentials.impl.PropertyCredentials;
+import de.qaware.seu.as.code.plugins.credentials.util.IOSupport;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -50,7 +51,14 @@ public class SeuacCredentialsPlugin implements Plugin<Project> {
         }
         project.getExtensions().getExtraProperties().set(CREDENTIALS_PROPERTY, credentials);
 
+        IOSupport ioSupport = new IOSupport();
+
         SetCredentialsTask setCredentialsTask = project.getTasks().create("setCredentials", SetCredentialsTask.class);
         setCredentialsTask.setCredentials(credentials);
+        setCredentialsTask.setIoSupport(ioSupport);
+
+        ClearCredentialsTask clearCredentialsTask = project.getTasks().create("clearCredentials", ClearCredentialsTask.class);
+        clearCredentialsTask.setCredentials(credentials);
+        clearCredentialsTask.setIoSupport(ioSupport);
     }
 }
