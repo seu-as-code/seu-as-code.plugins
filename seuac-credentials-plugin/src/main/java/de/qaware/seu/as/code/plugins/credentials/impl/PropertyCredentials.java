@@ -17,13 +17,14 @@ package de.qaware.seu.as.code.plugins.credentials.impl;
 
 import de.qaware.seu.as.code.plugins.credentials.Credentials;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -105,14 +106,13 @@ public class PropertyCredentials implements Credentials {
     @Override
     public void save() throws IOException {
         if (properties.isEmpty()) {
-
-            Files.deleteIfExists(credentialsFile.toPath());
+            FileUtils.deleteQuietly(credentialsFile);
         } else {
             FileOutputStream fileOutputStream = new FileOutputStream(credentialsFile);
             try {
                 properties.store(fileOutputStream, "");
             } finally {
-                fileOutputStream.close();
+                IOUtils.closeQuietly(fileOutputStream);
             }
         }
     }
