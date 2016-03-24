@@ -15,7 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import de.qaware.seu.as.code.plugins.credentials.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
      */
     public ClearCredentialsTask() {
         this.setDescription("Clears stored credentials.");
-        this.setGroup("SEU-as-Code");
+        this.setGroup("SEU-as-code");
     }
 
     /**
@@ -61,7 +61,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
         System.out.print("Remove all credentials (y/N)? ");
         System.out.flush();
 
-        String answer = getIoSupport().readLine();
+        String answer = getConsoleReader().readLine();
         if (StringUtils.isBlank(answer)) {
             answer = "n";
         }
@@ -91,7 +91,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
         System.out.print("Remove credential with key '" + key + "' (y/N)? ");
         System.out.flush();
 
-        String answer = getIoSupport().readLine();
+        String answer = getConsoleReader().readLine();
         if (StringUtils.isBlank(answer)) {
             answer = "n";
         }

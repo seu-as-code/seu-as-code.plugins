@@ -47,11 +47,11 @@ class SeuacCredentialsPluginSpec extends Specification {
         def extension = project.getExtensions().getExtraProperties().get('credentials')
 
         expect setCredentialsTask, notNullValue()
-        expect setCredentialsTask.getIoSupport(), notNullValue()
+        expect setCredentialsTask.getConsoleReader(), notNullValue()
         expect setCredentialsTask.getCredentials(), notNullValue()
 
         expect clearCredentialsTask, notNullValue()
-        expect clearCredentialsTask.getIoSupport(), notNullValue()
+        expect clearCredentialsTask.getConsoleReader(), notNullValue()
         expect clearCredentialsTask.getCredentials(), notNullValue()
 
         expect extension, notNullValue()

@@ -105,6 +105,7 @@ public class PropertyCredentials implements Credentials {
     @Override
     public void save() throws IOException {
         if (properties.isEmpty()) {
+
             Files.deleteIfExists(credentialsFile.toPath());
         } else {
             FileOutputStream fileOutputStream = new FileOutputStream(credentialsFile);

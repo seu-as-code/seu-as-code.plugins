@@ -35,7 +35,7 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
      */
     public SetCredentialsTask() {
         this.setDescription("Stores credentials.");
-        this.setGroup("SEU-as-Code");
+        this.setGroup("SEU-as-code");
     }
 
     /**
@@ -48,7 +48,7 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
         System.out.print("Enter value for credentials with key '" + getKey() + "': ");
         System.out.flush();
 
-        String value = getIoSupport().readLine();
+        String value = getConsoleReader().readLine();
 
         getCredentials().set(getKey(), value);
         getCredentials().save();

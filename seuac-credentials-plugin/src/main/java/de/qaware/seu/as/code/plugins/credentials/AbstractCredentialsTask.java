@@ -15,7 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import de.qaware.seu.as.code.plugins.credentials.util.IOSupport;
+import de.qaware.seu.as.code.plugins.credentials.impl.ConsoleReader;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.internal.tasks.options.Option;
 
@@ -26,21 +26,18 @@ import org.gradle.api.internal.tasks.options.Option;
  */
 public abstract class AbstractCredentialsTask extends DefaultTask {
 
-    /**
-     * Credential key.
-     */
     private String key;
 
-
-    /**
-     * Credentials.
-     */
     private Credentials credentials;
 
+    private ConsoleReader consoleReader;
+
     /**
-     * I/O support.
+     * Initialize the console reader.
      */
-    private IOSupport ioSupport;
+    protected AbstractCredentialsTask() {
+        this.consoleReader = new ConsoleReader();
+    }
 
     /**
      * Sets the credentials.
@@ -71,15 +68,6 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     }
 
     /**
-     * Sets the {@link IOSupport} instance.
-     *
-     * @param ioSupport The I/O support.
-     */
-    public void setIoSupport(IOSupport ioSupport) {
-        this.ioSupport = ioSupport;
-    }
-
-    /**
      * @return The {@link Credentials}.
      */
     /* package-private */ Credentials getCredentials() {
@@ -87,9 +75,18 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     }
 
     /**
-     * @return The {@link IOSupport}.
+     * @return The {@link ConsoleReader}.
      */
-    /* package-private */ IOSupport getIoSupport() {
-        return ioSupport;
+    /* package-private */ ConsoleReader getConsoleReader() {
+        return consoleReader;
+    }
+
+    /**
+     * Sets the {@link ConsoleReader} instance.
+     *
+     * @param consoleReader The I/O support.
+     */
+    public void setConsoleReader(ConsoleReader consoleReader) {
+        this.consoleReader = consoleReader;
     }
 }

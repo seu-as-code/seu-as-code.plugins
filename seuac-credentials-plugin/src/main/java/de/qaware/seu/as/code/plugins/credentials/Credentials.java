@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 import java.io.IOException;
 
 /**
- * Get, set and remove credentials.
+ * Public interface definition for a credential. Allows to get, set and remove credentials.
  *
  * @author phxql
  */

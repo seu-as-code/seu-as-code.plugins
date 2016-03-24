@@ -15,7 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials
 
-import de.qaware.seu.as.code.plugins.credentials.util.IOSupport
+import de.qaware.seu.as.code.plugins.credentials.impl.ConsoleReader
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
@@ -34,12 +34,12 @@ class SetCredentialsTaskSpec extends Specification {
     private static final String TEST_SET_CREDENTIALS = 'testSetCredentials'
     private Project project
     private Credentials credentials
-    private IOSupport ioSupport
+    private ConsoleReader consoleReader
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
         this.credentials = Mock(Credentials)
-        this.ioSupport = Mock(IOSupport)
+        this.consoleReader = Mock(ConsoleReader)
     }
 
     def "Define SetCredentials task"() {
@@ -50,7 +50,7 @@ class SetCredentialsTaskSpec extends Specification {
         project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
             key "myKey"
             credentials this.credentials
-            ioSupport this.ioSupport
+            consoleReader this.consoleReader
         }
 
         then: "we expect to find the task correctly configured"
@@ -58,21 +58,21 @@ class SetCredentialsTaskSpec extends Specification {
 
         expect task, notNullValue()
         expect task.key, equalTo('myKey')
-        expect task.group, equalTo('SEU-as-Code')
+        expect task.group, equalTo('SEU-as-code')
         expect task.description, not(isEmptyOrNullString())
         expect task.getCredentials(), notNullValue()
-        expect task.getIoSupport(), notNullValue()
+        expect task.getConsoleReader(), notNullValue()
     }
 
     def "Invoke SetCredentialsTask with key"() {
         setup: "we define the task to remove a stored credential"
         // Simulate user input
-        ioSupport.readLine() >> 'value'
+        consoleReader.readLine() >> 'value'
 
         SetCredentialsTask task = project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
             key = "key"
             credentials = this.credentials
-            ioSupport = this.ioSupport
+            consoleReader = this.consoleReader
         }
 
         when: "the task runs"

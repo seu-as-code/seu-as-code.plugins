@@ -15,7 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials
 
-import de.qaware.seu.as.code.plugins.credentials.util.IOSupport
+import de.qaware.seu.as.code.plugins.credentials.impl.ConsoleReader
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
@@ -34,12 +34,12 @@ class ClearCredentialsTaskSpec extends Specification {
     private static final String TEST_CLEAR_CREDENTIALS = 'testClearCredentials'
     private Project project
     private Credentials credentials
-    private IOSupport ioSupport
+    private ConsoleReader consoleReader
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
         this.credentials = Mock(Credentials)
-        this.ioSupport = Mock(IOSupport)
+        this.consoleReader = Mock(ConsoleReader)
     }
 
 
@@ -51,7 +51,7 @@ class ClearCredentialsTaskSpec extends Specification {
         project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
             key "myKey"
             credentials this.credentials
-            ioSupport this.ioSupport
+            consoleReader this.consoleReader
         }
 
         then: "we expect to find the task correctly configured"
@@ -59,21 +59,21 @@ class ClearCredentialsTaskSpec extends Specification {
 
         expect task, notNullValue()
         expect task.key, equalTo('myKey')
-        expect task.group, equalTo('SEU-as-Code')
+        expect task.group, equalTo('SEU-as-code')
         expect task.description, not(isEmptyOrNullString())
         expect task.getCredentials(), notNullValue()
-        expect task.getIoSupport(), notNullValue()
+        expect task.getConsoleReader(), notNullValue()
     }
 
     def "Invoke ClearCredentials task with stored key"() {
         setup: "we define the task to remove a stored credential"
         // Simulate user confirms deletion
-        ioSupport.readLine() >> 'y'
+        consoleReader.readLine() >> 'y'
 
         ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
             key = "toRemove"
             credentials = this.credentials
-            ioSupport = this.ioSupport
+            consoleReader = this.consoleReader
         }
 
         when: "the task runs"
@@ -88,12 +88,12 @@ class ClearCredentialsTaskSpec extends Specification {
     def "Invoke ClearCredentials task with unknown key"() {
         setup: "we define the task to remove an a not stored credential"
         // Simulate user confirms deletion
-        ioSupport.readLine() >> 'y'
+        consoleReader.readLine() >> 'y'
 
         ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
             key = "unknown"
             credentials = this.credentials
-            ioSupport = this.ioSupport
+            consoleReader = this.consoleReader
         }
 
         when: "the task runs"
@@ -108,11 +108,11 @@ class ClearCredentialsTaskSpec extends Specification {
     def "Invoke ClearCredentials task without a key"() {
         setup: "we define the task to remove all credentials"
         // Simulate user confirms deletion
-        ioSupport.readLine() >> 'y'
+        consoleReader.readLine() >> 'y'
 
         ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
             credentials = this.credentials
-            ioSupport = this.ioSupport
+            consoleReader = this.consoleReader
         }
 
         when: "the task runs"
@@ -126,11 +126,11 @@ class ClearCredentialsTaskSpec extends Specification {
     def "Invoke ClearCredentials task and user declines deletion"() {
         setup: "we define the task to remove all credentials and the user to decline the deletion"
         // Simulate user declines deletion
-        ioSupport.readLine() >> 'n'
+        consoleReader.readLine() >> 'n'
 
         ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
             credentials = this.credentials
-            ioSupport = this.ioSupport
+            consoleReader = this.consoleReader
         }
 
         when: "the task runs"
