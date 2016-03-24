@@ -15,13 +15,9 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import org.gradle.api.DefaultTask;
-import org.gradle.api.internal.tasks.options.Option;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Task to set credentials.
@@ -32,43 +28,14 @@ import java.io.InputStreamReader;
  *
  * @author phxql
  */
-public class SetCredentialsTask extends DefaultTask {
-    /**
-     * Credential key.
-     */
-    private String key;
+public class SetCredentialsTask extends AbstractCredentialsTask {
 
     /**
-     * Credentials.
+     * Constructor initializing the tasks meta data.
      */
-    private Credentials credentials;
-
-    /**
-     * Sets the credentials.
-     *
-     * @param credentials Credentials.
-     */
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
-    }
-
-    /**
-     * Gets the key.
-     *
-     * @return Key.
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key.
-     *
-     * @param key Key.
-     */
-    @Option(option = "key", description = "The credentials key.")
-    public void setKey(String key) {
-        this.key = key;
+    public SetCredentialsTask() {
+        this.setDescription("Stores credentials.");
+        this.setGroup("SEU-as-Code");
     }
 
     /**
@@ -81,10 +48,9 @@ public class SetCredentialsTask extends DefaultTask {
         System.out.print("Enter value for credentials with key '" + getKey() + "': ");
         System.out.flush();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String value = reader.readLine();
+        String value = getConsoleReader().readLine();
 
-        credentials.set(getKey(), value);
-        credentials.save();
+        getCredentials().set(getKey(), value);
+        getCredentials().save();
     }
 }

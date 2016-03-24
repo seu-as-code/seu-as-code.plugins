@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -92,12 +93,27 @@ public class PropertyCredentials implements Credentials {
     }
 
     @Override
+    public void remove(String key) throws IOException {
+        properties.remove(key);
+    }
+
+    @Override
+    public void clear() throws IOException {
+        properties.clear();
+    }
+
+    @Override
     public void save() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(credentialsFile);
-        try {
-            properties.store(fileOutputStream, "");
-        } finally {
-            fileOutputStream.close();
+        if (properties.isEmpty()) {
+
+            Files.deleteIfExists(credentialsFile.toPath());
+        } else {
+            FileOutputStream fileOutputStream = new FileOutputStream(credentialsFile);
+            try {
+                properties.store(fileOutputStream, "");
+            } finally {
+                fileOutputStream.close();
+            }
         }
     }
 }
