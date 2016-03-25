@@ -20,7 +20,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * The SEU-as-Code Git plugin. Registers the git extension and creates init and clone
+ * The SEU-as-code Git plugin. Registers the git extension and creates init and clone
  * tasks for all defined repos.
  *
  * @author lreimer
