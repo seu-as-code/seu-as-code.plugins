@@ -6,7 +6,7 @@
 [![Stories in Progress](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=in%20progress&title=In%20Progress)](https://waffle.io/seu-as-code/seu-as-code.plugins)
 [![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/seu-as-code/seu-as-code.plugins/blob/master/LICENSE)
 
-# SEU-as-Code Base Plugin
+# SEU-as-code Base Plugin
 
 A Gradle plugin to create SEU installations from code. Provides basic tasks to bootstrap and update the SEU and to
 install and update the software packages. The SEU can be configured and customized using the `seuAsCode` extension.
@@ -23,7 +23,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.1.1'
+        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.2.0'
     }
 }
 
@@ -33,7 +33,7 @@ apply plugin: 'de.qaware.seu.as.code.base'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.base' version '2.1.1'
+    id 'de.qaware.seu.as.code.base' version '2.2.0'
 }
 ```
 
@@ -104,7 +104,7 @@ The following example show the full extension configuration:
 ```groovy
 seuAsCode {
     seuHome 'S:'
-    projectName 'SEU-as-Code'
+    projectName 'SEU-as-code'
     layout {
         codebase 'S:/codebase/'
         docbase 'S:/docbase/'
