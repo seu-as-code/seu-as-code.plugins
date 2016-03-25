@@ -45,6 +45,7 @@ Task name | Depends on | Type | Description
 --- | --- | --- | ---
 `bootstrapSeu`| `createSeuacLayout`, `installSoftware` | - | Initial tasks to create the SEU from scratch.
 `updateSeu` | `installSoftware` | - | Updates a the SEU installation and applies the latest configuration.
+`destroySeu` | - | DestroySeuTask | Destroy the complete SEU and deletes all directories. So be careful!
 `createSeuacLayout` | - | CreateSeuacLayoutTask | Creates the basic directory layout for the SEU.
 `applySoftware` | - | ApplyConfigurationTask | Apply the software configuration and install packages. New dependencies are installed, obsolete software will be removed.
 `applyHome` | - | ApplyConfigurationTask | Apply the home configuration and install packages. New dependencies are installed, obsolete software will be removed.
@@ -70,6 +71,7 @@ the dependencies are located, in this case we used Bintray.
 ```groovy
 repositories {
 	maven { url 'https://dl.bintray.com/seu-as-code/maven' }
+	jcenter()
 }
 dependencies {
     // dependencies for the Groovy root classloader
