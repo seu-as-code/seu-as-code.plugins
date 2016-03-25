@@ -21,7 +21,7 @@ import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.TaskAction
 
 /**
- * This task will store the SEU-as-Code configuration to the configured storage.
+ * This task will store the SEU-as-code configuration to the configured storage.
  */
 class StoreSeuacDbTask extends DefaultTask {
 
@@ -31,12 +31,12 @@ class StoreSeuacDbTask extends DefaultTask {
      * Initialize the group and description for this task.
      */
     StoreSeuacDbTask() {
-        group = 'SEU-as-Code'
+        group = 'SEU-as-code'
         description = 'Store the current SEU software package configuration.'
     }
 
     /**
-     * Stores the SEU-as-Code database for the current software configuration.
+     * Stores the SEU-as-code database for the current software configuration.
      */
     @TaskAction
     void storeSeuacDb() {

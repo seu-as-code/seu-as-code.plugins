@@ -20,7 +20,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 
 /**
- * The SEU-as-Code base plugin takes care of creating and updating an SEU installation.
+ * The SEU-as-code base plugin takes care of creating and updating an SEU installation.
  *
  * @author lreimer
  */
@@ -31,7 +31,7 @@ class SeuacBasePlugin implements Plugin<Project> {
     static final String EXTENSION_NAME = 'seuAsCode'
 
     /**
-     * Apply all SEU-as-Code tasks to the project as well as the extension and configurations.
+     * Apply all SEU-as-code tasks to the project as well as the extension and configurations.
      *
      * @param project the current project
      */
@@ -97,11 +97,11 @@ class SeuacBasePlugin implements Plugin<Project> {
             applyHome.finalizedBy runHomeHooks
             applyHome.mustRunAfter createSeuacLayout
 
-            Task bootstrapSeu = project.task('bootstrapSeu', group: 'SEU-as-Code', description: 'Bootstrap the complete SEU.')
+            Task bootstrapSeu = project.task('bootstrapSeu', group: 'SEU-as-code', description: 'Bootstrap the complete SEU.')
             bootstrapSeu.dependsOn createSeuacLayout, applySoftware, applyHome
             bootstrapSeu.finalizedBy storeSeuacDb
 
-            Task updateSeu = project.task('updateSeu', group: 'SEU-as-Code', description: 'Update the complete SEU.')
+            Task updateSeu = project.task('updateSeu', group: 'SEU-as-code', description: 'Update the complete SEU.')
             updateSeu.dependsOn applySoftware, applyHome
             updateSeu.finalizedBy storeSeuacDb
         }

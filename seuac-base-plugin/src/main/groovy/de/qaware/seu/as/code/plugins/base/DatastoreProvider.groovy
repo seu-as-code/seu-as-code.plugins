@@ -19,7 +19,7 @@ import org.gradle.api.artifacts.Dependency
 import org.gradle.api.file.FileTree
 
 /**
- * The base class for different SEU-as-Code data store providers. The providers
+ * The base class for different SEU-as-code data store providers. The providers
  * are responsible to persist and query the SEU configuration.
  *
  * @author lreimer

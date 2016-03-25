@@ -44,7 +44,7 @@ class CreateAsciiBannerTask extends DefaultTask {
      * Initialize the group for this task.
      */
     CreateAsciiBannerTask() {
-        group = 'SEU-as-Code'
+        group = 'SEU-as-code'
         description = 'Create an ASCII art banner file from the project name.'
     }
 

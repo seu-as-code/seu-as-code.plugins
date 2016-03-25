@@ -44,7 +44,7 @@ class RunHooksTask extends DefaultTask {
      * Initialize the group and description for this task.
      */
     RunHooksTask() {
-        group = 'SEU-as-Code'
+        group = 'SEU-as-code'
         description = 'Run hooks for installed software packages.'
     }
 

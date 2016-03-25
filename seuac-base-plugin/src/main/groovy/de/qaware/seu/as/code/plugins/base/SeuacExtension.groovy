@@ -20,7 +20,7 @@ import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
 
 /**
- * This is the SEU-as-Code extension for our SeuacBasePlugin.
+ * This is the SEU-as-code extension for our SeuacBasePlugin.
  *
  * @author lreimer
  */

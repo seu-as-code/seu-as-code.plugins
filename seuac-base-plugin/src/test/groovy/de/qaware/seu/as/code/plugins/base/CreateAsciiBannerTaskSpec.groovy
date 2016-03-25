@@ -39,7 +39,7 @@ class CreateAsciiBannerTaskSpec extends Specification {
     def "Define CreateAsciiBannerTask and doCreateAsciiBanner"() {
         given: "a configured CreateAsciiBannerTask"
         CreateAsciiBannerTask task = project.task("createAsciiBanner", type: CreateAsciiBannerTask) {
-            projectName = 'SEU-as-Code'
+            projectName = 'SEU-as-code'
             bannerFile = new File(seuHome, CreateAsciiBannerTask.DEFAULT_FILENAME)
             settings = defaultBanner()
         }
