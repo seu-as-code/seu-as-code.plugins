@@ -64,6 +64,7 @@ class SeuacBasePluginSpec extends Specification {
         expect project.extensions.findByName(SeuacBasePlugin.EXTENSION_NAME), notNullValue()
         expect project.tasks.bootstrapSeu, notNullValue()
         expect project.tasks.updateSeu, notNullValue()
+        expect project.tasks.destroySeu, notNullValue()
         expect project.tasks.createSeuacLayout, notNullValue()
         expect project.tasks.applySoftware, notNullValue()
         expect project.tasks.runSoftwareHooks, notNullValue()

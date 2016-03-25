@@ -146,6 +146,15 @@ class SeuacLayout {
     }
 
     /**
+     * Utility method to remove the directories for this layout instance.
+     *
+     * @throws IOException in case if I/O problems
+     */
+    void rmdirs() throws IOException {
+        getDirectories().each { File d -> d.deleteDir() }
+    }
+
+    /**
      * Factory method to create a defaut SEU-as-code layout for the given SEU home.
      *
      * @param seuHome the SEU home

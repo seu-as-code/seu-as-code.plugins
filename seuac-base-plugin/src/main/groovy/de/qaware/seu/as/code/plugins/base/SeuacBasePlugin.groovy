@@ -104,6 +104,11 @@ class SeuacBasePlugin implements Plugin<Project> {
             Task updateSeu = project.task('updateSeu', group: 'SEU-as-code', description: 'Update the complete SEU.')
             updateSeu.dependsOn applySoftware, applyHome
             updateSeu.finalizedBy storeSeuacDb
+
+            project.task('destroySeu', type: DestroySeuTask) {
+                layout = seuAsCode.layout
+                datastore = seuAsCode.datastore
+            }
         }
     }
 
