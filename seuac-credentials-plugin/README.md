@@ -6,7 +6,7 @@
 [![Stories in Progress](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=in%20progress&title=In%20Progress)](https://waffle.io/seu-as-code/seu-as-code.plugins)
 [![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/seu-as-code/seu-as-code.plugins/blob/master/LICENSE)
 
-# SEU-as-Code Credentials Plugin
+# SEU-as-code Credentials Plugin
 
 A Gradle plugin for the secure storage of your credentials using the Windows Data Protection API (DPAPI).
 
@@ -22,7 +22,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-credentials-plugin:2.1.0'
+        classpath 'de.qaware.seu.as.code:seuac-credentials-plugin:2.2.0'
     }
 }
 
@@ -32,7 +32,7 @@ apply plugin: 'de.qaware.seu.as.code.credentials'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.credentials' version '2.1.0'
+    id 'de.qaware.seu.as.code.credentials' version '2.2.0'
 }
 ```
 
