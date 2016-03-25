@@ -35,7 +35,7 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
      */
     public SetCredentialsTask() {
         this.setDescription("Stores credentials.");
-        this.setGroup("SEU-as-Code");
+        this.setGroup("SEU-as-code");
     }
 
     /**

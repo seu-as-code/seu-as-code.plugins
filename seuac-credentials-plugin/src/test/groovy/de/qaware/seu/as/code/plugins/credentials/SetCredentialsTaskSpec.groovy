@@ -58,7 +58,7 @@ class SetCredentialsTaskSpec extends Specification {
 
         expect task, notNullValue()
         expect task.key, equalTo('myKey')
-        expect task.group, equalTo('SEU-as-Code')
+        expect task.group, equalTo('SEU-as-code')
         expect task.description, not(isEmptyOrNullString())
         expect task.getCredentials(), notNullValue()
         expect task.getConsoleReader(), notNullValue()

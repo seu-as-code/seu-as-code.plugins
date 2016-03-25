@@ -35,7 +35,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
      */
     public ClearCredentialsTask() {
         this.setDescription("Clears stored credentials.");
-        this.setGroup("SEU-as-Code");
+        this.setGroup("SEU-as-code");
     }
 
     /**
