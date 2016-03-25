@@ -20,7 +20,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * The SEU-as-Code subversion plugin. Registers the subversion extension and creates checkout and
+ * The SEU-as-code subversion plugin. Registers the subversion extension and creates checkout and
  * update tasks for all defined repos.
  *
  * @author lreimer

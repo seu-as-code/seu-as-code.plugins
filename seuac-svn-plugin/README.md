@@ -6,7 +6,7 @@
 [![Stories in Progress](https://badge.waffle.io/seu-as-code/seu-as-code.plugins.png?label=in%20progress&title=In%20Progress)](https://waffle.io/seu-as-code/seu-as-code.plugins)
 [![Apache License 2](http://img.shields.io/badge/license-ASF2-blue.svg)](https://github.com/seu-as-code/seu-as-code.plugins/blob/master/LICENSE)
 
-# SEU-as-Code SVN Plugin
+# SEU-as-code SVN Plugin
 
 A Gradle plugin for handling SVN repositories. Provides basic tasks to checkout SVN repositories and update 
 local directories. The repositories can be configured using an extension.
@@ -62,7 +62,7 @@ Property name | Type | Default value | Description
 
 ### Example
 
-The following example defines the SVN repository of the SEU-as-Code plugins. The example did not hardcode the
+The following example defines the SVN repository of the SEU-as-code plugins. The example did not hardcode the
 username and password properties, instead you should use project properties or the credentials plugin.
 ```groovy
 subversion {
