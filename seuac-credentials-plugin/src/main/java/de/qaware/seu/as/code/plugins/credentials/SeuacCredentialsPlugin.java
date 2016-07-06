@@ -17,6 +17,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 
 import de.qaware.seu.as.code.plugins.credentials.impl.DPAPIEncryptor;
 import de.qaware.seu.as.code.plugins.credentials.impl.PropertyCredentials;
+import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -46,7 +47,7 @@ public class SeuacCredentialsPlugin implements Plugin<Project> {
         try {
             credentials = new PropertyCredentials(new File(project.getGradle().getGradleUserHomeDir(), PROPERTIES_FILE), new DPAPIEncryptor());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new GradleException("Can not access encrypted credentials property file.", e);
         }
         project.getExtensions().getExtraProperties().set(CREDENTIALS_PROPERTY, credentials);
 

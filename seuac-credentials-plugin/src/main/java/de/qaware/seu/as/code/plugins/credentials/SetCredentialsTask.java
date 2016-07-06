@@ -36,6 +36,7 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
     public SetCredentialsTask() {
         this.setDescription("Stores credentials.");
         this.setGroup("SEU-as-code");
+        this.setEnabled(OperatingSystem.current() == OperatingSystem.WINDOWS);
     }
 
     /**
