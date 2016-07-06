@@ -25,6 +25,11 @@ import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
  * @author lreimer
  */
 class SeuacExtension {
+    /**
+     * Name of this extension for this plugin.
+     */
+    static final String NAME = 'seuAsCode'
+
     String seuHome
     String projectName
 

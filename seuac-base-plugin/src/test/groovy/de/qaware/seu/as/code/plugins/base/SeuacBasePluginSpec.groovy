@@ -20,6 +20,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
+import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.notNullValue
 import static spock.util.matcher.HamcrestSupport.expect
 
@@ -61,7 +62,7 @@ class SeuacBasePluginSpec extends Specification {
         project.evaluate()
 
         then: "the extentions and all tasks are registered"
-        expect project.extensions.findByName(SeuacBasePlugin.EXTENSION_NAME), notNullValue()
+        expect project.extensions.findByName(SeuacExtension.NAME), notNullValue()
         expect project.tasks.bootstrapSeu, notNullValue()
         expect project.tasks.updateSeu, notNullValue()
         expect project.tasks.destroySeu, notNullValue()
@@ -71,5 +72,9 @@ class SeuacBasePluginSpec extends Specification {
         expect project.tasks.applyHome, notNullValue()
         expect project.tasks.runHomeHooks, notNullValue()
         expect project.tasks.storeSeuacDb, notNullValue()
+
+        expect project.extensions.extraProperties.get('osFamily'), equalTo(Platform.current().osFamily)
+        expect project.extensions.extraProperties.get('osClassifier'), equalTo(Platform.current().osClassifier)
+        expect project.extensions.extraProperties.get('osArch'), equalTo(Platform.current().osArch)
     }
 }

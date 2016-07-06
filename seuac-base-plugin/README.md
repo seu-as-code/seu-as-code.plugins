@@ -23,7 +23,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.2.0'
+        classpath 'de.qaware.seu.as.code:seuac-base-plugin:2.3.0'
     }
 }
 
@@ -33,7 +33,7 @@ apply plugin: 'de.qaware.seu.as.code.base'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.base' version '2.2.0'
+    id 'de.qaware.seu.as.code.base' version '2.3.0'
 }
 ```
 
@@ -63,6 +63,16 @@ Task name | Description
 `seuac`| Used for dependencies that need to be put in the root classloader, e.g. SQL drivers
 `software` | Used for software dependencies that will be installed in the software directory.
 `home` | Used for dependencies that will be installed in the home directory.
+
+## Extra Properties
+
+The plugin defines the following extra properties, that may be used for platform specific behaviour:
+
+Task name | Description
+--- | ---
+`osFamily`| The OS family, either `windows`, `macos`, `unix` or `unknown`
+`osClassifier` | The OS classifier, either `win`, `mac`, `unix` or `???`
+`osArch` | The OS architecture, either `x86_64` or `x86`
 
 ### Dependencies
 

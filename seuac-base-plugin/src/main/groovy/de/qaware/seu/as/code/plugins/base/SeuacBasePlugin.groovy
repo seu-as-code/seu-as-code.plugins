@@ -25,10 +25,6 @@ import org.gradle.api.Task
  * @author lreimer
  */
 class SeuacBasePlugin implements Plugin<Project> {
-    /**
-     * Name of the extension for this plugin.
-     */
-    static final String EXTENSION_NAME = 'seuAsCode'
 
     /**
      * Apply all SEU-as-code tasks to the project as well as the extension and configurations.
@@ -40,8 +36,11 @@ class SeuacBasePlugin implements Plugin<Project> {
         // basic plugin specific setup of project
         createConfigurations(project)
 
-        // create the extension for this project
-        project.extensions.create(EXTENSION_NAME, SeuacExtension)
+        // register extension properties for OS family, classifier and architecture
+        setExtraProperties(project)
+
+        // create the extensions for this project
+        project.extensions.create(SeuacExtension.NAME, SeuacExtension)
         SeuacExtension seuAsCode = project.seuAsCode
 
         project.afterEvaluate {
@@ -110,6 +109,13 @@ class SeuacBasePlugin implements Plugin<Project> {
                 datastore = seuAsCode.datastore
             }
         }
+    }
+
+    private void setExtraProperties(Project project) {
+        def platform = Platform.current()
+        project.extensions.extraProperties.set('osFamily', platform.osFamily)
+        project.extensions.extraProperties.set('osClassifier', platform.osClassifier)
+        project.extensions.extraProperties.set('osArch', platform.osArch)
     }
 
     private void createConfigurations(Project project) {
