@@ -29,7 +29,7 @@ class PlatformSpec extends Specification {
     @Requires({ os.macOs })
     def "Check current on Mac OS"() {
         expect:
-        Platform.current() == Platform.MacOS
+        Platform.current() == Platform.MacOs
     }
 
     @Requires({ os.windows })
@@ -47,9 +47,9 @@ class PlatformSpec extends Specification {
         name         || os
         'Windows 98' || Platform.Windows
         'Linux'      || Platform.Unix
-        'Mac OS X'   || Platform.MacOS
-        'Darwin'     || Platform.MacOS
-        'OSX'        || Platform.MacOS
+        'Mac OS X'   || Platform.MacOs
+        'Darwin'     || Platform.MacOs
+        'OSX'        || Platform.MacOs
         'Android'    || Platform.Unknown
     }
 }

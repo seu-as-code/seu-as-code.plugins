@@ -59,7 +59,7 @@ class PlatformExtensionSpec extends Specification {
         1 * project.dependencies { _ }
 
         where:
-        platform << [Platform.Windows, Platform.MacOS, Platform.Unix]
+        platform << [Platform.Windows, Platform.MacOs, Platform.Unix]
     }
 
     def "Apply other platform dependencies when on Windows should not work"() {
@@ -84,11 +84,11 @@ class PlatformExtensionSpec extends Specification {
     }
 
     def "Apply other platform dependencies when on MacOS should not work"() {
-        given: 'we are on MacOS and an extension instance'
-        def platform = Platform.MacOS
+        given: 'we are on MacOs and an extension instance'
+        def platform = Platform.MacOs
         def extension = new PlatformExtension(project, platform)
 
-        when: 'we apply some dependencies via the the non MacOS closures'
+        when: 'we apply some dependencies via the the non MacOs closures'
         extension.windows {
             dependencies {
                 software 'de.qaware.seu.as.code:seuac-environment:2.0.0:jdk8'
