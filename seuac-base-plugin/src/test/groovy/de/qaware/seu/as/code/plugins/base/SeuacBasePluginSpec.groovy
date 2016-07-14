@@ -58,11 +58,25 @@ class SeuacBasePluginSpec extends Specification {
             layout = defaultLayout
         }
 
+        project.platform {
+            windows {
+                dependencies.add('software', ':seuac-win:1.0.0@zip')
+            }
+            macOs {
+                dependencies.add('software', ':seuac-mac:1.0.0@zip')
+            }
+            unix {
+                dependencies.add('software', ':seuac-unix:1.0.0@zip')
+            }
+        }
+
         when: "we evaluate the project"
         project.evaluate()
 
         then: "the extentions and all tasks are registered"
         expect project.extensions.findByName(SeuacExtension.NAME), notNullValue()
+        expect project.extensions.findByName(PlatformExtension.NAME), notNullValue()
+
         expect project.tasks.bootstrapSeu, notNullValue()
         expect project.tasks.updateSeu, notNullValue()
         expect project.tasks.destroySeu, notNullValue()

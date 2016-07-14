@@ -23,7 +23,7 @@ package de.qaware.seu.as.code.plugins.base
 enum Platform {
     Windows('win'), MacOS('mac'), Unix('unix'), Unknown('???');
 
-    final def osClassifier;
+    final def osClassifier
 
     private Platform(osClassifier) {
         this.osClassifier = osClassifier
@@ -44,14 +44,22 @@ enum Platform {
      * @return either x86_64 or x86
      */
     def String getOsArch() {
+        is64bit() ? 'x86_64' : 'x86'
+    }
+
+    /**
+     * Is this platform a 64-bit platform?
+     *
+     * @return true if so, otherwise false
+     */
+    def boolean is64bit() {
         boolean is64bit
         if (this == Windows) {
             is64bit = (System.getenv("ProgramFiles(x86)") != null)
         } else {
             is64bit = (System.getProperty("os.arch").indexOf("64") != -1)
         }
-
-        (is64bit) ? 'x86_64' : 'x86'
+        is64bit
     }
 
     /**

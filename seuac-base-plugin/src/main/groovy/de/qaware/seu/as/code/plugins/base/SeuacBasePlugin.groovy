@@ -37,9 +37,11 @@ class SeuacBasePlugin implements Plugin<Project> {
         createConfigurations(project)
 
         // register extension properties for OS family, classifier and architecture
-        setExtraProperties(project)
+        def platform = Platform.current()
+        setExtraProperties(project, platform)
 
         // create the extensions for this project
+        project.extensions.add(PlatformExtension.NAME, new PlatformExtension(project, platform))
         project.extensions.create(SeuacExtension.NAME, SeuacExtension)
         SeuacExtension seuAsCode = project.seuAsCode
 
@@ -111,8 +113,7 @@ class SeuacBasePlugin implements Plugin<Project> {
         }
     }
 
-    private void setExtraProperties(Project project) {
-        def platform = Platform.current()
+    private void setExtraProperties(Project project, Platform platform) {
         project.extensions.extraProperties.set('osFamily', platform.osFamily)
         project.extensions.extraProperties.set('osClassifier', platform.osClassifier)
         project.extensions.extraProperties.set('osArch', platform.osArch)
