@@ -57,13 +57,18 @@ class RunHooksTask extends DefaultTask {
         File hooks = new File(target, 'META-INF/hooks/')
         if (hooks.exists()) {
             Binding binding = new Binding();
+
             binding.setVariable('seuHome', seuHome)
             binding.setVariable('seuLayout', seuLayout)
             binding.setVariable('projectName', projectName)
             binding.setVariable('directory', target)
             binding.setVariable('logger', logger)
 
-            def shell = new GroovyShell(binding)
+            binding.setVariable('platform', Platform.current())
+            binding.setVariable('ext', project.extensions.extraProperties)
+            binding.setVariable('project', project)
+
+            def shell = new GroovyShell(getClass().classLoader, binding)
             hooks.eachFileMatch(FileType.FILES, ~/.*\.groovy/) {
                 logger.debug "Running software hook $it"
                 try {
@@ -72,6 +77,9 @@ class RunHooksTask extends DefaultTask {
                     logger.warn("Error running software hook $it", any)
                 }
             }
+
+            // IDEA: use GradleBuild task here to execute Gradle Build files
+            // this may be used for self downloading packages
         }
 
         // delete the whole META-INF/ directory

@@ -13,4 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+assert seuHome
+assert seuLayout
+assert projectName
+assert directory
+assert logger
+assert platform
+assert ext
+assert project
+
 logger.info "Executing hooks for $projectName SEU in $seuHome"
