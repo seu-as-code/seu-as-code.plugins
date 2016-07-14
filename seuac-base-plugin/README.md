@@ -96,6 +96,13 @@ dependencies {
     software 'org.gradle:gradle:2.5'
     software 'org.groovy-lang:groovy:2.4.4'
 }
+platform {
+    windows { // add Windows specific dependencies here }
+    macOs { // add MacOS specific dependencies here }
+    unix { // add Unix or Linux specific dependencies here }
+    x86 { // add 32-bit dependencies here }
+    x86_64 { // add 64-bit dependencies here }
+}
 ```
 
 ## Extension Properties
