@@ -57,12 +57,12 @@ class PlatformExtension {
 
     /**
      * Evaluates the given closure on the current project of the current platform
-     * we are running on is MacOS.
+     * we are running on is MacOs.
      *
      * @param closure the closure to apply to the current project
      */
     def macOs(Closure closure) {
-        if (platform == Platform.MacOS) {
+        if (platform == Platform.MacOs) {
             closure.delegate = project
             closure()
         }

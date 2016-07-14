@@ -21,7 +21,7 @@ package de.qaware.seu.as.code.plugins.base
  * @author lreimer
  */
 enum Platform {
-    Windows('win'), MacOS('mac'), Unix('unix'), Unknown('???');
+    Windows('win'), MacOs('mac'), Unix('unix'), Unknown('???');
 
     final def osClassifier
 
@@ -83,11 +83,38 @@ enum Platform {
         if (osName.contains("windows")) {
             Windows
         } else if (osName.contains("mac os x") || osName.contains("darwin") || osName.contains("osx")) {
-            MacOS
+            MacOs
         } else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
             Unix
         } else {
             Unknown
         }
+    }
+
+    /**
+     * Is current platform Windows?
+     *
+     * @return true on Windows, else false
+     */
+    static boolean isWindows() {
+        current() == Windows
+    }
+
+    /**
+     * Is current platform Unix?
+     *
+     * @return true on Unix, else false
+     */
+    static boolean isUnix() {
+        current() == Unix
+    }
+
+    /**
+     * Is current plaform MacOs?
+     *
+     * @return true on MacOs, else false
+     */
+    static boolean isMacOs() {
+        current() == MacOs
     }
 }
