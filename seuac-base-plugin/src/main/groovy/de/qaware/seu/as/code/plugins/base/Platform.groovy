@@ -52,14 +52,8 @@ enum Platform {
      *
      * @return true if so, otherwise false
      */
-    def boolean is64bit() {
-        boolean is64bit
-        if (this == Windows) {
-            is64bit = (System.getenv("ProgramFiles(x86)") != null)
-        } else {
-            is64bit = (System.getProperty("os.arch").indexOf("64") != -1)
-        }
-        is64bit
+    static boolean is64bit() {
+        (System.getenv("ProgramFiles(x86)") != null) || (System.getProperty("os.arch").indexOf("64") != -1)
     }
 
     /**

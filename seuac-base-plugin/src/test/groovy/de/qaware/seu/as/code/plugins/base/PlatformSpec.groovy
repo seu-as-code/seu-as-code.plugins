@@ -30,12 +30,14 @@ class PlatformSpec extends Specification {
     def "Check current on Mac OS"() {
         expect:
         Platform.current() == Platform.MacOs
+        Platform.isMacOs()
     }
 
     @Requires({ os.windows })
     def "Check current on Windows"() {
         expect:
         Platform.current() == Platform.Windows
+        Platform.isWindows()
     }
 
     @Unroll

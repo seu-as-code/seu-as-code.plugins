@@ -88,7 +88,7 @@ class PlatformExtension {
      * @param closure the closure to apply to the current project
      */
     def x86(Closure closure) {
-        if (!platform.is64bit()) {
+        if (!Platform.is64bit()) {
             closure.delegate = project
             closure()
         }
@@ -101,7 +101,7 @@ class PlatformExtension {
      * @param closure the closure to apply to the current project
      */
     def x86_64(Closure closure) {
-        if (platform.is64bit()) {
+        if (Platform.is64bit()) {
             closure.delegate = project
             closure()
         }
