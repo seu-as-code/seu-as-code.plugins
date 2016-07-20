@@ -51,7 +51,7 @@ class PlatformExtension {
     void win(Closure closure) {
         if (platform == Platform.Windows) {
             closure.delegate = project
-            closure.call()
+            closure()
         }
     }
 
@@ -64,7 +64,7 @@ class PlatformExtension {
     void mac(Closure closure) {
         if (platform == Platform.MacOs) {
             closure.delegate = project
-            closure.call()
+            closure()
         }
     }
 
@@ -77,7 +77,7 @@ class PlatformExtension {
     void unix(Closure closure) {
         if (platform == Platform.Unix) {
             closure.delegate = project
-            closure.call()
+            closure()
         }
     }
 
