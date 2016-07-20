@@ -39,12 +39,12 @@ class PlatformExtensionSpec extends Specification {
         def extension = new PlatformExtension(project, platform)
 
         when: 'we apply some dependencies via the windows closure'
-        extension.windows {
+        extension.win {
             dependencies {
                 software 'de.qaware.seu.as.code:seuac-environment:2.0.0:jdk8'
             }
         }
-        extension.macOs {
+        extension.mac {
             dependencies {
                 software 'de.qaware.seu.as.code:seuac-environment:2.0.0:jdk8'
             }
@@ -68,7 +68,7 @@ class PlatformExtensionSpec extends Specification {
         def extension = new PlatformExtension(project, platform)
 
         when: 'we apply some dependencies via the the non windows closures'
-        extension.macOs {
+        extension.mac {
             dependencies {
                 software 'de.qaware.seu.as.code:seuac-environment:2.0.0:jdk8'
             }
@@ -89,7 +89,7 @@ class PlatformExtensionSpec extends Specification {
         def extension = new PlatformExtension(project, platform)
 
         when: 'we apply some dependencies via the the non MacOs closures'
-        extension.windows {
+        extension.win {
             dependencies {
                 software 'de.qaware.seu.as.code:seuac-environment:2.0.0:jdk8'
             }

@@ -59,10 +59,10 @@ class SeuacBasePluginSpec extends Specification {
         }
 
         project.platform {
-            windows {
+            win {
                 dependencies.add('software', ':seuac-win:1.0.0@zip')
             }
-            macOs {
+            mac {
                 dependencies.add('software', ':seuac-mac:1.0.0@zip')
             }
             unix {

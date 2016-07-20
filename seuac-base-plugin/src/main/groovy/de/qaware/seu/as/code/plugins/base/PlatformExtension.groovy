@@ -48,10 +48,10 @@ class PlatformExtension {
      *
      * @param closure the closure to apply to the current project
      */
-    def windows(Closure closure) {
+    void win(Closure closure) {
         if (platform == Platform.Windows) {
             closure.delegate = project
-            closure()
+            closure.call()
         }
     }
 
@@ -61,10 +61,10 @@ class PlatformExtension {
      *
      * @param closure the closure to apply to the current project
      */
-    def macOs(Closure closure) {
+    void mac(Closure closure) {
         if (platform == Platform.MacOs) {
             closure.delegate = project
-            closure()
+            closure.call()
         }
     }
 
@@ -74,10 +74,10 @@ class PlatformExtension {
      *
      * @param closure the closure to apply to the current project
      */
-    def unix(Closure closure) {
+    void unix(Closure closure) {
         if (platform == Platform.Unix) {
             closure.delegate = project
-            closure()
+            closure.call()
         }
     }
 
@@ -87,7 +87,7 @@ class PlatformExtension {
      *
      * @param closure the closure to apply to the current project
      */
-    def x86(Closure closure) {
+    void x86(Closure closure) {
         if (!Platform.is64bit()) {
             closure.delegate = project
             closure()
@@ -100,7 +100,7 @@ class PlatformExtension {
      *
      * @param closure the closure to apply to the current project
      */
-    def x86_64(Closure closure) {
+    void x86_64(Closure closure) {
         if (Platform.is64bit()) {
             closure.delegate = project
             closure()
