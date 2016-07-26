@@ -22,7 +22,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-credentials-plugin:2.2.0'
+        classpath 'de.qaware.seu.as.code:seuac-credentials-plugin:2.4.0'
     }
 }
 
@@ -32,7 +32,7 @@ apply plugin: 'de.qaware.seu.as.code.credentials'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.credentials' version '2.2.0'
+    id 'de.qaware.seu.as.code.credentials' version '2.4.0'
 }
 ```
 
@@ -42,8 +42,9 @@ The plugin defines the following tasks:
 
 Task name | Depends on | Type | Description
 --- | --- | --- | ---
-`setCredentials`| - | - | Sets a credential. Invoke with `--key [Key of the credentials]` parameter.
-`clearCredentials`| - | - | Clears a credential. Invoke with `--key [Key of the credentials]` parameter. Invoke without `--key` parameter to clear all stored credentials. User confirmation is required in any case.
+`setCredentials`| - | SetCredentialsTask | Sets a credential. Invoke with `--service [Name of service]` parameter.
+`updateCredentials` | - | UpdateCredentialsTask | Updates the password of a credential. Invoke with `--service [Name of service]` parameter.
+`clearCredentials`| - | ClearCredentialsTask | Clears a credential. Invoke with `--service [Name of service]` parameter.
 
 ## Extension Properties
 
@@ -51,21 +52,35 @@ The plugin defines the following extra extension properties:
 
 Property name | Type | Default value | Description
 --- | --- | --- | ---
-`credentials` | Credentials | - | Object to query credentials. Invoke the `String get(String key)` method to get the credentials with the key `key`.
+`credentials` | Credentials | - | Object to query credentials. Invoke the `String get(String service)` method to get the credentials with the service name `service`.
 
 ### Example
 
-First add the credentials using the key `nexusUsername` and `nexusPassword` by invoking
-`gradle setCredentials --key nexusUsername` and `gradle setCredentials --key nexusPassword`.
+First add the credentials for the `nexus` service by invoking one of the following Gradle tasks, you will be asked for the
+username and password on the Console:
+```shell
+$ ./gradlew setCredentials --service nexus
+$ ./gradlew setCredentials --service nexus --username fooUser --password barPassword
+```
 
+Now you can use this credential information in your build script, e.g. in the repositories section, as follows:
 ```groovy
     repositories {
         mavenCentral()
         maven {
             url nexusUrl
             credentials {
-                username project.credentials.get('nexusUsername')
-                password project.credentials.get('nexusPassword')
+                // use array type access to credentials via service name
+                username project.credentials['nexus'].username
+                password project.credentials['nexus'].password
+
+                // use getter access to credentials via service name
+                username project.credentials.get('nexus').username
+                password project.credentials.get('nexus').password
+
+                // or use string interpolation
+                username "${credentials['nexus'].username}"
+                password "${credentials['nexus'].password}"
             }
         }
     }
@@ -73,17 +88,20 @@ First add the credentials using the key `nexusUsername` and `nexusPassword` by i
 
 ## How does this work?
 
-The `setCredentials` task creates a property file named `secure-credentials.properties` in your gradle home directory 
-(defaults to ~/.gradle). In that property file the credentials are stored. The key of the credential is stored in 
+The plugin currently supports Windows and Mac OSX as operating systems. The plugin uses the platform mechanisms to
+encrypt and decrypt sensitive data by calling the responsible native libraries using JNA bindings.
+
+On Windows the plugin creates a property file named `secure-credentials.properties` in your Gradle home directory
+(defaults to ~/.gradle). In that property file the credentials are securely stored. The key of the credential is stored in
 plaintext, while the value of the credential is encrypted using the Windows Data Protection API (DPAPI).
 
-## Limitations
-
-As the plugin uses DPAPI to encrypt the credentials, this plugin only works with Windows.
+On Mac OSX the plugin securely stores the credentials using the default key store mechanism.
 
 ## Maintainer
 
 Moritz Kammerer (@phxql)
+
+M.-Leander Reimer (@lreimer)
 
 ## License
 
