@@ -60,7 +60,7 @@ First add the credentials for the `nexus` service by invoking one of the followi
 username and password on the Console:
 ```shell
 $ ./gradlew setCredentials --service nexus
-$ ./gradlew setCredentials --service nexus --username fooUser --password barPassword
+$ ./gradlew setCredentials --service nexus --username fooUser
 ```
 
 Now you can use this credential information in your build script, e.g. in the repositories section, as follows:
