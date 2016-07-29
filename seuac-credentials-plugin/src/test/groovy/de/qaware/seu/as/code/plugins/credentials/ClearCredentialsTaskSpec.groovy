@@ -58,7 +58,7 @@ class ClearCredentialsTaskSpec extends Specification {
         ClearCredentialsTask task = project.tasks.findByName(TEST_CLEAR_CREDENTIALS)
 
         expect task, notNullValue()
-        expect task.key, equalTo('myKey')
+        expect task.service, equalTo('myKey')
         expect task.group, equalTo('SEU-as-code')
         expect task.description, not(isEmptyOrNullString())
         expect task.getCredentials(), notNullValue()

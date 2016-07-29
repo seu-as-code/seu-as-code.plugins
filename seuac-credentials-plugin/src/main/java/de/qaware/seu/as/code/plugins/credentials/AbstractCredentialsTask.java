@@ -26,7 +26,7 @@ import org.gradle.api.internal.tasks.options.Option;
  */
 public abstract class AbstractCredentialsTask extends DefaultTask {
 
-    private String key;
+    private String service;
 
     private Credentials credentials;
 
@@ -36,6 +36,7 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
      * Initialize the console reader.
      */
     protected AbstractCredentialsTask() {
+        this.setGroup("Security");
         this.consoleReader = new ConsoleReader();
     }
 
@@ -49,22 +50,22 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     }
 
     /**
-     * Gets the key.
+     * Gets the service.
      *
      * @return Key.
      */
-    public String getKey() {
-        return key;
+    public String getService() {
+        return service;
     }
 
     /**
-     * Sets the key.
+     * Sets the service.
      *
-     * @param key Key.
+     * @param service Key.
      */
-    @Option(option = "key", description = "The credentials key.")
-    public void setKey(String key) {
-        this.key = key;
+    @Option(option = "service", description = "The credentials service.")
+    public void setService(String service) {
+        this.service = service;
     }
 
     /**

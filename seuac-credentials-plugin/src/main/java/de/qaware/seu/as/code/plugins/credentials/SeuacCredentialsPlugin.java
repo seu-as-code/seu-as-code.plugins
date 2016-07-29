@@ -15,8 +15,8 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import de.qaware.seu.as.code.plugins.credentials.impl.DPAPIEncryptor;
-import de.qaware.seu.as.code.plugins.credentials.impl.PropertyCredentials;
+import de.qaware.seu.as.code.plugins.credentials.win.DPAPIEncryptor;
+import de.qaware.seu.as.code.plugins.credentials.win.PropertyCredentials;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

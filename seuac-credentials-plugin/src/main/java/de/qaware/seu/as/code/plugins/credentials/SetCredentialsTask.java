@@ -22,7 +22,7 @@ import java.io.IOException;
 /**
  * Task to set credentials.
  * <p/>
- * Invoke with 'gradle setCredentials --key [Name of the key]'
+ * Invoke with 'gradle setCredentials --service [Name of service]'
  * <p/>
  * The task will query the user on the console to input the value of the credentials.
  *
@@ -34,9 +34,7 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
      * Constructor initializing the tasks meta data.
      */
     public SetCredentialsTask() {
-        this.setDescription("Stores credentials.");
-        this.setGroup("SEU-as-code");
-        this.setEnabled(OperatingSystem.current() == OperatingSystem.WINDOWS);
+        this.setDescription("Sets a credential.");
     }
 
     /**
@@ -46,12 +44,12 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
      */
     @TaskAction
     public void onAction() throws IOException {
-        System.out.print("Enter value for credentials with key '" + getKey() + "': ");
+        System.out.print("Enter value for credentials with key '" + getService() + "': ");
         System.out.flush();
 
         String value = getConsoleReader().readLine();
 
-        getCredentials().set(getKey(), value);
+        getCredentials().set(getService(), value);
         getCredentials().save();
     }
 }

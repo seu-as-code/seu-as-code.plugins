@@ -57,7 +57,7 @@ class SetCredentialsTaskSpec extends Specification {
         SetCredentialsTask task = project.tasks.findByName(TEST_SET_CREDENTIALS)
 
         expect task, notNullValue()
-        expect task.key, equalTo('myKey')
+        expect task.service, equalTo('myKey')
         expect task.group, equalTo('SEU-as-code')
         expect task.description, not(isEmptyOrNullString())
         expect task.getCredentials(), notNullValue()
@@ -70,7 +70,7 @@ class SetCredentialsTaskSpec extends Specification {
         consoleReader.readLine() >> 'value'
 
         SetCredentialsTask task = project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
-            key = "key"
+            key = "service"
             credentials = this.credentials
             consoleReader = this.consoleReader
         }
@@ -79,7 +79,7 @@ class SetCredentialsTaskSpec extends Specification {
         task.onAction()
 
         then: "that entry is set and saved"
-        1 * this.credentials.set('key', 'value')
+        1 * this.credentials.set('service', 'value')
         1 * this.credentials.save()
     }
 }

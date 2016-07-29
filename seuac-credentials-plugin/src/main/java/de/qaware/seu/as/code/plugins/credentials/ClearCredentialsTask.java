@@ -21,10 +21,9 @@ import org.gradle.api.tasks.TaskAction;
 import java.io.IOException;
 
 /**
- * Task to to remove stored credentials.
+ * Task to to clear stored credentials.
  * <p/>
- * Invoke with 'gradle clearCredentials --key [Name of the key]' to remove a single stored credential. Leave the --key
- * parameter blank to remove all stored credentials
+ * Invoke with 'gradle clearCredentials --service [Name of service]' to remove a single stored credential.
  *
  * @author clboettcher
  */
@@ -34,8 +33,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
      * Constructor initializing the tasks meta data.
      */
     public ClearCredentialsTask() {
-        this.setDescription("Clears stored credentials.");
-        this.setGroup("SEU-as-code");
+        this.setDescription("Clears a credential.");
     }
 
     /**
@@ -45,8 +43,8 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
      */
     @TaskAction
     public void onAction() throws IOException {
-        if (StringUtils.isNotBlank(getKey())) {
-            removeCredentialWithKey(getKey());
+        if (StringUtils.isNotBlank(getService())) {
+            removeCredentialWithKey(getService());
         } else {
             clearAllCredentials();
         }
