@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.qaware.seu.as.code.plugins.credentials.impl
+package de.qaware.seu.as.code.plugins.credentials.win
 
 import org.apache.commons.codec.binary.Base64
 import spock.lang.Shared
@@ -52,12 +52,12 @@ class PropertyCredentialsSpec extends Specification {
 
         PropertyCredentials props = new PropertyCredentials(file, encryptor)
 
-        when: "we set a key value pair and save"
-        props.set('key', 'value');
+        when: "we set a service value pair and save"
+        props.set('service', 'value');
         props.save();
 
-        then: "there should be a key value stored"
-        expect props.get('key'), is('value')
+        then: "there should be a service value stored"
+        expect props.get('service'), is('value')
     }
 
     def "2. Check credentials in properties are Base64"() {
@@ -71,7 +71,7 @@ class PropertyCredentialsSpec extends Specification {
         }
 
         expect: "a Base64 encoded value"
-        that properties.getProperty("key"), is(Base64.encodeBase64String("value".getBytes("UTF-8")))
+        that properties.getProperty("service"), is(Base64.encodeBase64String("value".getBytes("UTF-8")))
     }
 
     def "3. Remove a single credential"() {
@@ -81,7 +81,7 @@ class PropertyCredentialsSpec extends Specification {
         encryptor.encrypt('value'.getBytes("UTF-8")) >> 'value'.getBytes("UTF-8")
 
         def props = new PropertyCredentials(file, encryptor)
-        props.set('key', 'value')
+        props.set('service', 'value')
         props.set('delete', 'me')
         props.save()
 
@@ -91,13 +91,13 @@ class PropertyCredentialsSpec extends Specification {
 
         then: "the credential is removed, other credentials are not touched, the file still exists"
         expect props.get('delete'), nullValue()
-        expect props.get('key'), is('value')
+        expect props.get('service'), is('value')
         expect file.exists(), is(true)
     }
 
     def "4. Remove all credentials"() {
         given: "a credentials store"
-        def encryptor = Stub(de.qaware.seu.as.code.plugins.credentials.impl.Encryptor)
+        def encryptor = Stub(de.qaware.seu.as.code.plugins.credentials.win.Encryptor)
         def props = new PropertyCredentials(file, encryptor)
         props.set('delete', 'me')
         props.save()

@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.qaware.seu.as.code.plugins.credentials.impl;
+package de.qaware.seu.as.code.plugins.credentials.win;
 
 import de.qaware.seu.as.code.plugins.credentials.Credentials;
 import org.apache.commons.codec.binary.Base64;

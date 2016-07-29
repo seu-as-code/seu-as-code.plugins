@@ -13,23 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.qaware.seu.as.code.plugins.credentials.impl;
-
-import com.sun.jna.platform.win32.Crypt32Util;
+package de.qaware.seu.as.code.plugins.credentials.win;
 
 /**
- * Uses DPAPI to encrypt/decrypt data.
+ * Encrypts and decrypts data.
  *
  * @author phxql
  */
-public class DPAPIEncryptor implements Encryptor {
-    @Override
-    public byte[] encrypt(byte[] plaintext) {
-        return Crypt32Util.cryptProtectData(plaintext);
-    }
+public interface Encryptor {
+    /**
+     * Encrypts the given plaintext.
+     *
+     * @param plaintext Plaintext.
+     * @return Ciphertext.
+     */
+    byte[] encrypt(byte[] plaintext);
 
-    @Override
-    public byte[] decrypt(byte[] ciphertext) {
-        return Crypt32Util.cryptUnprotectData(ciphertext);
-    }
+    /**
+     * Decrypts the given ciphertext.
+     *
+     * @param ciphertext Ciphertext.
+     * @return Plaintext.
+     */
+    byte[] decrypt(byte[] ciphertext);
 }
