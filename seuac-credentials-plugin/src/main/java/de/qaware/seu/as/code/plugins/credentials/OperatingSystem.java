@@ -50,4 +50,31 @@ public enum OperatingSystem {
             return null;
         }
     }
+
+    /**
+     * Convenience method to check of we are on MacOS.
+     *
+     * @return true if on MacOS, otherwise false
+     */
+    public static boolean isMacOs() {
+        return OperatingSystem.current() == MAC_OS;
+    }
+
+    /**
+     * Convenience method to check if we are on Windows.
+     *
+     * @return true if on Windows, otherwise false
+     */
+    public static boolean isWindows() {
+        return OperatingSystem.current() == WINDOWS;
+    }
+
+    /**
+     * Convenience method to check if the OS is supported.
+     *
+     * @return true if on Windows or MacOS, otherwise false
+     */
+    public static boolean isSupported() {
+        return OperatingSystem.current() != null;
+    }
 }

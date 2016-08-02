@@ -15,46 +15,46 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import de.qaware.seu.as.code.plugins.credentials.win.DPAPIEncryptor;
-import de.qaware.seu.as.code.plugins.credentials.win.PropertyCredentials;
-import org.gradle.api.GradleException;
+import de.qaware.seu.as.code.plugins.credentials.mac.KeychainCredentialsStorage;
+import de.qaware.seu.as.code.plugins.credentials.win.PropertyCredentialsStorage;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * SEU-as-code Credentials plugin.
  * <p/>
- * Provides the 'credentials' object to get credentials and the 'setCredentials' task to set credentials.
+ * Provides the 'credentials' object to get credentials and the 'setStorage' task to set credentials.
  *
  * @author phxql
  */
 public class SeuacCredentialsPlugin implements Plugin<Project> {
-    /**
-     * Name of the properties file.
-     */
-    private static final String PROPERTIES_FILE = "secure-credentials.properties";
-    /**
-     * Name of the credentials property in the build script.
-     */
-    private static final String CREDENTIALS_PROPERTY = "credentials";
-
     @Override
     public void apply(Project project) {
-        Credentials credentials;
-        try {
-            credentials = new PropertyCredentials(new File(project.getGradle().getGradleUserHomeDir(), PROPERTIES_FILE), new DPAPIEncryptor());
-        } catch (IOException e) {
-            throw new GradleException("Can not access encrypted credentials property file.", e);
-        }
-        project.getExtensions().getExtraProperties().set(CREDENTIALS_PROPERTY, credentials);
+        CredentialsStorage storage = createCredentialsStorage(project);
+        ConsoleReader console = new ConsoleReader();
+
+        // register the extra credential property to access credentials in the build script
+        project.getExtensions().getExtraProperties().set(CredentialsProperty.NAME, new CredentialsProperty(storage));
 
         SetCredentialsTask setCredentialsTask = project.getTasks().create("setCredentials", SetCredentialsTask.class);
-        setCredentialsTask.setCredentials(credentials);
+        setCredentialsTask.setStorage(storage);
+        setCredentialsTask.setConsole(console);
 
         ClearCredentialsTask clearCredentialsTask = project.getTasks().create("clearCredentials", ClearCredentialsTask.class);
-        clearCredentialsTask.setCredentials(credentials);
+        clearCredentialsTask.setStorage(storage);
+        clearCredentialsTask.setConsole(console);
+    }
+
+    private CredentialsStorage createCredentialsStorage(Project project) {
+        CredentialsStorage storage = null;
+
+        if (OperatingSystem.isWindows()) {
+            storage = new PropertyCredentialsStorage(project);
+        } else if (OperatingSystem.isMacOs()) {
+            storage = new KeychainCredentialsStorage();
+        } else {
+            project.getLogger().warn("Unsupported OS. All credential tasks will be disabled.");
+        }
+        return storage;
     }
 }

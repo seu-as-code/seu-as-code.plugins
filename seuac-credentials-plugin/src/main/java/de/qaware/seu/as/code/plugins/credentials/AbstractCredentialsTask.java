@@ -15,79 +15,92 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import de.qaware.seu.as.code.plugins.credentials.impl.ConsoleReader;
+import org.apache.commons.lang3.StringUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.internal.tasks.options.Option;
 
 /**
- * Abstract base class for credentials tasks.
+ * Abstract base class for storage tasks.
  *
  * @author clboettcher
  */
 public abstract class AbstractCredentialsTask extends DefaultTask {
 
     private String service;
+    private String username;
 
-    private Credentials credentials;
-
-    private ConsoleReader consoleReader;
+    private CredentialsStorage storage;
+    private ConsoleReader console;
 
     /**
      * Initialize the console reader.
      */
     protected AbstractCredentialsTask() {
         this.setGroup("Security");
-        this.consoleReader = new ConsoleReader();
+        this.setEnabled(OperatingSystem.isSupported());
     }
 
-    /**
-     * Sets the credentials.
-     *
-     * @param credentials Credentials.
-     */
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
-    }
-
-    /**
-     * Gets the service.
-     *
-     * @return Key.
-     */
     public String getService() {
         return service;
     }
 
     /**
-     * Sets the service.
+     * Sets the service name. This method may also be called when
+     * the service name is set via the command line option.
      *
-     * @param service Key.
+     * @param service the service nam.
      */
-    @Option(option = "service", description = "The credentials service.")
+    @Option(option = "service", description = "The service the credentials are for.")
     public void setService(String service) {
         this.service = service;
     }
 
     /**
-     * @return The {@link Credentials}.
-     */
-    /* package-private */ Credentials getCredentials() {
-        return credentials;
-    }
-
-    /**
-     * @return The {@link ConsoleReader}.
-     */
-    /* package-private */ ConsoleReader getConsoleReader() {
-        return consoleReader;
-    }
-
-    /**
-     * Sets the {@link ConsoleReader} instance.
+     * This method will return the username, either from the command line option or
+     * it will be read from the command line.
      *
-     * @param consoleReader The I/O support.
+     * @return the username
      */
-    public void setConsoleReader(ConsoleReader consoleReader) {
-        this.consoleReader = consoleReader;
+    public String getUsername() {
+        if (StringUtils.isEmpty(username)) {
+            username = console.readLine("Enter username:");
+        }
+        return username;
+    }
+
+    /**
+     * Sets the username. This method may also be calles when the
+     * username is set via the command line options.
+     *
+     * @param username the username
+     */
+    @Option(option = "username", description = "The username for the credentials.")
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    protected CredentialsStorage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(CredentialsStorage storage) {
+        this.storage = storage;
+    }
+
+    protected ConsoleReader getConsole() {
+        return console;
+    }
+
+    public void setConsole(ConsoleReader console) {
+        this.console = console;
+    }
+
+    /**
+     * This method will read the password from the console and return it.
+     *
+     * @return the password
+     */
+    protected char[] getPassword() {
+        return console.readPassword("Enter password:");
     }
 }

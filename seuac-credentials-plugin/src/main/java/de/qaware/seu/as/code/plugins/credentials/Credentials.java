@@ -15,47 +15,66 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
-import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Public interface definition for a credential. Allows to get, set and remove credentials.
+ * A simple credentials POJO that contains username and password.
  *
- * @author phxql
+ * @author reimer
  */
-public interface Credentials {
+public final class Credentials {
+    /**
+     * An empty credentials instance with no username and no password.
+     */
+    public static final Credentials EMPTY = new Credentials("", "");
+
+    private final String username;
+    private final String password;
 
     /**
-     * Returns the credential with the given key. Returns null, if no credential with the given key could be found.
+     * Initialize the instance with a username and password value.
      *
-     * @param key Key.
-     * @return Value of the credential. Null, if no credential with the given key could be found.
+     * @param username the username
+     * @param password the password
      */
-    String get(String key);
+    public Credentials(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     /**
-     * Sets the credential.
+     * Initialize the instance from its toString() representation.
      *
-     * @param key   Key.
-     * @param value Value.
+     * @param toString the toString representation
      */
-    void set(String key, String value);
+    public Credentials(String toString) {
+        Pattern pattern = Pattern.compile(".*\\{username='(.*)', password='(.*)'\\}");
+        Matcher matcher = pattern.matcher(toString);
 
-    /**
-     * Removes the credential with the given {@code key}.
-     *
-     * @param key The Key.
-     */
-    void remove(String key) throws IOException;
+        if (matcher.matches()) {
+            this.username = matcher.group(1);
+            this.password = matcher.group(2);
+        } else {
+            throw new CredentialsException("No valid toString() representation.");
+        }
+    }
 
-    /**
-     * Clears all credentials.
-     */
-    void clear() throws IOException;
+    public String getUsername() {
+        return username;
+    }
 
-    /**
-     * Saves the credentials.
-     *
-     * @throws IOException If something went wrong while saving.
-     */
-    void save() throws IOException;
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Credentials{");
+        sb.append("username='").append(username).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
 }

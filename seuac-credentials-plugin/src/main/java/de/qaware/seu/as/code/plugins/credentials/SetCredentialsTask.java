@@ -17,14 +17,13 @@ package de.qaware.seu.as.code.plugins.credentials;
 
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.IOException;
-
 /**
- * Task to set credentials.
+ * Task to set the credentials for a given service.
+ * <p>
+ * Invoke with 'gradle setCredentials --service [name of service]' or alternatively with
+ * 'gradle setCredentials --service [name of service] --username [the username]'
  * <p/>
- * Invoke with 'gradle setCredentials --service [Name of service]'
- * <p/>
- * The task will query the user on the console to input the value of the credentials.
+ * The task will query the username and password on the console to input the value of the credentials.
  *
  * @author phxql
  */
@@ -34,22 +33,14 @@ public class SetCredentialsTask extends AbstractCredentialsTask {
      * Constructor initializing the tasks meta data.
      */
     public SetCredentialsTask() {
-        this.setDescription("Sets a credential.");
+        this.setDescription("Sets the credentials.");
     }
 
     /**
-     * Is executed from gradle when running the 'setCredentials' task.
-     *
-     * @throws IOException If something went wrong while setting credentials.
+     * Is executed from gradle when running the 'setStorage' task.
      */
     @TaskAction
-    public void onAction() throws IOException {
-        System.out.print("Enter value for credentials with key '" + getService() + "': ");
-        System.out.flush();
-
-        String value = getConsoleReader().readLine();
-
-        getCredentials().set(getService(), value);
-        getCredentials().save();
+    public void onAction() {
+        getStorage().setCredentials(getService(), getUsername(), getPassword());
     }
 }

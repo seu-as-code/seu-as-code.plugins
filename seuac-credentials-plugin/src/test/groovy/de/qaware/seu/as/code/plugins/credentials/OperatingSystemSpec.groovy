@@ -28,13 +28,15 @@ class OperatingSystemSpec extends Specification {
     @Requires({ os.macOs })
     def "Check current on Mac OS"() {
         expect:
-        OperatingSystem.current() == OperatingSystem.MAC_OS
+        OperatingSystem.isMacOs()
+        OperatingSystem.isSupported()
     }
 
     @Requires({ os.windows })
     def "Check current on Windows"() {
         expect:
-        OperatingSystem.current() == OperatingSystem.WINDOWS
+        OperatingSystem.isWindows()
+        OperatingSystem.isSupported()
     }
 
     @Unroll

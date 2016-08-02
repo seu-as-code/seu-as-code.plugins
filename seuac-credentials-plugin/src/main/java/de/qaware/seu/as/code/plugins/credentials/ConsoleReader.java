@@ -13,27 +13,31 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.qaware.seu.as.code.plugins.credentials.win;
+package de.qaware.seu.as.code.plugins.credentials;
 
 /**
- * Encrypts and decrypts data.
- *
- * @author phxql
+ * Supports I/O opperations.
  */
-public interface Encryptor {
-    /**
-     * Encrypts the given plaintext.
-     *
-     * @param plaintext Plaintext.
-     * @return Ciphertext.
-     */
-    byte[] encrypt(byte[] plaintext);
+public class ConsoleReader {
 
     /**
-     * Decrypts the given ciphertext.
+     * Reads a line from the console.
      *
-     * @param ciphertext Ciphertext.
-     * @return Plaintext.
+     * @param prompt the command line prompt
+     * @param args   any arguments for the prompt
+     * @return the line read from the console
      */
-    byte[] decrypt(byte[] ciphertext);
+    public String readLine(String prompt, Object... args) {
+        return System.console().readLine(prompt, args);
+    }
+
+    /**
+     * Reads a password from the console.
+     *
+     * @param prompt the command line prompt
+     * @return the password read from the console
+     */
+    public char[] readPassword(String prompt) {
+        return System.console().readPassword(prompt);
+    }
 }

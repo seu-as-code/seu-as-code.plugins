@@ -13,33 +13,32 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.qaware.seu.as.code.plugins.credentials.impl;
+package de.qaware.seu.as.code.plugins.credentials;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import org.gradle.api.GradleException;
 
 /**
- * Supports I/O opperations.
+ * A custom Gradle exception to signal something went wrong with managed Credentials.
+ *
+ * @author lreimer
  */
-public class ConsoleReader {
-
-    private final BufferedReader reader;
-
+public class CredentialsException extends GradleException {
     /**
-     * Initialize our reader using system input stream.
+     * Initialize exception with error message.
+     *
+     * @param message the message
      */
-    public ConsoleReader() {
-        this.reader = new BufferedReader(new InputStreamReader(System.in));
+    public CredentialsException(String message) {
+        super(message);
     }
 
     /**
-     * Reads a line form the console.
+     * Initialize exception with error message and cause.
      *
-     * @return The read line.
-     * @throws IOException if an I/O error occurrs.
+     * @param message the error message
+     * @param cause   the cause
      */
-    public String readLine() throws IOException {
-        return reader.readLine();
+    public CredentialsException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

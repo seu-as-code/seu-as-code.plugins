@@ -15,7 +15,6 @@
  */
 package de.qaware.seu.as.code.plugins.credentials
 
-import de.qaware.seu.as.code.plugins.credentials.impl.ConsoleReader
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
@@ -32,16 +31,16 @@ import static spock.util.matcher.HamcrestSupport.that
 class ClearCredentialsTaskSpec extends Specification {
 
     private static final String TEST_CLEAR_CREDENTIALS = 'testClearCredentials'
+
     private Project project
-    private Credentials credentials
-    private ConsoleReader consoleReader
+    private CredentialsStorage storage
+    private ConsoleReader console
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
-        this.credentials = Mock(Credentials)
-        this.consoleReader = Mock(ConsoleReader)
+        this.storage = Mock(CredentialsStorage)
+        this.console = Mock(ConsoleReader)
     }
-
 
     def "Define ClearCredentials task"() {
         expect: "the ClearCredentialsTask to be undefined"
@@ -49,95 +48,53 @@ class ClearCredentialsTaskSpec extends Specification {
 
         when: "we defined and configure the ClearCredentialsTask task"
         project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
-            key "myKey"
-            credentials this.credentials
-            consoleReader this.consoleReader
+            service "nexus"
+            storage this.storage
+            console this.console
         }
 
         then: "we expect to find the task correctly configured"
         ClearCredentialsTask task = project.tasks.findByName(TEST_CLEAR_CREDENTIALS)
 
         expect task, notNullValue()
-        expect task.service, equalTo('myKey')
-        expect task.group, equalTo('SEU-as-code')
+        expect task.service, equalTo('nexus')
+        expect task.group, equalTo('Security')
         expect task.description, not(isEmptyOrNullString())
-        expect task.getCredentials(), notNullValue()
-        expect task.getConsoleReader(), notNullValue()
+        expect task.getStorage(), notNullValue()
+        expect task.getConsole(), notNullValue()
     }
 
-    def "Invoke ClearCredentials task with stored key"() {
+    def "Invoke ClearCredentials task with stored service and user accepts"() {
         setup: "we define the task to remove a stored credential"
-        // Simulate user confirms deletion
-        consoleReader.readLine() >> 'y'
+        console.readLine("Clear credentials for service %s (y/N)?", "nexus") >> 'y'
 
         ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
-            key = "toRemove"
-            credentials = this.credentials
-            consoleReader = this.consoleReader
+            service = "nexus"
+            storage = this.storage
+            console = this.console
         }
 
         when: "the task runs"
         task.onAction()
 
         then: "that entry is checked and removed"
-        1 * this.credentials.get('toRemove') >> 'value'
-        1 * this.credentials.remove('toRemove')
-        1 * this.credentials.save()
+        1 * this.storage.clearCredentials('nexus')
     }
 
-    def "Invoke ClearCredentials task with unknown key"() {
-        setup: "we define the task to remove an a not stored credential"
-        // Simulate user confirms deletion
-        consoleReader.readLine() >> 'y'
+    def "Invoke ClearCredentials task with stored service but user declines"() {
+        setup: "we define the task to remove a stored credential"
+        console.readLine("Clear credentials for service %s (y/N)?", "nexus") >> 'n'
 
         ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
-            key = "unknown"
-            credentials = this.credentials
-            consoleReader = this.consoleReader
+            service = "nexus"
+            storage = this.storage
+            console = this.console
         }
 
         when: "the task runs"
         task.onAction()
 
-        then: "that entry does not exist. The task action is aborted."
-        1 * this.credentials.get('unknown') >> null
-        0 * this.credentials.remove(_)
-        0 * this.credentials.save()
-    }
-
-    def "Invoke ClearCredentials task without a key"() {
-        setup: "we define the task to remove all credentials"
-        // Simulate user confirms deletion
-        consoleReader.readLine() >> 'y'
-
-        ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
-            credentials = this.credentials
-            consoleReader = this.consoleReader
-        }
-
-        when: "the task runs"
-        task.onAction()
-
-        then: "all entries are cleared"
-        1 * this.credentials.clear()
-        1 * this.credentials.save()
-    }
-
-    def "Invoke ClearCredentials task and user declines deletion"() {
-        setup: "we define the task to remove all credentials and the user to decline the deletion"
-        // Simulate user declines deletion
-        consoleReader.readLine() >> 'n'
-
-        ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
-            credentials = this.credentials
-            consoleReader = this.consoleReader
-        }
-
-        when: "the task runs"
-        task.onAction()
-
-        then: "the task is aborted. No entries are cleared"
-        0 * this.credentials.clear()
-        0 * this.credentials.save()
+        then: "that entry is checked and removed"
+        0 * this.storage.clearCredentials('nexus')
     }
 }

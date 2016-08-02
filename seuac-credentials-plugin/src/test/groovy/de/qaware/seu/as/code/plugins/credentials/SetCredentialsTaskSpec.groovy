@@ -15,7 +15,6 @@
  */
 package de.qaware.seu.as.code.plugins.credentials
 
-import de.qaware.seu.as.code.plugins.credentials.impl.ConsoleReader
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
@@ -32,14 +31,15 @@ import static spock.util.matcher.HamcrestSupport.that
 class SetCredentialsTaskSpec extends Specification {
 
     private static final String TEST_SET_CREDENTIALS = 'testSetCredentials'
+
     private Project project
-    private Credentials credentials
-    private ConsoleReader consoleReader
+    private CredentialsStorage storage
+    private ConsoleReader console
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
-        this.credentials = Mock(Credentials)
-        this.consoleReader = Mock(ConsoleReader)
+        this.storage = Mock(CredentialsStorage)
+        this.console = Mock(ConsoleReader)
     }
 
     def "Define SetCredentials task"() {
@@ -48,38 +48,55 @@ class SetCredentialsTaskSpec extends Specification {
 
         when: "we defined and configure the SetCredentials task"
         project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
-            key "myKey"
-            credentials this.credentials
-            consoleReader this.consoleReader
+            service "nexus"
+            storage this.storage
+            console this.console
         }
 
         then: "we expect to find the task correctly configured"
         SetCredentialsTask task = project.tasks.findByName(TEST_SET_CREDENTIALS)
 
         expect task, notNullValue()
-        expect task.service, equalTo('myKey')
-        expect task.group, equalTo('SEU-as-code')
+        expect task.service, equalTo('nexus')
+        expect task.group, equalTo('Security')
         expect task.description, not(isEmptyOrNullString())
-        expect task.getCredentials(), notNullValue()
-        expect task.getConsoleReader(), notNullValue()
+        expect task.getStorage(), notNullValue()
+        expect task.getConsole(), notNullValue()
     }
 
-    def "Invoke SetCredentialsTask with key"() {
-        setup: "we define the task to remove a stored credential"
-        // Simulate user input
-        consoleReader.readLine() >> 'value'
+    def "Invoke SetCredentialsTask with service and no credentials"() {
+        setup: "the mocked responses"
+        console.readLine("Enter username:") >> 'Max'
+        console.readPassword("Enter password:") >> 'Mustermann'.toCharArray()
 
         SetCredentialsTask task = project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
-            key = "service"
-            credentials = this.credentials
-            consoleReader = this.consoleReader
+            service = "nexus"
+            storage = this.storage
+            console = this.console
         }
 
         when: "the task runs"
         task.onAction()
 
-        then: "that entry is set and saved"
-        1 * this.credentials.set('service', 'value')
-        1 * this.credentials.save()
+        then: "that credentials are set via the storage"
+        1 * this.storage.setCredentials('nexus', 'Max', 'Mustermann'.toCharArray())
+    }
+
+    def "Invoke SetCredentialsTask with service and username"() {
+        setup: "the mocked responses"
+        console.readPassword("Enter password:") >> 'Mustermann'.toCharArray()
+
+        SetCredentialsTask task = project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
+            service = "nexus"
+            username = 'John'
+            storage = this.storage
+            console = this.console
+        }
+
+        when: "the task runs"
+        task.onAction()
+
+        then: "that credentials are set via the storage"
+        1 * this.storage.setCredentials('nexus', 'John', 'Mustermann'.toCharArray())
     }
 }
