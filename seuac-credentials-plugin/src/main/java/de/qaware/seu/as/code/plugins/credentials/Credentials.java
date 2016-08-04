@@ -43,23 +43,6 @@ public final class Credentials {
         this.password = password;
     }
 
-    /**
-     * Initialize the instance from its toString() representation.
-     *
-     * @param toString the toString representation
-     */
-    public Credentials(String toString) {
-        Pattern pattern = Pattern.compile(".*\\{username='(.*)', password='(.*)'\\}");
-        Matcher matcher = pattern.matcher(toString);
-
-        if (matcher.matches()) {
-            this.username = matcher.group(1);
-            this.password = matcher.group(2);
-        } else {
-            throw new CredentialsException("No valid toString() representation.");
-        }
-    }
-
     public String getUsername() {
         return username;
     }
@@ -68,13 +51,36 @@ public final class Credentials {
         return password;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Credentials{");
-        sb.append("username='").append(username).append('\'');
-        sb.append(", password='").append(password).append('\'');
+    /**
+     * Special method to get a Credential representation to be used as secret when
+     * securely storing the data.
+     *
+     * @return the secret representation
+     */
+    public String toSecret() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"username\":\"").append(username).append("\"");
+        sb.append(',');
+        sb.append("\"password\":\"").append(password).append("\"");
         sb.append('}');
         return sb.toString();
+    }
+
+    /**
+     * Factory method to create Credentials from their secret representation.
+     *
+     * @param secret the secret representation
+     * @return the Credential
+     */
+    public static Credentials fromSecret(String secret) {
+        Pattern pattern = Pattern.compile("\\{\"username\":\"(.*)\",\"password\":\"(.*)\"\\}");
+        Matcher matcher = pattern.matcher(secret);
+
+        if (matcher.matches()) {
+            return new Credentials(matcher.group(1), matcher.group(2));
+        } else {
+            throw new CredentialsException("No valid secret representation.");
+        }
     }
 
 }

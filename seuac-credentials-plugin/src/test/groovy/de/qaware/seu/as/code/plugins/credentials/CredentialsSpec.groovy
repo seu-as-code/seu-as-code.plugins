@@ -15,7 +15,10 @@
  */
 package de.qaware.seu.as.code.plugins.credentials
 
+import org.apache.commons.codec.binary.Base64
 import spock.lang.Specification
+
+import java.nio.charset.Charset
 
 /**
  * Spec to check proper functionality of the Credentials class.
@@ -23,23 +26,43 @@ import spock.lang.Specification
  * @author lreimer
  */
 class CredentialsSpec extends Specification {
-    def "Check toString and fromString"() {
+    def "Check toSecret and fromSecret"() {
         given:
-        def toString = new Credentials('Max', 'Mustermann').toString()
+        def secret = new Credentials('Max', 'Mustermann').toSecret()
 
         when:
-        def credentials = new Credentials(toString)
+        def credentials = Credentials.fromSecret(secret)
 
         then:
+        secret == '''{"username":"Max","password":"Mustermann"}'''
         credentials.username == 'Max'
         credentials.password == 'Mustermann'
     }
 
-    def "Check invalid Credentials representation"() {
+    def "Check invalid secret representation"() {
         when:
-        new Credentials("invalid")
+        Credentials.fromSecret("invalid")
 
         then:
         thrown(CredentialsException)
+    }
+
+    def "Check UTF-8 charset"() {
+        expect:
+        Charset.forName("UTF-8").name() == "UTF-8"
+    }
+
+    def "toSecret then fromSecret with Base64"() {
+        given:
+        def credential = new Credentials('Max', 'Mustermann')
+        def secret64 = Base64.encodeBase64String(credential.toSecret().getBytes(Charset.forName("UTF-8")))
+
+        when:
+        def decoded = new String(Base64.decodeBase64(secret64), Charset.forName("UTF-8"))
+        def fromSecret = Credentials.fromSecret(decoded)
+
+        then:
+        fromSecret.username == 'Max'
+        fromSecret.password == 'Mustermann'
     }
 }
