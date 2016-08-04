@@ -28,7 +28,6 @@ import com.sun.jna.ptr.PointerByReference;
 public interface Security extends Library {
 
     int errSecSuccess = 0;
-    int errSecDuplicateItem = -25299;
     int errSecItemNotFound = -25300;
 
     /**
