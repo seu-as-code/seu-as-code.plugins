@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Properties;
 
 /**
@@ -38,7 +37,6 @@ import java.util.Properties;
 public class PropertyCredentialsStorage implements CredentialsStorage {
 
     private static final String PROPERTIES_FILE = "secure-credentials.properties";
-    private static final Charset UTF_8 = Charset.forName("UTF-8");
 
     private final Properties properties;
     private final File credentialsFile;
@@ -75,7 +73,7 @@ public class PropertyCredentialsStorage implements CredentialsStorage {
      *
      * @param file the file to load from
      */
-    private void loadProperties(File file) throws CredentialsException {
+    private void loadProperties(File file) {
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             properties.load(fileInputStream);
         } catch (IOException e) {
@@ -83,7 +81,7 @@ public class PropertyCredentialsStorage implements CredentialsStorage {
         }
     }
 
-    private void save() throws CredentialsException {
+    private void save() {
         if (properties.isEmpty()) {
             FileUtils.deleteQuietly(credentialsFile);
         } else {
@@ -105,7 +103,7 @@ public class PropertyCredentialsStorage implements CredentialsStorage {
         byte[] encryptedValue = Base64.decodeBase64(encodedValue);
         byte[] decryptedValue = encryptor.decrypt(encryptedValue);
 
-        return new Credentials(new String(decryptedValue, UTF_8));
+        return Credentials.fromSecret(new String(decryptedValue, UTF_8));
     }
 
     @Override
@@ -115,10 +113,11 @@ public class PropertyCredentialsStorage implements CredentialsStorage {
 
     @Override
     public void setCredentials(String service, Credentials credentials) {
-        String value = credentials.toString();
-        byte[] encryptedValue = encryptor.encrypt(value.getBytes(UTF_8));
+        String secret = credentials.toSecret();
+        byte[] encryptedValue = encryptor.encrypt(secret.getBytes(UTF_8));
         String encodedValue = Base64.encodeBase64String(encryptedValue);
 
+        // this will set or update the credentials
         properties.setProperty(service, encodedValue);
         save();
     }

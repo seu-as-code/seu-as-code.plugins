@@ -15,6 +15,8 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
+import java.nio.charset.Charset;
+
 /**
  * This is the main interface to store and handle credentials. Platform specific implementations
  * that do the heavy lifting of securely storing the credentials.
@@ -22,6 +24,11 @@ package de.qaware.seu.as.code.plugins.credentials;
  * @author lreimer
  */
 public interface CredentialsStorage {
+    /**
+     * The default charset to use for credential storage.
+     */
+    Charset UTF_8 = Charset.forName("UTF-8");
+
     /**
      * Find the credentials for the given service name.
      *

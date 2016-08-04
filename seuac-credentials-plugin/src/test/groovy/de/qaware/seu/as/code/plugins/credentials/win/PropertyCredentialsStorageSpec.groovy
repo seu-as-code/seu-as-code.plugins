@@ -46,7 +46,7 @@ class PropertyCredentialsStorageSpec extends Specification {
     void setupSpec() {
         file = File.createTempFile("seuac-storage", ".properties")
         credentials = new Credentials('Max', 'Mustermann')
-        bytes = credentials.toString().getBytes('UTF-8')
+        bytes = credentials.toSecret().getBytes('UTF-8')
     }
 
     void cleanupSpec() {
