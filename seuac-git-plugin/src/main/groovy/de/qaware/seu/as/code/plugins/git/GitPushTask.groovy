@@ -31,6 +31,7 @@ class GitPushTask extends AbstractGitTask {
     boolean dryRun = false
     boolean pushAll = false
     boolean pushTags = false
+    boolean force
 
     @TaskAction
     def doPush() {
@@ -47,6 +48,8 @@ class GitPushTask extends AbstractGitTask {
             if (pushTags) {
                 push.setPushTags()
             }
+            push.setTimeout(timeout)
+            push.setForce(force)
             push.call()
         } always {
             if (gitRepo) {
@@ -54,4 +57,18 @@ class GitPushTask extends AbstractGitTask {
             }
         }
     }
+
+    /**
+     * Apply the task specific options to this instance.
+     *
+     * @param options the task options
+     */
+    void applyOptions(GitPushOptions options) {
+        this.dryRun = options.dryRun
+        this.pushAll = options.pushAll
+        this.pushTags = options.pushTags
+        this.timeout = options.timeout
+        this.force = options.force
+    }
+
 }

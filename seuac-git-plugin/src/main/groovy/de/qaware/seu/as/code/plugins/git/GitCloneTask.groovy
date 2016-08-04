@@ -34,6 +34,10 @@ class GitCloneTask extends AbstractGitTask {
     @Input
     boolean singleBranch
 
+    boolean noCheckout
+    boolean cloneAllBranches
+    boolean cloneSubmodules
+
     @TaskAction
     def doClone() {
         CloneCommand clone = null;
@@ -48,7 +52,14 @@ class GitCloneTask extends AbstractGitTask {
             if (singleBranch && branch.startsWith("refs/")) {
                 clone.cloneAllBranches = false
                 clone.branchesToClone = [branch]
+            } else {
+                clone.setCloneAllBranches(cloneAllBranches)
             }
+
+            // set the additional options
+            clone.setNoCheckout(noCheckout)
+            clone.setCloneSubmodules(cloneSubmodules)
+            clone.setTimeout(timeout)
 
             repository = clone.call().getRepository()
         } always {
@@ -56,5 +67,18 @@ class GitCloneTask extends AbstractGitTask {
                 repository.close()
             }
         }
+    }
+
+    /**
+     * Apply the task specific options to this instance.
+     *
+     * @param options the task options
+     */
+    void applyOptions(GitCloneOptions options) {
+        this.singleBranch = options.singleBranch
+        this.noCheckout = options.noCheckout
+        this.timeout = options.timeout
+        this.cloneAllBranches = options.cloneAllBranches
+        this.cloneSubmodules = options.cloneSubmodules
     }
 }

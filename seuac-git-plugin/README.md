@@ -23,7 +23,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-git-plugin:2.3.0'
+        classpath 'de.qaware.seu.as.code:seuac-git-plugin:2.3.0.RC1'
     }
 }
 
@@ -33,7 +33,7 @@ apply plugin: 'de.qaware.seu.as.code.git'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.git' version '2.3.0'
+    id 'de.qaware.seu.as.code.git' version '2.3.0.RC1'
 }
 ```
 
@@ -67,7 +67,7 @@ Property name | Type | Default value | Description
 `branch` | String | - | The branch name to use. Defaults to HEAD. If `singleBranch` is `true` this must be a valid refspec like `refs/heads/BRANCHNAME`.
 `username` | String | - | The username used for authentication.
 `password` | String | - | The password used for authentication.
-`singleBranch` | Boolean | `false` | Should only clone the specified branch.
+`options` | GitOptions | - | The Git command options.
 
 ### Example
 
@@ -81,7 +81,24 @@ git {
         branch 'HEAD'
         username gitUsername
         password gitPassword
-        singleBranch false
+        
+        options {
+            clone {
+                singleBranch = false
+                cloneSubmodules = true
+                noCheckout = false
+                timeout = 300
+            }
+            pull {
+                rebase = true
+                timeout = 600
+            }
+            push {
+                dryRun = true
+                pushAll = true
+                pushTags = true
+            }
+        }
     }
 }
 ```

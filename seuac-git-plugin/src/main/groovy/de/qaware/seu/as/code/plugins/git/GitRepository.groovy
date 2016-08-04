@@ -27,7 +27,8 @@ class GitRepository {
     File directory
     String username
     String password
-    boolean singleBranch = false
+
+    final GitOptions options = new GitOptions()
 
     /**
      * Required to construct by name.
@@ -96,8 +97,31 @@ class GitRepository {
      * Shorthand method to set the single branch only option.
      *
      * @param singleBranch only clone the single branch
+     * @deprecated use clone options instead
      */
+    @Deprecated
     void singleBranch(boolean singleBranch) {
-        this.singleBranch = singleBranch
+        this.options.clone.singleBranch = singleBranch
+    }
+
+    /**
+     * Setter method to set the single branch only option.
+     *
+     * @param singleBranch only clone the single branch
+     * @deprecated use clone options instead
+     */
+    @Deprecated
+    void setSingleBranch(boolean singleBranch) {
+        this.options.clone.singleBranch = singleBranch
+    }
+
+    /**
+     * Apply the closure to the GitCommandOptions.
+     *
+     * @param closure the configuration closure
+     */
+    void options(Closure closure) {
+        closure.delegate = options
+        closure()
     }
 }

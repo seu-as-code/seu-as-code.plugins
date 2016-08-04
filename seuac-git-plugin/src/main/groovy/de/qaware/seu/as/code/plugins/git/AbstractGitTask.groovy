@@ -28,6 +28,8 @@ import org.gradle.api.tasks.OutputDirectory
  */
 abstract class AbstractGitTask extends DefaultTask {
 
+    protected int timeout
+
     /**
      * Initialize task with group.
      */
