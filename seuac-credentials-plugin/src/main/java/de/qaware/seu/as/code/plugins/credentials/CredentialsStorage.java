@@ -34,6 +34,7 @@ public interface CredentialsStorage {
      *
      * @param service the service name
      * @return the stored Credentials or NULL if not present
+     * @throws CredentialsException error finding the credentials
      */
     Credentials findCredentials(String service) throws CredentialsException;
 
@@ -43,6 +44,7 @@ public interface CredentialsStorage {
      * @param service  the service name
      * @param username the username to set
      * @param password the password to set
+     * @throws CredentialsException error storing the credentials
      */
     void setCredentials(String service, String username, char[] password) throws CredentialsException;
 
@@ -51,6 +53,7 @@ public interface CredentialsStorage {
      *
      * @param service     the service name
      * @param credentials the credentials object
+     * @throws CredentialsException error storing the credentials
      */
     void setCredentials(String service, Credentials credentials) throws CredentialsException;
 
@@ -58,6 +61,32 @@ public interface CredentialsStorage {
      * Clear the stored credentials for the given service name.
      *
      * @param service the service name
+     * @throws CredentialsException error clearing the credentials
      */
     void clearCredentials(String service) throws CredentialsException;
+
+    /**
+     * NoOp implementation of a credential storage. Does not store anything.
+     */
+    class None implements CredentialsStorage {
+
+        @Override
+        public Credentials findCredentials(String service) {
+            return null;
+        }
+
+        @Override
+        public void setCredentials(String service, String username, char[] password) {
+
+        }
+
+        @Override
+        public void setCredentials(String service, Credentials credentials) {
+
+        }
+
+        @Override
+        public void clearCredentials(String service) {
+        }
+    }
 }

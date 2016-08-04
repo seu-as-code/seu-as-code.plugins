@@ -54,6 +54,7 @@ public class SeuacCredentialsPlugin implements Plugin<Project> {
             storage = new KeychainCredentialsStorage();
         } else {
             project.getLogger().warn("Unsupported OS. All credential tasks will be disabled.");
+            storage = new CredentialsStorage.None();
         }
         return storage;
     }
