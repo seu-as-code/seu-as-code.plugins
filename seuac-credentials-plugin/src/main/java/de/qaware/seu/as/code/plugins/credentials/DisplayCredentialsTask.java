@@ -42,10 +42,10 @@ public class DisplayCredentialsTask extends AbstractCredentialsTask {
         String service = getService();
         Credentials credentials = getStorage().findCredentials(service);
         if (credentials != null) {
-            getConsole().format("Current credentials for service '%s' -> {'%s', '%s'}.%n", service,
+            getConsole().format("%nCurrent credentials for service '%s' -> {'%s', '%s'}.%n", service,
                     credentials.getUsername(), credentials.getPassword());
         } else {
-            getConsole().format("No credentials found for service '%s'.%n", service);
+            getConsole().format("%nNo credentials found for service '%s'.%n", service);
         }
     }
 }

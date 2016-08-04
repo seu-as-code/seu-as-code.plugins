@@ -43,6 +43,7 @@ public class ClearCredentialsTask extends AbstractCredentialsTask {
     public void onAction() {
         String service = getService();
         if (StringUtils.isNotBlank(service)) {
+            getConsole().format("%n");
             String answer = getConsole().readLine("Clear credentials for service %s (y/N)?", service);
             if (StringUtils.equalsIgnoreCase(answer, "y")) {
                 getStorage().clearCredentials(service);
