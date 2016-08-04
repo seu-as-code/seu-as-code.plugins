@@ -44,6 +44,8 @@ class SeuacCredentialsPluginSpec extends Specification {
         then: "we expect to find the tasks and the extension to be configured"
         SetCredentialsTask setCredentialsTask = (SetCredentialsTask) project.tasks.findByName('setCredentials')
         ClearCredentialsTask clearCredentialsTask = (ClearCredentialsTask) project.tasks.findByName('clearCredentials')
+        DisplayCredentialsTask displayCredentialsTask = (DisplayCredentialsTask) project.tasks.findByName('displayCredentials')
+
         def extension = project.getExtensions().getExtraProperties().get('credentials')
 
         expect setCredentialsTask, notNullValue()
@@ -53,6 +55,10 @@ class SeuacCredentialsPluginSpec extends Specification {
         expect clearCredentialsTask, notNullValue()
         expect clearCredentialsTask.getConsole(), notNullValue()
         expect clearCredentialsTask.getStorage(), notNullValue()
+
+        expect displayCredentialsTask, notNullValue()
+        expect displayCredentialsTask.getConsole(), notNullValue()
+        expect displayCredentialsTask.getStorage(), notNullValue()
 
         expect extension, notNullValue()
     }

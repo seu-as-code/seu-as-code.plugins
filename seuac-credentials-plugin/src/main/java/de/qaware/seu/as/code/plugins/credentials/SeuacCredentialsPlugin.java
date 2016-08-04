@@ -31,22 +31,28 @@ public class SeuacCredentialsPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         CredentialsStorage storage = createCredentialsStorage(project);
-        ConsoleReader console = new ConsoleReader();
+        SystemConsole console = new SystemConsole();
 
         // register the extra credential property to access credentials in the build script
         project.getExtensions().getExtraProperties().set(CredentialsProperty.NAME, new CredentialsProperty(storage));
 
         SetCredentialsTask setCredentialsTask = project.getTasks().create("setCredentials", SetCredentialsTask.class);
-        setCredentialsTask.setStorage(storage);
-        setCredentialsTask.setConsole(console);
+        initTask(setCredentialsTask, storage, console);
 
         ClearCredentialsTask clearCredentialsTask = project.getTasks().create("clearCredentials", ClearCredentialsTask.class);
-        clearCredentialsTask.setStorage(storage);
-        clearCredentialsTask.setConsole(console);
+        initTask(clearCredentialsTask, storage, console);
+
+        DisplayCredentialsTask displayCredentialsTask = project.getTasks().create("displayCredentials", DisplayCredentialsTask.class);
+        initTask(displayCredentialsTask, storage, console);
+    }
+
+    private void initTask(AbstractCredentialsTask task, CredentialsStorage storage, SystemConsole console) {
+        task.setStorage(storage);
+        task.setConsole(console);
     }
 
     private CredentialsStorage createCredentialsStorage(Project project) {
-        CredentialsStorage storage = null;
+        CredentialsStorage storage;
 
         if (OperatingSystem.isWindows()) {
             storage = new PropertyCredentialsStorage(project);

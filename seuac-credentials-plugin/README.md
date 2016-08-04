@@ -42,9 +42,9 @@ The plugin defines the following tasks:
 
 Task name | Depends on | Type | Description
 --- | --- | --- | ---
-`setCredentials`| - | SetCredentialsTask | Sets a credential. Invoke with `--service [Name of service]` parameter.
-`updateCredentials` | - | UpdateCredentialsTask | Updates the password of a credential. Invoke with `--service [Name of service]` parameter.
-`clearCredentials`| - | ClearCredentialsTask | Clears a credential. Invoke with `--service [Name of service]` parameter.
+`setCredentials`| - | SetCredentialsTask | Sets the credentials for a service. Invoke with `--service [Name of service]` parameter.
+`displayCredentials` | - | DisplayCredentialsTask | Displays the credentials for a service of a credential. Invoke with `--service [Name of service]` parameter.
+`clearCredentials`| - | ClearCredentialsTask | Clears the credentials for a service. Invoke with `--service [Name of service]` parameter.
 
 ## Extension Properties
 

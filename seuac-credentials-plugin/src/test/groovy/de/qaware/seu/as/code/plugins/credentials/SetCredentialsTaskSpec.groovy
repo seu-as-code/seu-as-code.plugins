@@ -34,12 +34,12 @@ class SetCredentialsTaskSpec extends Specification {
 
     private Project project
     private CredentialsStorage storage
-    private ConsoleReader console
+    private SystemConsole console
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
         this.storage = Mock(CredentialsStorage)
-        this.console = Mock(ConsoleReader)
+        this.console = Mock(SystemConsole)
     }
 
     def "Define SetCredentials task"() {

@@ -30,7 +30,7 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     private String username;
 
     private CredentialsStorage storage;
-    private ConsoleReader console;
+    private SystemConsole console;
 
     /**
      * Initialize the console reader.
@@ -83,15 +83,15 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
         return storage;
     }
 
-    public void setStorage(CredentialsStorage storage) {
+    protected void setStorage(CredentialsStorage storage) {
         this.storage = storage;
     }
 
-    protected ConsoleReader getConsole() {
+    protected SystemConsole getConsole() {
         return console;
     }
 
-    public void setConsole(ConsoleReader console) {
+    protected void setConsole(SystemConsole console) {
         this.console = console;
     }
 

@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 /**
  * Supports I/O opperations.
  */
-public class ConsoleReader {
+public class SystemConsole {
 
     /**
      * Reads a line from the console.
@@ -39,5 +39,15 @@ public class ConsoleReader {
      */
     public char[] readPassword(String prompt) {
         return System.console().readPassword(prompt);
+    }
+
+    /**
+     * Output the given format string to the current system console.
+     *
+     * @param fmt  the format string to output
+     * @param args any message arguments
+     */
+    public void format(String fmt, Object... args) {
+        System.console().format(fmt, args);
     }
 }

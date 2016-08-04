@@ -24,13 +24,13 @@ import static spock.util.matcher.HamcrestSupport.expect
 import static spock.util.matcher.HamcrestSupport.that
 
 /**
- * Basic test specification for the {@link ClearCredentialsTask}.
+ * Basic test specification for the {@link DisplayCredentialsTask}.
  *
- * @author clboettcher
+ * @author lreimer
  */
-class ClearCredentialsTaskSpec extends Specification {
+class DisplayCredentialsTaskSpec extends Specification {
 
-    private static final String TEST_CLEAR_CREDENTIALS = 'testClearCredentials'
+    private static final String TEST_DISPLAY_CREDENTIALS = 'testDisplayCredentials'
 
     private Project project
     private CredentialsStorage storage
@@ -42,19 +42,19 @@ class ClearCredentialsTaskSpec extends Specification {
         this.console = Mock(SystemConsole)
     }
 
-    def "Define ClearCredentials task"() {
-        expect: "the ClearCredentialsTask to be undefined"
-        that project.tasks.findByName(TEST_CLEAR_CREDENTIALS), is(nullValue())
+    def "Define DisplayCredentials task"() {
+        expect: "the DisplayCredentials to be undefined"
+        that project.tasks.findByName(TEST_DISPLAY_CREDENTIALS), is(nullValue())
 
-        when: "we defined and configure the ClearCredentialsTask task"
-        project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
+        when: "we defined and configure the DisplayCredentials task"
+        project.task(TEST_DISPLAY_CREDENTIALS, type: DisplayCredentialsTask) {
             service "nexus"
             storage this.storage
             console this.console
         }
 
         then: "we expect to find the task correctly configured"
-        ClearCredentialsTask task = project.tasks.findByName(TEST_CLEAR_CREDENTIALS)
+        DisplayCredentialsTask task = project.tasks.findByName(TEST_DISPLAY_CREDENTIALS)
 
         expect task, notNullValue()
         expect task.service, equalTo('nexus')
@@ -64,12 +64,12 @@ class ClearCredentialsTaskSpec extends Specification {
         expect task.getConsole(), notNullValue()
     }
 
-    def "Invoke ClearCredentials task with stored service and user accepts"() {
-        setup: "we define the task to remove a stored credential"
-        console.readLine("Clear credentials for service %s (y/N)?", "nexus") >> 'y'
+    def "Invoke DisplayCredentialsTask with service"() {
+        given: "the mocked responses"
+        storage.findCredentials('nexus') >> new Credentials('Max', 'Mustermann')
 
-        ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
-            service = "nexus"
+        DisplayCredentialsTask task = project.task(TEST_DISPLAY_CREDENTIALS, type: DisplayCredentialsTask) {
+            service = 'nexus'
             storage = this.storage
             console = this.console
         }
@@ -77,16 +77,16 @@ class ClearCredentialsTaskSpec extends Specification {
         when: "the task runs"
         task.onAction()
 
-        then: "that entry is checked and removed"
-        1 * this.storage.clearCredentials('nexus')
+        then: "that credentials are set via the storage"
+        1 * console.format(_, 'nexus', 'Max', 'Mustermann')
     }
 
-    def "Invoke ClearCredentials task with stored service but user declines"() {
-        setup: "we define the task to remove a stored credential"
-        console.readLine("Clear credentials for service %s (y/N)?", "nexus") >> 'n'
+    def "Invoke DisplayCredentialsTask for unknown service"() {
+        given: "the mocked responses"
+        storage.findCredentials('nexus') >> null
 
-        ClearCredentialsTask task = project.task(TEST_CLEAR_CREDENTIALS, type: ClearCredentialsTask) {
-            service = "nexus"
+        DisplayCredentialsTask task = project.task(TEST_DISPLAY_CREDENTIALS, type: DisplayCredentialsTask) {
+            service = 'nexus'
             storage = this.storage
             console = this.console
         }
@@ -94,7 +94,8 @@ class ClearCredentialsTaskSpec extends Specification {
         when: "the task runs"
         task.onAction()
 
-        then: "that entry is checked and removed"
-        0 * this.storage.clearCredentials('nexus')
+        then: "that credentials are set via the storage"
+        1 * console.format(_, 'nexus')
     }
+
 }
