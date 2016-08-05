@@ -23,7 +23,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-git-plugin:2.3.0.RC1'
+        classpath 'de.qaware.seu.as.code:seuac-git-plugin:2.3.0.RC2'
     }
 }
 
@@ -33,7 +33,7 @@ apply plugin: 'de.qaware.seu.as.code.git'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.git' version '2.3.0.RC1'
+    id 'de.qaware.seu.as.code.git' version '2.3.0.RC2'
 }
 ```
 
@@ -97,6 +97,8 @@ git {
                 dryRun = true
                 pushAll = true
                 pushTags = true
+                timeout = 200
+                force = true
             }
         }
     }

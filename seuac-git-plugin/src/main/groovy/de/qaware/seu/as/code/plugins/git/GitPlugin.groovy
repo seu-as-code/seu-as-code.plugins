@@ -106,10 +106,11 @@ class GitPlugin implements Plugin<Project> {
     }
 
     private configureGitCommitTasks(Project project, String repoName, GitRepository repo) {
-        project.task("gitCommit${repoName}", type: GitCommitTask) {
+        def gitCommit = (GitCommitTask) project.task("gitCommit${repoName}", type: GitCommitTask) {
             description = "Commit changes for ${repoName} Git repository"
             directory = repo.directory
         }
+        gitCommit.applyOptions(repo.options.commit)
     }
 
     private configureGitCloneTasks(Project project, String repoName, GitRepository repo) {

@@ -17,6 +17,7 @@ package de.qaware.seu.as.code.plugins.git
 
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.Git
+import org.gradle.api.internal.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -26,8 +27,15 @@ import org.gradle.api.tasks.TaskAction
  */
 class GitCommitTask extends AbstractGitTask {
 
-    boolean all = true
+    @Option(option = "message", description = "The commit message.")
     String message = ''
+
+    boolean all = true
+    boolean noVerify
+    boolean amend
+
+    GitUser committer
+    GitUser author
 
     @TaskAction
     def doCommit() {
@@ -36,7 +44,19 @@ class GitCommitTask extends AbstractGitTask {
             gitRepo = Git.open(directory);
 
             CommitCommand commit = gitRepo.commit();
-            commit.setMessage(message()).setAll(all)
+            commit.setMessage(message)
+
+            // set committer and author if set
+            if (committer != null) {
+                commit.setCommitter(committer.username, committer.email)
+            }
+            if (author != null) {
+                commit.setAuthor(author.username, author.email)
+            }
+
+            // set the options
+            commit.setAll(all).setAmend(amend).setNoVerify(noVerify)
+
             commit.call()
         } always {
             if (gitRepo) {
@@ -45,8 +65,18 @@ class GitCommitTask extends AbstractGitTask {
         }
     }
 
-    private String message() {
-        // either use explicit message if set or message project property
-        message ?: project.property('message')
+    /**
+     * Apply the task specific options to this instance.
+     *
+     * @param options the task options
+     */
+    void applyOptions(GitCommitOptions options) {
+        this.message = options.message
+        this.all = options.all
+        this.noVerify = options.noVerify
+        this.amend = options.amend
+        this.committer = options.committer
+        this.author = options.author
     }
+
 }

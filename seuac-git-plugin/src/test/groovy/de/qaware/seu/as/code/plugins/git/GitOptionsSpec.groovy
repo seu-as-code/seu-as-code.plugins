@@ -82,4 +82,39 @@ class GitOptionsSpec extends Specification {
         options.clone.noCheckout
         options.clone.timeout == 600
     }
+
+    def "Check commit options closure"() {
+        given:
+        def options = new GitOptions()
+
+        expect:
+        options.commit.author == null
+        options.commit.committer == null
+
+        when:
+        options.commit {
+            message = 'Added new files'
+            all = false
+            noVerify = true
+            amend = true
+            committer {
+                username = 'seu-as-code'
+                email = 'seu-as-code@qaware.de'
+            }
+            author {
+                username = 'lreimer'
+                email = 'lreimer@qaware.de'
+            }
+        }
+
+        then:
+        options.commit.message == 'Added new files'
+        !options.commit.all
+        options.commit.noVerify
+        options.commit.amend
+        options.commit.committer.username == 'seu-as-code'
+        options.commit.committer.email == 'seu-as-code@qaware.de'
+        options.commit.author.username == 'lreimer'
+        options.commit.author.email == 'lreimer@qaware.de'
+    }
 }

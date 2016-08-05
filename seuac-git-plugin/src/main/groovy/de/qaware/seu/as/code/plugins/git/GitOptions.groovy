@@ -34,6 +34,9 @@ class GitOptions {
     @PackageScope
     final GitPushOptions push = new GitPushOptions()
 
+    @PackageScope
+    final GitCommitOptions commit = new GitCommitOptions()
+
     /**
      * Apply the closure to the GitPullOptions.
      *
@@ -61,6 +64,16 @@ class GitOptions {
      */
     void push(Closure closure) {
         closure.delegate = push
+        closure()
+    }
+
+    /**
+     * Apply the closure to the GitCommitOptions.
+     *
+     * @param closure the configuration closure
+     */
+    void commit(Closure closure) {
+        closure.delegate = commit
         closure()
     }
 }
