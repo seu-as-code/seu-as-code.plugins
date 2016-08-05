@@ -91,7 +91,7 @@ public interface Security extends Library {
      * @param keychainRef On return, a pointer to the keychain object. You must call the CFRelease function to release this object when you are finished using it.
      * @return A result code. See Keychain Services Result Codes. The result code errSecNoDefaultKeychain indicates that no default keychain could be found. The result code errSecDuplicateItem indicates that you tried to add a password that already exists in the keychain. The result code errSecDataTooLarge indicates that you tried to add more data than is allowed for a structure of this type. Call SecCopyErrorMessageString (OS X only) to get a human-readable string explaining the result.
      */
-    int SecKeychainOpen(byte[] pathName, PointerByReference keychainRef);
+    int SecKeychainOpen(String pathName, PointerByReference keychainRef);
 
     /**
      * Adds a new generic password to a keychain.
