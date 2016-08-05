@@ -44,19 +44,23 @@ class GitPullTaskSpec extends Specification {
     }
 
     def "Define GitPullTask"() {
+        given:
+        def options = new GitPullOptions()
+
         expect: "the pull task to be undefined"
         that project.tasks.findByName(TEST_GIT_PULL), is(nullValue())
 
         when: "we we defined and configure the task"
-        project.task(TEST_GIT_PULL, type: GitPullTask) {
+        def task = (GitPullTask) project.task(TEST_GIT_PULL, type: GitPullTask) {
             directory = this.directory
             username = 'user'
             password = 'secret'
             remote = 'test'
         }
+        task.applyOptions(options)
+        task = (GitPullTask) project.tasks.findByName(TEST_GIT_PULL)
 
         then: "we expect to find the task correctly configured"
-        GitPullTask task = project.tasks.findByName(TEST_GIT_PULL)
 
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
@@ -64,6 +68,9 @@ class GitPullTaskSpec extends Specification {
         expect task.username, equalTo('user')
         expect task.password, equalTo('secret')
         expect task.directory, notNullValue()
+
+        task.rebase == options.rebase
+        task.timeout == options.timeout
     }
 
     def "Invoke doPull"() {

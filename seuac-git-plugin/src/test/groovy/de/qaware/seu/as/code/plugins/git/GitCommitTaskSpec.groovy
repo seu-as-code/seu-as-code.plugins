@@ -57,7 +57,6 @@ class GitCommitTaskSpec extends Specification {
             password = 'secret'
         }
         task.applyOptions(options)
-
         task = (GitCommitTask) project.tasks.findByName(TEST_GIT_COMMIT)
 
         then: "the we expect to find the task to be correctly configured"
