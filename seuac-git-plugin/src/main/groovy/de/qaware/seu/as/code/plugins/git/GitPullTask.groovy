@@ -20,6 +20,7 @@ import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.TextProgressMonitor
 import org.eclipse.jgit.merge.MergeStrategy
+import org.gradle.api.internal.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -30,8 +31,10 @@ import org.gradle.api.tasks.TaskAction
 class GitPullTask extends AbstractGitTask {
 
     String remote = Constants.DEFAULT_REMOTE_NAME
-    boolean rebase = false
     MergeStrategy strategy = MergeStrategy.RECURSIVE
+
+    @Option(option = "rebase", description = "Perform rebase after fetching.")
+    boolean rebase = false
 
     @TaskAction
     def doPull() {

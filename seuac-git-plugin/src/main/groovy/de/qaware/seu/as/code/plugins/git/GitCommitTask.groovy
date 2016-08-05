@@ -30,8 +30,13 @@ class GitCommitTask extends AbstractGitTask {
     @Option(option = "message", description = "The commit message.")
     String message = ''
 
+    @Option(option = "all", description = "Automatically stage files that have been modified and deleted.")
     boolean all = true
+
+    @Option(option = "no-verify", description = "Bypasses the pre-commit and commit-msg hooks.")
     boolean noVerify
+
+    @Option(option = "amend", description = "Replace the tip of the current branch by creating a new commit.")
     boolean amend
 
     GitUser committer

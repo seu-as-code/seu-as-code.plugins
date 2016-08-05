@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.git
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
+import org.gradle.api.internal.tasks.options.Option
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
@@ -34,9 +35,11 @@ class GitCloneTask extends AbstractGitTask {
     @Input
     boolean singleBranch
 
-    boolean noCheckout
     boolean cloneAllBranches
     boolean cloneSubmodules
+
+    @Option(option = "no-checkout", description = "Do not checkout branch after clone.")
+    boolean noCheckout
 
     @TaskAction
     def doClone() {
