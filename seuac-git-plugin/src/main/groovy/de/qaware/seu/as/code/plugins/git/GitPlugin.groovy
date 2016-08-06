@@ -73,7 +73,7 @@ class GitPlugin implements Plugin<Project> {
         }
     }
 
-    private configureGitStatusTasks(Project project, repoName, repo) {
+    private configureGitStatusTasks(Project project, String repoName, GitRepository repo) {
         def gitStatus = project.task("gitStatus${repoName}", type: GitStatusTask) {
             description = "Status the ${repoName} Git repository"
             directory = repo.directory
@@ -83,47 +83,50 @@ class GitPlugin implements Plugin<Project> {
         project.tasks.gitStatusAll.dependsOn gitStatus
     }
 
-    private configureGitPushTasks(Project project, repoName, repo) {
-        def gitPush = project.task("gitPush${repoName}", type: GitPushTask) {
+    private configureGitPushTasks(Project project, String repoName, GitRepository repo) {
+        def gitPush = (GitPushTask) project.task("gitPush${repoName}", type: GitPushTask) {
             description = "Push the ${repoName} Git repository"
             directory = repo.directory
             username = repo.username
             password = repo.password
         }
+        gitPush.applyOptions(repo.options.push)
         project.tasks.gitPushAll.dependsOn gitPush
     }
 
-    private configureGitPullTasks(Project project, repoName, repo) {
-        def gitPull = project.task("gitPull${repoName}", type: GitPullTask) {
+    private configureGitPullTasks(Project project, String repoName, GitRepository repo) {
+        def gitPull = (GitPullTask) project.task("gitPull${repoName}", type: GitPullTask) {
             description = "Pull the ${repoName} Git repository"
             directory = repo.directory
             username = repo.username
             password = repo.password
         }
+        gitPull.applyOptions(repo.options.pull)
         project.tasks.gitPullAll.dependsOn gitPull
     }
 
-    private configureGitCommitTasks(Project project, repoName, repo) {
-        project.task("gitCommit${repoName}", type: GitCommitTask) {
+    private configureGitCommitTasks(Project project, String repoName, GitRepository repo) {
+        def gitCommit = (GitCommitTask) project.task("gitCommit${repoName}", type: GitCommitTask) {
             description = "Commit changes for ${repoName} Git repository"
             directory = repo.directory
         }
+        gitCommit.applyOptions(repo.options.commit)
     }
 
-    private configureGitCloneTasks(Project project, repoName, repo) {
-        def gitClone = project.task("gitClone${repoName}", type: GitCloneTask) {
+    private configureGitCloneTasks(Project project, String repoName, GitRepository repo) {
+        def gitClone = (GitCloneTask) project.task("gitClone${repoName}", type: GitCloneTask) {
             description = "Clone the ${repoName} Git repository"
             directory = repo.directory
             url = repo.url
             branch = repo.branch
             username = repo.username
             password = repo.password
-            singleBranch = repo.singleBranch
         }
+        gitClone.applyOptions(repo.options.clone)
         project.tasks.gitCloneAll.dependsOn gitClone
     }
 
-    private configureGitInitTasks(Project project, repoName, repo) {
+    private configureGitInitTasks(Project project, String repoName, GitRepository repo) {
         def gitInit = project.task("gitInit${repoName}", type: GitInitTask) {
             description = "Init the ${repoName} Git repository"
             directory = repo.directory

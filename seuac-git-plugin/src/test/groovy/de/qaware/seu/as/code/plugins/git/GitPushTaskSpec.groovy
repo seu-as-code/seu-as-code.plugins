@@ -44,19 +44,23 @@ class GitPushTaskSpec extends Specification {
     }
 
     def "Define GitPushTask"() {
+        given:
+        def options = new GitPushOptions()
+
         expect: "the push task to be undefined"
         that project.tasks.findByName(TEST_GIT_PUSH), is(nullValue())
 
         when: "we define and configure the task for the project"
-        project.task(TEST_GIT_PUSH, type: GitPushTask) {
+        def task = (GitPushTask) project.task(TEST_GIT_PUSH, type: GitPushTask) {
             directory = this.directory
             username = 'user'
             password = 'secret'
             remote = 'test'
         }
+        task.applyOptions(options)
+        task = (GitPushTask) project.tasks.findByName(TEST_GIT_PUSH)
 
         then: "we expect to find the task correctly configured"
-        GitPushTask task = project.tasks.findByName(TEST_GIT_PUSH)
 
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
@@ -64,6 +68,12 @@ class GitPushTaskSpec extends Specification {
         expect task.username, equalTo('user')
         expect task.password, equalTo('secret')
         expect task.directory, notNullValue()
+
+        task.force == options.force
+        task.dryRun == options.dryRun
+        task.pushAll == options.pushAll
+        task.pushTags == options.pushTags
+        task.timeout == options.timeout
     }
 
     def "Invoke doPush"() {

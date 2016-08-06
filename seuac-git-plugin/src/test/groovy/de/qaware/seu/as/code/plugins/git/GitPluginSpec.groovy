@@ -51,6 +51,14 @@ class GitPluginSpec extends Specification {
                 branch = 'TEST'
                 username = 'lreimer'
                 password = 'secret'
+                options {
+                    clone {
+                        singleBranch = true
+                        cloneSubmodules = true
+                        noCheckout = true
+                        timeout = 300
+                    }
+                }
             }
             wiki {
                 url "https://github.com/qaware/QAseuac.wiki.git"
@@ -82,7 +90,7 @@ class GitPluginSpec extends Specification {
         expect gitStatusAll, notNullValue()
         expect gitStatusAll.group, equalTo('Version Control')
 
-        def gitCloneCode = project.tasks.gitCloneCode
+        def gitCloneCode = (GitCloneTask) project.tasks.gitCloneCode
         expect gitCloneCode, notNullValue()
         expect gitCloneCode.description, equalTo('Clone the Code Git repository')
         expect gitCloneCode.url, equalTo('https://github.com/qaware/QAseuac.git')
@@ -90,6 +98,11 @@ class GitPluginSpec extends Specification {
         expect gitCloneCode.username, equalTo('lreimer')
         expect gitCloneCode.password, equalTo('secret')
         expect gitCloneCode.directory, notNullValue()
+
+        expect gitCloneCode.singleBranch, is(true)
+        expect gitCloneCode.cloneSubmodules, is(true)
+        expect gitCloneCode.noCheckout, is(true)
+        expect gitCloneCode.timeout, is(300)
 
         def gitCloneWiki = project.tasks.gitCloneWiki
         expect gitCloneWiki, notNullValue()

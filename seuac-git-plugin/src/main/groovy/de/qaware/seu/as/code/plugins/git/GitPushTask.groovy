@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.git
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.lib.Constants
+import org.gradle.api.internal.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -28,9 +29,18 @@ import org.gradle.api.tasks.TaskAction
 class GitPushTask extends AbstractGitTask {
 
     String remote = Constants.DEFAULT_REMOTE_NAME
+
+    @Option(option = "dry-run", description = "Set if push operation should be a dry run.")
     boolean dryRun = false
+
+    @Option(option = "all", description = "Push all branches.")
     boolean pushAll = false
+
+    @Option(option = "tags", description = "Push all tags.")
     boolean pushTags = false
+
+    @Option(option = "force", description = "Set force for push operations.")
+    boolean force
 
     @TaskAction
     def doPush() {
@@ -47,6 +57,9 @@ class GitPushTask extends AbstractGitTask {
             if (pushTags) {
                 push.setPushTags()
             }
+            push.setTimeout(timeout)
+            push.setForce(force)
+
             push.call()
         } always {
             if (gitRepo) {
@@ -54,4 +67,18 @@ class GitPushTask extends AbstractGitTask {
             }
         }
     }
+
+    /**
+     * Apply the task specific options to this instance.
+     *
+     * @param options the task options
+     */
+    void applyOptions(GitPushOptions options) {
+        this.dryRun = options.dryRun
+        this.pushAll = options.pushAll
+        this.pushTags = options.pushTags
+        this.timeout = options.timeout
+        this.force = options.force
+    }
+
 }

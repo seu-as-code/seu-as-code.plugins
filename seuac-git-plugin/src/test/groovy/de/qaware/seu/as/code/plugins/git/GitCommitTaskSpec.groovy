@@ -44,24 +44,35 @@ class GitCommitTaskSpec extends Specification {
     }
 
     def "Define GitCommitTask"() {
+        given:
+        def options = new GitCommitOptions()
+
         expect: "the commit task to be undefined"
         that project.tasks.findByName(TEST_GIT_COMMIT), is(nullValue())
 
         when: "we define and configure the commit task"
-        project.task(TEST_GIT_COMMIT, type: GitCommitTask) {
+        def task = (GitCommitTask) project.task(TEST_GIT_COMMIT, type: GitCommitTask) {
             directory = this.directory
             username = 'user'
             password = 'secret'
         }
+        task.applyOptions(options)
+        task = (GitCommitTask) project.tasks.findByName(TEST_GIT_COMMIT)
 
         then: "the we expect to find the task to be correctly configured"
-        GitCommitTask task = project.tasks.findByName(TEST_GIT_COMMIT)
 
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
         expect task.username, equalTo('user')
         expect task.password, equalTo('secret')
         expect task.directory, notNullValue()
+
+        task.amend == options.amend
+        task.message == options.message
+        task.noVerify == options.noVerify
+        task.all == options.all
+        task.author == options.author
+        task.committer == options.committer
     }
 
     def "Invoke doCommit"() {

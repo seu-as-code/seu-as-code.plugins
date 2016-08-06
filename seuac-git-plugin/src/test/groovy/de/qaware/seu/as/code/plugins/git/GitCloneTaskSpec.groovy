@@ -44,20 +44,24 @@ class GitCloneTaskSpec extends Specification {
     }
 
     def "Define GitCloneTask"() {
+        given:
+        def options = new GitCloneOptions()
+
         expect: "the clone task to be undefined"
         that project.tasks.findByName(TEST_GIT_CLONE), is(nullValue())
 
         when: "we defined and configure the clone task"
-        project.task(TEST_GIT_CLONE, type: GitCloneTask) {
+        def task = (GitCloneTask) project.task(TEST_GIT_CLONE, type: GitCloneTask) {
             url = "https://github.com/qaware/QAseuac.git"
             directory = this.directory
             branch = 'TEST'
             username = 'user'
             password = 'secret'
         }
+        task.applyOptions(options)
+        task = (GitCloneTask) project.tasks.findByName(TEST_GIT_CLONE)
 
         then: "we expect to find the task correctly configured"
-        GitCloneTask task = project.tasks.findByName(TEST_GIT_CLONE)
 
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
@@ -66,6 +70,12 @@ class GitCloneTaskSpec extends Specification {
         expect task.username, equalTo('user')
         expect task.password, equalTo('secret')
         expect task.directory, notNullValue()
+
+        task.singleBranch == options.singleBranch
+        task.cloneAllBranches == options.cloneAllBranches
+        task.cloneSubmodules == options.cloneSubmodules
+        task.noCheckout == options.noCheckout
+        task.timeout == options.timeout
     }
 
     def "Invoke doClone"() {
