@@ -160,4 +160,28 @@ class KeychainCredentialsStorageSpec extends Specification {
         found?.password == credentials.password
         storage.findCredentials('spock') == null
     }
+
+    @Requires({ os.macOs })
+    def "Integration test on MacOS with SEU-as-code keychain"() {
+        given:
+        def dir = new File(KeychainCredentialsStorage.getResource("/").toURI())
+        def keychainFile = new File(dir, 'SEU-as-code.keychain')
+
+        // Use 'testtest' to open keychain if asked
+        def extension = new CredentialsExtension()
+        extension.keychainFile = keychainFile.getAbsolutePath()
+        def storage = new KeychainCredentialsStorage(extension)
+
+        when:
+        storage.setCredentials('test', credentials)
+        def found = storage.findCredentials('test')
+        storage.clearCredentials('test')
+
+        then:
+        storage.findCredentials('spock')
+
+        found?.username == credentials.username
+        found?.password == credentials.password
+        storage.findCredentials('test') == null
+    }
 }
