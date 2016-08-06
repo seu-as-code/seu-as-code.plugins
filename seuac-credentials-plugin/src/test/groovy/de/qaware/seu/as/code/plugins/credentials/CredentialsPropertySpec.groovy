@@ -61,7 +61,7 @@ class CredentialsPropertySpec extends Specification {
         def credentials = "${extension['nexus'].username} ${extension['nexus'].password}"
 
         then:
-        credentials == 'Max Mustermann'
+        credentials == "Max Mustermann"
     }
 
     def "Get unknown empty Credentials"() {
@@ -74,5 +74,16 @@ class CredentialsPropertySpec extends Specification {
 
         then:
         credentials == Credentials.EMPTY
+    }
+
+    def "Get credential for uninitialized storage"() {
+        setup:
+        def property = new CredentialsProperty()
+
+        when:
+        property.get('unknown')
+
+        then:
+        thrown(IllegalStateException)
     }
 }

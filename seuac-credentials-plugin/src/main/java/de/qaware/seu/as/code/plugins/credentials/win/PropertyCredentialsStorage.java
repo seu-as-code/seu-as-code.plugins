@@ -15,10 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials.win;
 
-import de.qaware.seu.as.code.plugins.credentials.Credentials;
-import de.qaware.seu.as.code.plugins.credentials.CredentialsException;
-import de.qaware.seu.as.code.plugins.credentials.CredentialsStorage;
-import de.qaware.seu.as.code.plugins.credentials.Encryptor;
+import de.qaware.seu.as.code.plugins.credentials.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;
@@ -36,7 +33,7 @@ import java.util.Properties;
  */
 public class PropertyCredentialsStorage implements CredentialsStorage {
 
-    private static final String PROPERTIES_FILE = "secure-credentials.properties";
+    private static final String DEFAULT_FILENAME = "secure-credentials.properties";
 
     private final Properties properties;
     private final File credentialsFile;
@@ -45,15 +42,26 @@ public class PropertyCredentialsStorage implements CredentialsStorage {
     /**
      * Initialize a new property credential storage for the given project.
      *
-     * @param project the current Gradle project used to locate the file
+     * @param project   the current Gradle project used to locate the file
+     * @param extension the credentials configuration extension
      */
-    public PropertyCredentialsStorage(Project project) {
-        this(new File(project.getGradle().getGradleUserHomeDir(), PROPERTIES_FILE),
-                new DPAPIEncryptor());
+    public PropertyCredentialsStorage(Project project, CredentialsExtension extension) {
+        this(project, extension, new DPAPIEncryptor());
     }
 
     /**
-     * Creates a new instance.
+     * Creates a new instance for the given Gradle project, credentials extension and encryptor.
+     *
+     * @param project   a Gradle project
+     * @param extension the credentials configuration extension
+     * @param encryptor an encryptor
+     */
+    PropertyCredentialsStorage(Project project, CredentialsExtension extension, Encryptor encryptor) {
+        this(credentialsFile(project, extension), encryptor);
+    }
+
+    /**
+     * Creates a new instance for a given property file and encryptor.
      *
      * @param credentialsFile Properties file.
      * @param encryptor       Encryptor.
@@ -66,6 +74,12 @@ public class PropertyCredentialsStorage implements CredentialsStorage {
         if (credentialsFile.exists()) {
             loadProperties(credentialsFile);
         }
+    }
+
+    private static File credentialsFile(Project project, CredentialsExtension extension) {
+        String propertyFile = extension.getPropertyFile();
+        return (propertyFile != null) ? new File(propertyFile) :
+                new File(project.getGradle().getGradleUserHomeDir(), DEFAULT_FILENAME);
     }
 
     /**

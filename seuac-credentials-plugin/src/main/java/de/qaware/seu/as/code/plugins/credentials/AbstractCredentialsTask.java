@@ -83,7 +83,7 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
         return storage;
     }
 
-    protected void setStorage(CredentialsStorage storage) {
+    void setStorage(CredentialsStorage storage) {
         this.storage = storage;
     }
 
@@ -91,7 +91,7 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
         return console;
     }
 
-    protected void setConsole(SystemConsole console) {
+    void setConsole(SystemConsole console) {
         this.console = console;
     }
 

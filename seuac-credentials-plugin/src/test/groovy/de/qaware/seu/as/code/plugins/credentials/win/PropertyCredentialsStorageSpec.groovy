@@ -16,8 +16,10 @@
 package de.qaware.seu.as.code.plugins.credentials.win
 
 import de.qaware.seu.as.code.plugins.credentials.Credentials
+import de.qaware.seu.as.code.plugins.credentials.CredentialsExtension
 import de.qaware.seu.as.code.plugins.credentials.Encryptor
 import org.apache.commons.codec.binary.Base64
+import org.gradle.api.Project
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
@@ -101,4 +103,19 @@ class PropertyCredentialsStorageSpec extends Specification {
         expect file.exists(), is(true)
     }
 
+    def "4. Check custom location"() {
+        given:
+        def encryptor = Stub(Encryptor)
+        encryptor.decrypt(bytes) >> bytes
+        encryptor.encrypt(bytes) >> bytes
+
+        def extension = new CredentialsExtension()
+        extension.propertyFile = file.getAbsolutePath()
+        def project = Stub(Project)
+        def props = new PropertyCredentialsStorage(project, extension, encryptor)
+
+        expect:
+        props.findCredentials('nexus').username == 'Max'
+        props.findCredentials('nexus').password == 'Mustermann'
+    }
 }

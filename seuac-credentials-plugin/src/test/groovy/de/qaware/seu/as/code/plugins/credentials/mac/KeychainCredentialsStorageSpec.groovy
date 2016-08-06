@@ -17,6 +17,7 @@ package de.qaware.seu.as.code.plugins.credentials.mac
 
 import de.qaware.seu.as.code.plugins.credentials.Credentials
 import de.qaware.seu.as.code.plugins.credentials.CredentialsException
+import de.qaware.seu.as.code.plugins.credentials.CredentialsExtension
 import org.apache.commons.codec.binary.Base64
 import spock.lang.Requires
 import spock.lang.Shared
@@ -31,8 +32,8 @@ import static de.qaware.seu.as.code.plugins.credentials.CredentialsStorage.UTF_8
  */
 class KeychainCredentialsStorageSpec extends Specification {
 
-    static final String SERVICE = 'nexus'
-    static final String ACCOUNT = 'seu-as-code'
+    static final String SERVICE = 'SEU-as-code'
+    static final String ACCOUNT = 'nexus'
 
     @Shared
     def credentials = new Credentials('Max', 'Mustermann')
@@ -51,10 +52,10 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        def found = storage.findCredentials(SERVICE)
+        def found = storage.findCredentials(ACCOUNT)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, _, _, _) >> Security.errSecItemNotFound
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, _, _, _) >> Security.errSecItemNotFound
         found == null
     }
 
@@ -63,10 +64,10 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        storage.findCredentials(SERVICE)
+        storage.findCredentials(ACCOUNT)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, _, _, _) >> 42
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, _, _, _) >> 42
         thrown(CredentialsException)
     }
 
@@ -75,11 +76,11 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        storage.setCredentials(SERVICE, credentials)
+        storage.setCredentials(ACCOUNT, credentials)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecItemNotFound
-        1 * security.SecKeychainAddGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, password.length(), password.bytes, null) >> Security.errSecSuccess
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecItemNotFound
+        1 * security.SecKeychainAddGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, password.length(), password.bytes, null) >> Security.errSecSuccess
     }
 
     def "Update an existing credentials in keystore"() {
@@ -87,12 +88,12 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        storage.setCredentials(SERVICE, credentials)
+        storage.setCredentials(ACCOUNT, credentials)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecSuccess
-        1 * security.SecKeychainItemModifyContent(null, null, password.length(), password.bytes) >> Security.errSecSuccess
-        1 * coreFoundation.CFRelease(null)
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecSuccess
+        1 * security.SecKeychainItemModifyContent(_, null, password.length(), password.bytes) >> Security.errSecSuccess
+        1 * coreFoundation.CFRelease(_)
     }
 
     def "Try to set credentials in keystore with error"() {
@@ -100,10 +101,10 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        storage.setCredentials(SERVICE, credentials)
+        storage.setCredentials(ACCOUNT, credentials)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> 42
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> 42
         thrown(CredentialsException)
     }
 
@@ -112,10 +113,10 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        storage.clearCredentials(SERVICE)
+        storage.clearCredentials(ACCOUNT)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecItemNotFound
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecItemNotFound
         0 * security.SecKeychainItemDelete(_)
     }
 
@@ -124,10 +125,10 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        storage.clearCredentials(SERVICE)
+        storage.clearCredentials(ACCOUNT)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> 42
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> 42
         thrown(CredentialsException)
     }
 
@@ -136,10 +137,10 @@ class KeychainCredentialsStorageSpec extends Specification {
         def storage = new KeychainCredentialsStorage(security, coreFoundation)
 
         when:
-        storage.clearCredentials(SERVICE)
+        storage.clearCredentials(ACCOUNT)
 
         then:
-        1 * security.SecKeychainFindGenericPassword(null, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecSuccess
+        1 * security.SecKeychainFindGenericPassword(_, SERVICE.length(), SERVICE.bytes, ACCOUNT.length(), ACCOUNT.bytes, null, null, _) >> Security.errSecSuccess
         1 * security.SecKeychainItemDelete(null)
         1 * coreFoundation.CFRelease(null)
     }
@@ -147,7 +148,7 @@ class KeychainCredentialsStorageSpec extends Specification {
     @Requires({ os.macOs })
     def "Integration test on MacOS"() {
         given:
-        def storage = new KeychainCredentialsStorage()
+        def storage = new KeychainCredentialsStorage(new CredentialsExtension())
 
         when:
         storage.setCredentials('spock', credentials)

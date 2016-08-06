@@ -17,6 +17,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 
 import de.qaware.seu.as.code.plugins.credentials.mac.KeychainCredentialsStorage;
 import de.qaware.seu.as.code.plugins.credentials.win.PropertyCredentialsStorage;
+import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -30,20 +31,33 @@ import org.gradle.api.Project;
 public class SeuacCredentialsPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
-        CredentialsStorage storage = createCredentialsStorage(project);
-        SystemConsole console = new SystemConsole();
 
         // register the extra credential property to access credentials in the build script
-        project.getExtensions().getExtraProperties().set(CredentialsProperty.NAME, new CredentialsProperty(storage));
+        final CredentialsExtension extension = new CredentialsExtension();
+        project.getExtensions().add(CredentialsExtension.NAME, extension);
 
-        SetCredentialsTask setCredentialsTask = project.getTasks().create("setCredentials", SetCredentialsTask.class);
-        initTask(setCredentialsTask, storage, console);
+        final CredentialsProperty property = new CredentialsProperty();
+        project.getExtensions().getExtraProperties().set(CredentialsProperty.NAME, property);
 
-        ClearCredentialsTask clearCredentialsTask = project.getTasks().create("clearCredentials", ClearCredentialsTask.class);
-        initTask(clearCredentialsTask, storage, console);
+        // now create the tasks
+        project.afterEvaluate(new Action<Project>() {
+            @Override
+            public void execute(Project project) {
+                CredentialsStorage storage = createCredentialsStorage(project, extension);
+                SystemConsole console = new SystemConsole();
 
-        DisplayCredentialsTask displayCredentialsTask = project.getTasks().create("displayCredentials", DisplayCredentialsTask.class);
-        initTask(displayCredentialsTask, storage, console);
+                property.setStorage(storage);
+
+                SetCredentialsTask setCredentialsTask = project.getTasks().create("setCredentials", SetCredentialsTask.class);
+                initTask(setCredentialsTask, storage, console);
+
+                ClearCredentialsTask clearCredentialsTask = project.getTasks().create("clearCredentials", ClearCredentialsTask.class);
+                initTask(clearCredentialsTask, storage, console);
+
+                DisplayCredentialsTask displayCredentialsTask = project.getTasks().create("displayCredentials", DisplayCredentialsTask.class);
+                initTask(displayCredentialsTask, storage, console);
+            }
+        });
     }
 
     private void initTask(AbstractCredentialsTask task, CredentialsStorage storage, SystemConsole console) {
@@ -51,13 +65,13 @@ public class SeuacCredentialsPlugin implements Plugin<Project> {
         task.setConsole(console);
     }
 
-    private CredentialsStorage createCredentialsStorage(Project project) {
+    private CredentialsStorage createCredentialsStorage(Project project, CredentialsExtension extension) {
         CredentialsStorage storage;
 
         if (OperatingSystem.isWindows()) {
-            storage = new PropertyCredentialsStorage(project);
+            storage = new PropertyCredentialsStorage(project, extension);
         } else if (OperatingSystem.isMacOs()) {
-            storage = new KeychainCredentialsStorage();
+            storage = new KeychainCredentialsStorage(extension);
         } else {
             project.getLogger().warn("Unsupported OS. All credential tasks will be disabled.");
             storage = new CredentialsStorage.None();

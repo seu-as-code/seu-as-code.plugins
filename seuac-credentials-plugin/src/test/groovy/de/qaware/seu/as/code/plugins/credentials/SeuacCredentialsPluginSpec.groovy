@@ -25,21 +25,22 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * Basic test specification for the {@link SeuacCredentialsPlugin}.
  *
- * @author clboettcher
+ * @author lreimer
  */
 class SeuacCredentialsPluginSpec extends Specification {
 
     private Project project
-    private SeuacCredentialsPlugin plugin
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
-        this.plugin = new SeuacCredentialsPlugin()
     }
 
     def "Apply the plugin"() {
+        setup:
+        project.apply plugin: 'seuac-credentials'
+
         when: "the plugin is applied"
-        this.plugin.apply(this.project)
+        project.evaluate()
 
         then: "we expect to find the tasks and the extension to be configured"
         SetCredentialsTask setCredentialsTask = (SetCredentialsTask) project.tasks.findByName('setCredentials')

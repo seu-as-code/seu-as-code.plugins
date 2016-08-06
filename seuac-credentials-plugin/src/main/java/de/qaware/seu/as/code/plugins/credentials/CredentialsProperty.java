@@ -39,20 +39,34 @@ package de.qaware.seu.as.code.plugins.credentials;
  * @author lreimer
  */
 public class CredentialsProperty {
-
     /**
      * Name of the credentials property in the build script.
      */
-    public static final String NAME = "credentials";
+    static final String NAME = "credentials";
 
-    private final CredentialsStorage storage;
+    private CredentialsStorage storage;
 
     /**
-     * Initialize the property instance with the required storage instance.
+     * Create a new instance but do not initialize the storage yet.
+     */
+    public CredentialsProperty() {
+        this(null);
+    }
+
+    /**
+     * Create a new instance and initialize the credential storage.
      *
-     * @param storage the credentials storage
+     * @param storage the credential storage
      */
     public CredentialsProperty(CredentialsStorage storage) {
+        this.storage = storage;
+    }
+
+    CredentialsStorage getStorage() {
+        return storage;
+    }
+
+    void setStorage(CredentialsStorage storage) {
         this.storage = storage;
     }
 
@@ -63,6 +77,9 @@ public class CredentialsProperty {
      * @return the credentials or Credentials.EMPTY if not found
      */
     public Credentials get(String service) {
+        if (storage == null) {
+            throw new IllegalStateException("The credential storage is not initialized yet.");
+        }
         Credentials credentials = storage.findCredentials(service);
         return (credentials != null) ? credentials : Credentials.EMPTY;
     }

@@ -21,6 +21,7 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import de.qaware.seu.as.code.plugins.credentials.Credentials;
 import de.qaware.seu.as.code.plugins.credentials.CredentialsException;
+import de.qaware.seu.as.code.plugins.credentials.CredentialsExtension;
 import de.qaware.seu.as.code.plugins.credentials.CredentialsStorage;
 import org.apache.commons.codec.binary.Base64;
 
@@ -33,20 +34,25 @@ import static com.sun.jna.Native.loadLibrary;
  */
 public class KeychainCredentialsStorage implements CredentialsStorage {
 
-    private static final String ACCOUNT_NAME = "seu-as-code";
+    private static final String SERVICE_NAME = "SEU-as-code";
     private static final String SEC_KEYCHAIN_ADD_GENERIC_PASSWORD = "SecKeychainAddGenericPassword";
     private static final String SEC_KEYCHAIN_FIND_GENERIC_PASSWORD = "SecKeychainFindGenericPassword";
     private static final String SEC_KEYCHAIN_ITEM_FREE_CONTENT = "SecKeychainItemFreeContent";
     private static final String SEC_KEYCHAIN_ITEM_MODIFY_CONTENT = "SecKeychainItemModifyContent";
     private static final String SEC_KEYCHAIN_ITEM_DELETE = "SecKeychainItemDelete";
+    private static final String SEC_KEYCHAIN_OPEN = "SecKeychainOpen";
 
     private final Security security;
     private final CoreFoundation coreFoundation;
+    private final String keychainFile;
 
     /**
      * Initialze the instance with the required native library references.
+     *
+     * @param extension the credentials configuration extension
      */
-    public KeychainCredentialsStorage() {
+    public KeychainCredentialsStorage(CredentialsExtension extension) {
+        this.keychainFile = extension.getKeychainFile();
         this.security = (Security) loadLibrary("Security", Security.class);
         this.coreFoundation = (CoreFoundation) loadLibrary("CoreFoundation", CoreFoundation.class);
     }
@@ -58,6 +64,7 @@ public class KeychainCredentialsStorage implements CredentialsStorage {
      * @param coreFoundation the MacOS core foundation library reference
      */
     KeychainCredentialsStorage(Security security, CoreFoundation coreFoundation) {
+        this.keychainFile = null;
         this.security = security;
         this.coreFoundation = coreFoundation;
     }
@@ -68,7 +75,10 @@ public class KeychainCredentialsStorage implements CredentialsStorage {
         PointerByReference secretPointer = new PointerByReference();
 
         // try to find the generic password
-        int status = security.SecKeychainFindGenericPassword(null, service.length(), service.getBytes(), ACCOUNT_NAME.length(), ACCOUNT_NAME.getBytes(), secretLength, secretPointer, null);
+        Pointer keychainPointer = getKeychain();
+        int status = security.SecKeychainFindGenericPassword(keychainPointer, SERVICE_NAME.length(), SERVICE_NAME.getBytes(), service.length(), service.getBytes(), secretLength, secretPointer, null);
+        releaseKeychain(keychainPointer);
+
         if (status == Security.errSecItemNotFound) {
             // not an error, return nothing
             return null;
@@ -78,6 +88,8 @@ public class KeychainCredentialsStorage implements CredentialsStorage {
 
         // convert found secret to string
         String secret = Native.toString(secretPointer.getValue().getByteArray(0, secretLength.getValue()));
+
+        // perform cleanup and done
         status = security.SecKeychainItemFreeContent(null, secretPointer.getValue());
         if (status != Security.errSecSuccess) {
             throw new CredentialsException(fromNameAndStatusCode(SEC_KEYCHAIN_ITEM_FREE_CONTENT, status));
@@ -98,21 +110,28 @@ public class KeychainCredentialsStorage implements CredentialsStorage {
         String secret = credentials.toSecret();
         String password = Base64.encodeBase64String(secret.getBytes(UTF_8));
 
-        int status = security.SecKeychainFindGenericPassword(null, service.length(), service.getBytes(), ACCOUNT_NAME.length(), ACCOUNT_NAME.getBytes(), null, null, itemRef);
+        Pointer keychainPointer = getKeychain();
+        int status = security.SecKeychainFindGenericPassword(keychainPointer, SERVICE_NAME.length(), SERVICE_NAME.getBytes(), service.length(), service.getBytes(), null, null, itemRef);
+        releaseKeychain(keychainPointer);
+
         if (status == Security.errSecItemNotFound) {
-            // then we perform an add operation
-            status = security.SecKeychainAddGenericPassword(null, service.length(), service.getBytes(), ACCOUNT_NAME.length(), ACCOUNT_NAME.getBytes(), password.length(), password.getBytes(), null);
+            // then we perform an add operation of a generic password
+            keychainPointer = getKeychain();
+            status = security.SecKeychainAddGenericPassword(keychainPointer, SERVICE_NAME.length(), SERVICE_NAME.getBytes(), service.length(), service.getBytes(), password.length(), password.getBytes(), null);
+            releaseKeychain(keychainPointer);
+
             if (status != Security.errSecSuccess) {
                 throw new CredentialsException(fromNameAndStatusCode(SEC_KEYCHAIN_ADD_GENERIC_PASSWORD, status));
             }
         } else if (status == Security.errSecSuccess) {
-            // then we perform an update operation
+            // then we perform an update operation if the generic password
             status = security.SecKeychainItemModifyContent(itemRef.getValue(), null, password.length(), password.getBytes());
             coreFoundation.CFRelease(itemRef.getValue());
             if (status != Security.errSecSuccess) {
                 throw new CredentialsException(fromNameAndStatusCode(SEC_KEYCHAIN_ITEM_MODIFY_CONTENT, status));
             }
         } else {
+            // something else went wrong
             throw new CredentialsException(fromNameAndStatusCode(SEC_KEYCHAIN_FIND_GENERIC_PASSWORD, status));
         }
     }
@@ -120,17 +139,39 @@ public class KeychainCredentialsStorage implements CredentialsStorage {
     @Override
     public void clearCredentials(String service) {
         PointerByReference itemRef = new PointerByReference();
-        int status = security.SecKeychainFindGenericPassword(null, service.length(), service.getBytes(), ACCOUNT_NAME.length(), ACCOUNT_NAME.getBytes(), null, null, itemRef);
+
+        Pointer keychainPointer = getKeychain();
+        int status = security.SecKeychainFindGenericPassword(keychainPointer, SERVICE_NAME.length(), SERVICE_NAME.getBytes(), service.length(), service.getBytes(), null, null, itemRef);
+        releaseKeychain(keychainPointer);
+
         if (status == Security.errSecItemNotFound) {
             // we skip here, no error and no message
             return;
         } else if (status != Security.errSecSuccess) {
             throw new CredentialsException(fromNameAndStatusCode(SEC_KEYCHAIN_FIND_GENERIC_PASSWORD, status));
         }
+
         status = security.SecKeychainItemDelete(itemRef.getValue());
         coreFoundation.CFRelease(itemRef.getValue());
         if (status != Security.errSecSuccess) {
             throw new CredentialsException(fromNameAndStatusCode(SEC_KEYCHAIN_ITEM_DELETE, status));
+        }
+    }
+
+    private Pointer getKeychain() {
+        PointerByReference keychainPointer = new PointerByReference();
+        if (keychainFile != null) {
+            int status = security.SecKeychainOpen(keychainFile, keychainPointer);
+            if (status != Security.errSecSuccess) {
+                throw new CredentialsException(fromNameAndStatusCode(SEC_KEYCHAIN_OPEN, status));
+            }
+        }
+        return keychainPointer.getValue();
+    }
+
+    private void releaseKeychain(Pointer keychainPointer) {
+        if (keychainPointer != null) {
+            coreFoundation.CFRelease(keychainPointer);
         }
     }
 
