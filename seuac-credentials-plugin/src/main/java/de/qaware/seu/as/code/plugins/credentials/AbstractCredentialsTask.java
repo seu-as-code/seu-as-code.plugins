@@ -29,7 +29,7 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     private String service;
     private String username;
 
-    private CredentialsStorage storage;
+    private CredentialsStorageFactory storageFactory;
     private SystemConsole console;
 
     /**
@@ -63,7 +63,7 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
      */
     public String getUsername() {
         if (StringUtils.isEmpty(username)) {
-            username = console.readLine("Enter username:");
+            username = console.readLine("%nEnter username:");
         }
         return username;
     }
@@ -80,11 +80,15 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     }
 
     protected CredentialsStorage getStorage() {
-        return storage;
+        return storageFactory.create();
     }
 
-    void setStorage(CredentialsStorage storage) {
-        this.storage = storage;
+    CredentialsStorageFactory getStorageFactory() {
+        return storageFactory;
+    }
+
+    void setStorageFactory(CredentialsStorageFactory storageFactory) {
+        this.storageFactory = storageFactory;
     }
 
     protected SystemConsole getConsole() {

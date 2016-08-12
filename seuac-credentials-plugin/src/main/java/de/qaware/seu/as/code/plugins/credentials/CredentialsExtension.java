@@ -24,7 +24,7 @@ public class CredentialsExtension {
     /**
      * Name of the credentials configuration extension in the build script.
      */
-    public static final String NAME = "credentials";
+    static final String NAME = "credentials";
 
     private String keychainFile = null;
     private String propertyFile = null;
@@ -43,5 +43,14 @@ public class CredentialsExtension {
 
     public void setPropertyFile(String propertyFile) {
         this.propertyFile = propertyFile;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CredentialsExtension{");
+        sb.append("keychainFile='").append(keychainFile).append('\'');
+        sb.append(", propertyFile='").append(propertyFile).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

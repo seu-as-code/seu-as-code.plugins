@@ -36,11 +36,8 @@ class SeuacCredentialsPluginSpec extends Specification {
     }
 
     def "Apply the plugin"() {
-        setup:
-        project.apply plugin: 'seuac-credentials'
-
         when: "the plugin is applied"
-        project.evaluate()
+        project.apply plugin: 'seuac-credentials'
 
         then: "we expect to find the tasks and the extension to be configured"
         SetCredentialsTask setCredentialsTask = (SetCredentialsTask) project.tasks.findByName('setCredentials')

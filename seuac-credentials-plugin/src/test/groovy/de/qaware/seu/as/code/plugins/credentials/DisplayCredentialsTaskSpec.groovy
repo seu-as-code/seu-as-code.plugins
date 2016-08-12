@@ -33,13 +33,17 @@ class DisplayCredentialsTaskSpec extends Specification {
     private static final String TEST_DISPLAY_CREDENTIALS = 'testDisplayCredentials'
 
     private Project project
+    private CredentialsStorageFactory storageFactory
     private CredentialsStorage storage
     private SystemConsole console
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
+        this.storageFactory = Mock(CredentialsStorageFactory)
         this.storage = Mock(CredentialsStorage)
         this.console = Mock(SystemConsole)
+
+        this.storageFactory.create() >> storage
     }
 
     def "Define DisplayCredentials task"() {
@@ -49,7 +53,7 @@ class DisplayCredentialsTaskSpec extends Specification {
         when: "we defined and configure the DisplayCredentials task"
         project.task(TEST_DISPLAY_CREDENTIALS, type: DisplayCredentialsTask) {
             service "nexus"
-            storage this.storage
+            storageFactory this.storageFactory
             console this.console
         }
 
@@ -61,6 +65,7 @@ class DisplayCredentialsTaskSpec extends Specification {
         expect task.group, equalTo('Security')
         expect task.description, not(isEmptyOrNullString())
         expect task.getStorage(), notNullValue()
+        expect task.getStorageFactory(), notNullValue()
         expect task.getConsole(), notNullValue()
     }
 
@@ -70,7 +75,7 @@ class DisplayCredentialsTaskSpec extends Specification {
 
         DisplayCredentialsTask task = project.task(TEST_DISPLAY_CREDENTIALS, type: DisplayCredentialsTask) {
             service = 'nexus'
-            storage = this.storage
+            storageFactory = this.storageFactory
             console = this.console
         }
 
@@ -87,7 +92,7 @@ class DisplayCredentialsTaskSpec extends Specification {
 
         DisplayCredentialsTask task = project.task(TEST_DISPLAY_CREDENTIALS, type: DisplayCredentialsTask) {
             service = 'nexus'
-            storage = this.storage
+            storageFactory = this.storageFactory
             console = this.console
         }
 

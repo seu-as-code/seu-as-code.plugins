@@ -44,30 +44,15 @@ public class CredentialsProperty {
      */
     static final String NAME = "credentials";
 
-    private CredentialsStorage storage;
+    private final CredentialsStorageFactory storageFactory;
 
     /**
-     * Create a new instance but do not initialize the storage yet.
-     */
-    public CredentialsProperty() {
-        this(null);
-    }
-
-    /**
-     * Create a new instance and initialize the credential storage.
+     * Initialize the credentials property with a storage factory.
      *
-     * @param storage the credential storage
+     * @param storageFactory the storage factory
      */
-    public CredentialsProperty(CredentialsStorage storage) {
-        this.storage = storage;
-    }
-
-    CredentialsStorage getStorage() {
-        return storage;
-    }
-
-    void setStorage(CredentialsStorage storage) {
-        this.storage = storage;
+    public CredentialsProperty(CredentialsStorageFactory storageFactory) {
+        this.storageFactory = storageFactory;
     }
 
     /**
@@ -77,9 +62,7 @@ public class CredentialsProperty {
      * @return the credentials or Credentials.EMPTY if not found
      */
     public Credentials get(String service) {
-        if (storage == null) {
-            throw new IllegalStateException("The credential storage is not initialized yet.");
-        }
+        CredentialsStorage storage = storageFactory.create();
         Credentials credentials = storage.findCredentials(service);
         return (credentials != null) ? credentials : Credentials.EMPTY;
     }

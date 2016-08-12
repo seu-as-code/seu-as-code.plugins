@@ -24,12 +24,14 @@ import spock.lang.Specification
  */
 class CredentialsPropertySpec extends Specification {
 
+    CredentialsStorageFactory storageFactory = Mock(CredentialsStorageFactory)
     CredentialsStorage storage = Mock(CredentialsStorage)
 
     def "Get Credentials via typed get method"() {
         setup:
+        storageFactory.create() >> storage
         storage.findCredentials('nexus') >> new Credentials('Max', 'Mustermann')
-        def extension = new CredentialsProperty(storage)
+        def extension = new CredentialsProperty(storageFactory)
 
         when:
         def credentials = extension.get('nexus')
@@ -41,8 +43,9 @@ class CredentialsPropertySpec extends Specification {
 
     def "Get Credentials via index operator"() {
         setup:
+        storageFactory.create() >> storage
         storage.findCredentials('nexus') >> new Credentials('Max', 'Mustermann')
-        def extension = new CredentialsProperty(storage)
+        def extension = new CredentialsProperty(storageFactory)
 
         when:
         def credentials = extension['nexus']
@@ -54,8 +57,9 @@ class CredentialsPropertySpec extends Specification {
 
     def "Get Credentials using GString replacement"() {
         setup:
+        storageFactory.create() >> storage
         storage.findCredentials('nexus') >> new Credentials('Max', 'Mustermann')
-        def extension = new CredentialsProperty(storage)
+        def extension = new CredentialsProperty(storageFactory)
 
         when:
         def credentials = "${extension['nexus'].username} ${extension['nexus'].password}"
@@ -66,24 +70,14 @@ class CredentialsPropertySpec extends Specification {
 
     def "Get unknown empty Credentials"() {
         setup:
+        storageFactory.create() >> storage
         storage.findCredentials('nexus') >> null
-        def extension = new CredentialsProperty(storage)
+        def extension = new CredentialsProperty(storageFactory)
 
         when:
         def credentials = extension.get('nexus')
 
         then:
         credentials == Credentials.EMPTY
-    }
-
-    def "Get credential for uninitialized storage"() {
-        setup:
-        def property = new CredentialsProperty()
-
-        when:
-        property.get('unknown')
-
-        then:
-        thrown(IllegalStateException)
     }
 }

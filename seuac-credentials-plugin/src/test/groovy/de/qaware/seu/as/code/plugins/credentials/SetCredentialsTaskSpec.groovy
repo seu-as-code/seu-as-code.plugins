@@ -32,14 +32,18 @@ class SetCredentialsTaskSpec extends Specification {
 
     private static final String TEST_SET_CREDENTIALS = 'testSetCredentials'
 
-    private Project project
-    private CredentialsStorage storage
-    private SystemConsole console
+    Project project
+    CredentialsStorageFactory storageFactory
+    CredentialsStorage storage
+    SystemConsole console
 
     def setup() {
         this.project = ProjectBuilder.builder().build()
+        this.storageFactory = Mock(CredentialsStorageFactory)
         this.storage = Mock(CredentialsStorage)
         this.console = Mock(SystemConsole)
+
+        this.storageFactory.create() >> storage
     }
 
     def "Define SetCredentials task"() {
@@ -49,7 +53,7 @@ class SetCredentialsTaskSpec extends Specification {
         when: "we defined and configure the SetCredentials task"
         project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
             service "nexus"
-            storage this.storage
+            storageFactory this.storageFactory
             console this.console
         }
 
@@ -60,18 +64,19 @@ class SetCredentialsTaskSpec extends Specification {
         expect task.service, equalTo('nexus')
         expect task.group, equalTo('Security')
         expect task.description, not(isEmptyOrNullString())
+        expect task.getStorageFactory(), notNullValue()
         expect task.getStorage(), notNullValue()
         expect task.getConsole(), notNullValue()
     }
 
     def "Invoke SetCredentialsTask with service and no credentials"() {
         setup: "the mocked responses"
-        console.readLine("Enter username:") >> 'Max'
+        console.readLine("%nEnter username:") >> 'Max'
         console.readPassword("Enter password:") >> 'Mustermann'.toCharArray()
 
         SetCredentialsTask task = project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
             service = "nexus"
-            storage = this.storage
+            storageFactory = this.storageFactory
             console = this.console
         }
 
@@ -89,7 +94,7 @@ class SetCredentialsTaskSpec extends Specification {
         SetCredentialsTask task = project.task(TEST_SET_CREDENTIALS, type: SetCredentialsTask) {
             service = "nexus"
             username = 'John'
-            storage = this.storage
+            storageFactory = this.storageFactory
             console = this.console
         }
 
