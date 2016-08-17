@@ -8,7 +8,7 @@
 
 # SEU-as-code Credentials Plugin
 
-A Gradle plugin for the secure storage of your credentials using the Windows Data Protection API (DPAPI).
+A Gradle plugin for the secure storage of your credentials using the Windows Data Protection API (DPAPI) or the macOS key store.
 
 ## Usage
 
@@ -88,14 +88,14 @@ Now you can use this credential information in your build script, e.g. in the re
 
 ## How does this work?
 
-The plugin currently supports Windows and Mac OSX as operating systems. The plugin uses the platform mechanisms to
+The plugin currently supports Windows and macOS as operating systems. The plugin uses the platform mechanisms to
 encrypt and decrypt sensitive data by calling the responsible native libraries using JNA bindings.
 
 On Windows the plugin creates a property file named `secure-credentials.properties` in your Gradle home directory
 (defaults to ~/.gradle). In that property file the credentials are securely stored. The key of the credential is stored in
 plaintext, while the value of the credential is encrypted using the Windows Data Protection API (DPAPI).
 
-On Mac OSX the plugin securely stores the credentials using the default key store mechanism.
+On macOS the plugin securely stores the credentials using the default key store mechanism.
 
 ## Maintainer
 
