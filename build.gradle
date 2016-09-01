@@ -27,12 +27,10 @@ buildscript {
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
-        classpath 'com.gradle:build-receipt-plugin:1.0'
     }
 }
 
 apply plugin: 'distribution'
-apply plugin: 'com.gradle.build-receipt'
 
 allprojects {
     apply plugin: 'jacoco'
@@ -168,11 +166,6 @@ distributions {
             }
         }
     }
-}
-
-buildReceiptLicense {
-    agreementUrl = 'https://gradle.com/terms-of-service'
-    agree = 'yes'
 }
 
 task wrapper(type: Wrapper) {
