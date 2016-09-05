@@ -15,15 +15,24 @@
  */
 package de.qaware.seu.as.code.plugins.homebrew
 
+import de.undercouch.gradle.tasks.download.DownloadAction
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.FileCopyDetails
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import java.nio.file.Paths
 
 /**
+ * A simple task thats installs the latest version of <a href="http://brew.sh/">Homebrew</a> into the SEU.
  *
- * @author christian.fritz
+ * The target path can be configured.
  */
 class InstallHomebrewTask extends DefaultTask {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstallHomebrewTask.class);
+
     @Input
     File target
 
@@ -35,13 +44,29 @@ class InstallHomebrewTask extends DefaultTask {
     @TaskAction
     void doInstall() {
         if (target.exists()) {
-            // update homebrew
+            LOGGER.warn('Skip install of homebrew. {} exists', target)
             return
         }
+        LOGGER.info('Installing homebrew into {}', target)
         target.mkdirs()
-        project.exec {
-            commandLine 'curl', '-L', 'https://github.com/Homebrew/brew/tarball/master', '|',
-                    'tar', 'xz', '--strip', '1', '-C', 'homebrew'
+
+        def tmpTar = File.createTempFile('homebrewInst', '.zip')
+
+        def download = new DownloadAction(project)
+        download.src 'https://github.com/Homebrew/brew/archive/master.zip'
+        download.dest tmpTar
+        download.execute()
+
+        project.copy {
+            from project.zipTree(tmpTar)
+            includeEmptyDirs = false
+            into target
+            eachFile { FileCopyDetails details ->
+                def path = Paths.get details.path
+                if (path.getNameCount() > 1) {
+                    details.path = details.path - (path.subpath(0, 1).toString() + '/')
+                }
+            }
         }
     }
 }

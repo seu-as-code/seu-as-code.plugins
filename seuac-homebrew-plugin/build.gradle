@@ -17,6 +17,7 @@
 dependencies {
     compile gradleApi()
     compile 'org.codehaus.groovy:groovy-all:2.3.10'
+    compile 'de.undercouch:gradle-download-task:3.1.1'
 
     compile project(':seuac-base-plugin')
 
