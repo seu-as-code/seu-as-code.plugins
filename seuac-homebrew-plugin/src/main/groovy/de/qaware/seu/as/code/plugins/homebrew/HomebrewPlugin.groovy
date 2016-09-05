@@ -46,7 +46,7 @@ class HomebrewPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             Task installBrew = project.task('installBrew', type: InstallHomebrewTask) {
-                target = project.seuAsCode.layout.software
+                target = new File("${project.seuAsCode.layout.software}", 'homebrew')
             }
             installBrew.mustRunAfter 'createSeuacLayout'
         }
