@@ -37,6 +37,9 @@ class HomebrewPlugin implements Plugin<Project> {
      */
     @Override
     void apply(Project project) {
+        if (!project.pluginManager.hasPlugin('de.qaware.seu.as.code.base')) {
+            project.pluginManager.apply 'de.qaware.seu.as.code.base'
+        }
         createConfigurations project
 
         if (!isMacOs()) {
@@ -46,7 +49,7 @@ class HomebrewPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             Task installBrew = project.task('installBrew', type: InstallHomebrewTask) {
-                target = new File("${project.seuAsCode.layout.software}", 'homebrew')
+                homebrewBasePath = new File("${project.seuAsCode.layout.software}", 'homebrew')
             }
             installBrew.mustRunAfter 'createSeuacLayout'
         }
@@ -57,6 +60,7 @@ class HomebrewPlugin implements Plugin<Project> {
      * @param project the project.
      */
     private static void createConfigurations(Project project) {
-        project.configurations.create('brew')
+        def brewConfig = project.configurations.create('brew')
+        brewConfig.transitive = false
     }
 }
