@@ -34,7 +34,7 @@ class InstallHomebrewTask extends DefaultTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstallHomebrewTask.class);
 
     @Input
-    File target
+    File homebrewBasePath
 
     InstallHomebrewTask() {
         group = 'SEU-as-code'
@@ -43,12 +43,12 @@ class InstallHomebrewTask extends DefaultTask {
 
     @TaskAction
     void doInstall() {
-        if (target.exists()) {
-            LOGGER.warn('Skip install of homebrew. {} exists', target)
+        if (homebrewBasePath.exists()) {
+            LOGGER.warn('Skip install of homebrew. {} exists', homebrewBasePath)
             return
         }
-        LOGGER.info('Installing homebrew into {}', target)
-        target.mkdirs()
+        LOGGER.info('Installing homebrew into {}', homebrewBasePath)
+        homebrewBasePath.mkdirs()
 
         def tmpTar = File.createTempFile('homebrewInst', '.zip')
 
@@ -60,7 +60,7 @@ class InstallHomebrewTask extends DefaultTask {
         project.copy {
             from project.zipTree(tmpTar)
             includeEmptyDirs = false
-            into target
+            into homebrewBasePath
             eachFile { FileCopyDetails details ->
                 def path = Paths.get details.path
                 if (path.getNameCount() > 1) {
