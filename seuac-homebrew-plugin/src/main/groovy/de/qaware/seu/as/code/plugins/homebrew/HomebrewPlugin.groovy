@@ -25,8 +25,8 @@ import static de.qaware.seu.as.code.plugins.base.Platform.current
 import static de.qaware.seu.as.code.plugins.base.Platform.isMacOs
 
 /**
- *
- * @author christian.fritz
+ * The SEU-as-code Homebrew plugin extends the software installation mechanism to use homebrew packages instead self
+ * created packages.
  */
 class HomebrewPlugin implements Plugin<Project> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HomebrewPlugin.class);
@@ -42,7 +42,7 @@ class HomebrewPlugin implements Plugin<Project> {
         }
         createConfigurations project
 
-        if (!isMacOs()) {
+        if (!macOs) {
             LOGGER.info("Did not activate Homebrew Plugin. Did not run on {}", current());
             return;
         }
@@ -52,6 +52,13 @@ class HomebrewPlugin implements Plugin<Project> {
                 homebrewBasePath = new File("${project.seuAsCode.layout.software}", 'homebrew')
             }
             installBrew.mustRunAfter 'createSeuacLayout'
+
+            Task applyBrewSoftware = project.task('applyBrewSoftware', type: ApplyBrewSoftwareTask) {
+                homebrewBasePath = new File("${project.seuAsCode.layout.software}", 'homebrew')
+                source = project.configurations.brew
+                datastore = project.seuAsCode.datastore
+            }
+            project.tasks['applySoftware'].dependsOn << applyBrewSoftware
         }
     }
 
