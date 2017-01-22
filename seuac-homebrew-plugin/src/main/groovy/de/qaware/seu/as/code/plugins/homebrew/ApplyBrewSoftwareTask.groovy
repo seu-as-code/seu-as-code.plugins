@@ -10,6 +10,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.internal.ExecAction
 import org.gradle.process.internal.ExecActionFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import javax.inject.Inject
 import java.nio.file.Paths
@@ -23,6 +25,8 @@ import java.nio.file.Paths
  * @author christian.fritz
  */
 class ApplyBrewSoftwareTask extends DefaultTask {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplyBrewSoftwareTask.class);
+
     @Input
     Configuration source
     File homebrewBasePath
@@ -67,10 +71,12 @@ class ApplyBrewSoftwareTask extends DefaultTask {
      * Updates homebrew it self and then updates all installed home brew software.
      */
     def updateBrewPackages() {
+        LOGGER.info 'Updates brew itself'
         def update = createBrewCommand()
         update.commandLine += 'update'
         update.execute()
 
+        LOGGER.info 'Updates all installed brew packages'
         def upgrade = createBrewCommand()
         upgrade.commandLine += 'upgrade'
         upgrade.execute()
@@ -85,6 +91,8 @@ class ApplyBrewSoftwareTask extends DefaultTask {
         if (uninstallDeps.isEmpty()) {
             return
         }
+
+        LOGGER.info 'Uninstall the removed brew packages: {}', uninstallDeps
 
         def uninstall = createBrewCommand()
         uninstall.commandLine += 'uninstall'
@@ -102,11 +110,14 @@ class ApplyBrewSoftwareTask extends DefaultTask {
      * @param provider The provider to store the installed dependencies in
      */
     def installNewPackages(Set<Dependency> dependencies, DatastoreProvider provider) {
+        LOGGER.info 'Install the new brew packages'
         dependencies.forEach({ d ->
             def installTool = createBrewCommand()
             installTool.commandLine += ['install', d.name]
             installTool.execute()
             provider.storeDependency(d, null, 'brew')
+
+            LOGGER.info 'Finished installing brew package: {}', d.name
         })
     }
 
