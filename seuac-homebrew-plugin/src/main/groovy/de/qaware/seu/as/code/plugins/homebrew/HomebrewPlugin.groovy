@@ -30,6 +30,7 @@ import static de.qaware.seu.as.code.plugins.base.Platform.isMacOs
  */
 class HomebrewPlugin implements Plugin<Project> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HomebrewPlugin.class);
+
     /**
      * Apply this plugin to the given target object.
      *

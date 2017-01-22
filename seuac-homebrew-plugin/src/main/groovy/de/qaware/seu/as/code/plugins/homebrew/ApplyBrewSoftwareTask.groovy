@@ -58,8 +58,7 @@ class ApplyBrewSoftwareTask extends DefaultTask {
 
         // first we find all obsolete dependencies and remove associated files
         Set<String> obsoleteDeps = provider.findAllObsoleteDeps(source.dependencies, source.name)
-        Set<String> obsoleteFiles = provider.findAllFiles(obsoleteDeps, source.name)
-        uninstallOldPackages(obsoleteFiles)
+        uninstallOldPackages(obsoleteDeps)
 
         updateBrewPackages()
 
@@ -115,7 +114,8 @@ class ApplyBrewSoftwareTask extends DefaultTask {
             def installTool = createBrewCommand()
             installTool.commandLine += ['install', d.name]
             installTool.execute()
-            provider.storeDependency(d, null, 'brew')
+
+            provider.storeDependency d, [project.fileTree(new File("${homebrewBasePath}/Cellar/${d.name}/"))], 'brew'
 
             LOGGER.info 'Finished installing brew package: {}', d.name
         })
