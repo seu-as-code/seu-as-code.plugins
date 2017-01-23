@@ -43,7 +43,8 @@ The plugin defines the following tasks:
 Task name | Depends on | Type | Description
 --- | --- | --- | ---
 `installBrew` | - | `InstallHomebrewTask` | Installs the homebrew environment into the seu
-`applyBrewSoftware` | `applySoftware` | `ApplyBrewSoftwareTask` | Applies the current brew configuration. This will remove, update and install all brew dependencies. 
+`applyBrewSoftware` | `applySoftware` | `ApplyBrewSoftwareTask` | Applies the current brew configuration. This will remove, update and install all brew dependencies.
+`storeBrewSeuacDb` | `storeSeuacDb` | `StoreBrewSeuacDbTask` | Store the current HomeBrew SEU software package configuration.
 
 ## Example
 This short example will install Git SCM, Apache Maven and Apache Subversion into the seu using home brew. 
