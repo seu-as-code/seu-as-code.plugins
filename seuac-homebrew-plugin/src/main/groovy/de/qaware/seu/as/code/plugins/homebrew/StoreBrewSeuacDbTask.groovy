@@ -43,6 +43,7 @@ class StoreBrewSeuacDbTask extends DefaultTask {
     @TaskAction
     void storeSeuacDb() {
         DatastoreProvider provider = DatastoreProviderFactory.instance.get(datastore)
+        provider.init()
 
         project.configurations.brew.dependencies.each { Dependency d ->
             provider.storeDependency(d, [project.fileTree(new File("${homebrewBasePath}/Cellar/${d.name}/"))], 'brew')
