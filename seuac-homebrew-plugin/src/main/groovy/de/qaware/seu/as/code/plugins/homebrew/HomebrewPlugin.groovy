@@ -60,6 +60,12 @@ class HomebrewPlugin implements Plugin<Project> {
                 datastore = project.seuAsCode.datastore
             }
             project.tasks['applySoftware'].dependsOn << applyBrewSoftware
+
+            Task storeSeuacDb = project.task('storeBrewSeuacDb', type: StoreBrewSeuacDbTask, dependsOn: project.tasks['storeSeuacDb']) {
+                homebrewBasePath = new File("${project.seuAsCode.layout.software}", 'homebrew')
+                datastore = project.seuAsCode.datastore
+            }
+            project.tasks['storeSeuacDb'].finalizedBy storeSeuacDb
         }
     }
 

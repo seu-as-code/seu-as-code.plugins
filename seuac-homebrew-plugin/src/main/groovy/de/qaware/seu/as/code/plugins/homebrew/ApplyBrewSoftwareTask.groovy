@@ -95,10 +95,11 @@ class ApplyBrewSoftwareTask extends DefaultTask {
 
         def uninstall = createBrewCommand()
         uninstall.commandLine += 'uninstall'
-        uninstall.commandLine += uninstallDeps
+        uninstallDeps.forEach({ d ->
+            uninstall.commandLine += d.split(":", 3)[1]
+        })
 
-        def execute = uninstall.execute()
-        execute.rethrowFailure()
+        uninstall.execute()
     }
 
     /**
@@ -114,8 +115,6 @@ class ApplyBrewSoftwareTask extends DefaultTask {
             def installTool = createBrewCommand()
             installTool.commandLine += ['install', d.name]
             installTool.execute()
-
-            provider.storeDependency d, [project.fileTree(new File("${homebrewBasePath}/Cellar/${d.name}/"))], 'brew'
 
             LOGGER.info 'Finished installing brew package: {}', d.name
         })
