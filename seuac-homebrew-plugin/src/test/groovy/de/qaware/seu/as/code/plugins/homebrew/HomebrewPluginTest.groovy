@@ -15,6 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.homebrew
 
+import de.qaware.seu.as.code.plugins.base.Platform
 import de.qaware.seu.as.code.plugins.base.SeuacExtension
 import de.qaware.seu.as.code.plugins.base.SeuacLayout
 import org.gradle.api.Project
@@ -55,10 +56,15 @@ class HomebrewPluginTest extends Specification {
         then: "the extentions and all tasks are registered"
         expect project.extensions.findByName(SeuacExtension.NAME), notNullValue()
 
+        expect project.tasks.applySoftware, notNullValue()
+        expect project.tasks.storeSeuacDb, notNullValue()
+
+        if (!Platform.macOs) {
+            return
+        }
+
         expect project.tasks.installBrew, notNullValue()
         expect project.tasks.applyBrewSoftware, notNullValue()
-        expect project.tasks.applySoftware, notNullValue()
         expect project.tasks.storeBrewSeuacDb, notNullValue()
-        expect project.tasks.storeSeuacDb, notNullValue()
     }
 }
