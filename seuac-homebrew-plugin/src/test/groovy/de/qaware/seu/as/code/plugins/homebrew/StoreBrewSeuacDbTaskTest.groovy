@@ -20,10 +20,15 @@ import de.qaware.seu.as.code.plugins.base.JdbcH2DatastoreProvider
 import de.qaware.seu.as.code.plugins.base.SeuacDatastore
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import spock.lang.Requires
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
 
+/**
+ * Unit test for the {@link StoreBrewSeuacDbTask}.
+ */
+@Requires({ os.macOs })
 class StoreBrewSeuacDbTaskTest extends Specification {
 
     Project project

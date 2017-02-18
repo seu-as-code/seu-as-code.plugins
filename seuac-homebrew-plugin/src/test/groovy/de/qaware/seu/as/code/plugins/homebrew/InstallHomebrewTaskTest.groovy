@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.homebrew
 import de.qaware.seu.as.code.plugins.base.SeuacLayout
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import spock.lang.Requires
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
@@ -25,6 +26,7 @@ import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
 /**
  * Unit test for the {@link InstallHomebrewTask}
  */
+@Requires({ os.macOs })
 class InstallHomebrewTaskTest extends Specification {
 
     File home

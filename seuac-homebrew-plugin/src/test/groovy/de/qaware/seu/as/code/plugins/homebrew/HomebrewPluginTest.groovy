@@ -15,17 +15,21 @@
  */
 package de.qaware.seu.as.code.plugins.homebrew
 
-import de.qaware.seu.as.code.plugins.base.Platform
 import de.qaware.seu.as.code.plugins.base.SeuacExtension
 import de.qaware.seu.as.code.plugins.base.SeuacLayout
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import spock.lang.Requires
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
 import static org.hamcrest.Matchers.notNullValue
 import static spock.util.matcher.HamcrestSupport.expect
 
+/**
+ * Unit test for the {@link HomebrewPlugin}.
+ */
+@Requires({ os.macOs })
 class HomebrewPluginTest extends Specification {
 
     File home
@@ -58,10 +62,6 @@ class HomebrewPluginTest extends Specification {
 
         expect project.tasks.applySoftware, notNullValue()
         expect project.tasks.storeSeuacDb, notNullValue()
-
-        if (!Platform.macOs) {
-            return
-        }
 
         expect project.tasks.installBrew, notNullValue()
         expect project.tasks.applyBrewSoftware, notNullValue()
