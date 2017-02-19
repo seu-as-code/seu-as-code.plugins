@@ -49,6 +49,10 @@ class StoreBrewSeuacDbTaskTest extends Specification {
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
     }
 
+    void cleanup() {
+        provider.clear()
+    }
+
     def "StoreBrewSeuacDb"() {
         setup: "the plugin, apply it and configure the convention"
         project.apply plugin: 'seuac-homebrew'
