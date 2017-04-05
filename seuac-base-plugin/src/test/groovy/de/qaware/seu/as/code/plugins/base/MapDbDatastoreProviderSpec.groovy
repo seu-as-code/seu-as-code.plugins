@@ -69,14 +69,31 @@ class MapDbDatastoreProviderSpec extends Specification {
         provider.database.getHashSet('home').isEmpty()
     }
 
-    def "Check for correct dependencyId"() {
-        setup: "the mock behaviour"
-        dependency.group >> 'de.qaware.seu'
-        dependency.name >> 'seuac-base'
-        dependency.version >> '1.0.0'
+    def "Check for correct dependencyId with extension and classifier"() {
+        setup: "the dependency and project"
+        project.configurations.create('software')
+        dependency = project.dependencies.create('de.qaware.seu:seuac-test:1.0.0:1.5@zip')
 
-        expect: "we expect the correct dependency ID"
-        that provider.getDependencyId(dependency), equalTo('de.qaware.seu:seuac-base:1.0.0')
+        expect: "the correct dependency ID to be returned"
+        that provider.getDependencyId(dependency), equalTo('de.qaware.seu:seuac-test:1.0.0:1.5@zip')
+    }
+
+    def "Check for correct dependencyId with extension"() {
+        setup: "the dependency and project"
+        project.configurations.create('software')
+        dependency = project.dependencies.create('de.qaware.seu:seuac-test:1.0.0@zip')
+
+        expect: "the correct dependency ID to be returned"
+        that provider.getDependencyId(dependency), equalTo('de.qaware.seu:seuac-test:1.0.0@zip')
+    }
+
+    def "Check for correct dependencyId with classifier"() {
+        setup: "the dependency and project"
+        project.configurations.create('software')
+        dependency = project.dependencies.create('de.qaware.seu:seuac-test:1.0.0:1.5')
+
+        expect: "the correct dependency ID to be returned"
+        that provider.getDependencyId(dependency), equalTo('de.qaware.seu:seuac-test:1.0.0:1.5@jar')
     }
 
     def "Store software dependency"() {

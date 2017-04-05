@@ -65,6 +65,6 @@ class StoreSeuacDbTaskSpec extends Specification {
     }
 
     Set<String> findAllFiles(String c) {
-        provider.findAllFiles(['null:seuac-test:1.0.0'] as Set, c)
+        provider.findAllFiles(['null:seuac-test:1.0.0@zip'] as Set, c)
     }
 }
