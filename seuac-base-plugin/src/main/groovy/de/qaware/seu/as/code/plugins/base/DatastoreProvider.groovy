@@ -16,7 +16,9 @@
 package de.qaware.seu.as.code.plugins.base
 
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.artifacts.DependencyArtifact
 import org.gradle.api.file.FileTree
+import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 
 /**
  * The base class for different SEU-as-code data store providers. The providers
@@ -101,7 +103,54 @@ abstract class DatastoreProvider {
      * @return the ID
      */
     String getDependencyId(Dependency d) {
-        [d.group, d.name, d.version].join(':')
+        String dependencyId = [d.group, d.name, d.version].join(':')
+        String classifier = extractClassifier(d), extension = extractExtension(d)
+        if (classifier != null) {
+            dependencyId = [dependencyId, classifier].join(':')
+        }
+        if (extension != null) {
+            dependencyId = [dependencyId, extension].join('@')
+        }
+        dependencyId
+    }
+
+    /**
+     * Returns the classifier for the given dependency or null if no classifier exists.
+     * @param d the dep
+     * @return the classifier or null if no classifier exists
+     */
+    private String extractClassifier(Dependency d) {
+        extractArtifactProperty(d, 'classifier')
+    }
+
+    /**
+     * Returns the extension for the given dependency or null if no extension exists.
+     *
+     * @param d the dep
+     * @return the extension or null if no extension exists
+     */
+    private String extractExtension(Dependency d) {
+        extractArtifactProperty(d, 'extension')
+    }
+
+    /**
+     * Returns the given property out of the given dependency or null if the property doesn't exist.
+     *
+     * @param d the dep
+     * @param prop the prop
+     * @return the property or null if the property doesn't exist
+     */
+    private String extractArtifactProperty(Dependency d, String prop) {
+        if (d.hasProperty('artifacts')) {
+            DependencyArtifact[] artifacts = d.artifacts.toArray()
+            if (artifacts.length > 0) {
+                DependencyArtifact artifact = artifacts[0]
+                if (artifact.hasProperty(prop)) {
+                    return artifact.getAt(prop)
+                }
+            }
+        }
+        return null
     }
 
 }
