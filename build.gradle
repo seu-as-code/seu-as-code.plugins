@@ -164,6 +164,12 @@ distributions {
             from ('seuac-svn-plugin/build/libs') {
                 include '*.jar'
             }
+            from ('seuac-platform-plugin/build/libs') {
+                include '*.jar'
+            }
+            from ('seuac-homebrew-plugin/build/libs') {
+                include '*.jar'
+            }
         }
     }
 }
