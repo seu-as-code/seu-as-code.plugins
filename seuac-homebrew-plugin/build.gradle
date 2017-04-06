@@ -115,7 +115,7 @@ publishing {
 bintray {
     user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'unknown'
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'unknown'
-    publications = ['homebrew']
+    publications = ['homebrewPlugin']
     dryRun = false
     publish = true
     pkg {
