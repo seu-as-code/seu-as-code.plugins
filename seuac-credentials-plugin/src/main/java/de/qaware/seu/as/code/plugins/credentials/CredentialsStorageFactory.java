@@ -15,6 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
+import de.qaware.seu.as.code.plugins.credentials.linux.SecretServiceAPICredentialsStorage;
 import de.qaware.seu.as.code.plugins.credentials.mac.KeychainCredentialsStorage;
 import de.qaware.seu.as.code.plugins.credentials.win.PropertyCredentialsStorage;
 import org.gradle.api.Project;
@@ -58,6 +59,8 @@ interface CredentialsStorageFactory {
                 storage = new PropertyCredentialsStorage(project, extension);
             } else if (OperatingSystem.isMacOs()) {
                 storage = new KeychainCredentialsStorage(extension);
+            } else if (OperatingSystem.isLinux()) {
+                storage = new SecretServiceAPICredentialsStorage();
             } else {
                 project.getLogger().warn("Unsupported OS. All credential tasks will be disabled.");
                 storage = new CredentialsStorage.None();
