@@ -39,6 +39,13 @@ class OperatingSystemSpec extends Specification {
         OperatingSystem.isSupported()
     }
 
+    @Requires({ os.linux })
+    def "Check current on Linux"() {
+        expect:
+        OperatingSystem.isLinux()
+        OperatingSystem.isSupported()
+    }
+
     @Unroll
     def "Check for OS #name"() {
         expect:
@@ -47,7 +54,7 @@ class OperatingSystemSpec extends Specification {
         where:
         name         || os
         'Windows 98' || OperatingSystem.WINDOWS
-        'Linux'      || null
+        'Linux'      || OperatingSystem.LINUX
         'Mac OS X'   || OperatingSystem.MAC_OS
         'Darwin'     || OperatingSystem.MAC_OS
         'OSX'        || OperatingSystem.MAC_OS

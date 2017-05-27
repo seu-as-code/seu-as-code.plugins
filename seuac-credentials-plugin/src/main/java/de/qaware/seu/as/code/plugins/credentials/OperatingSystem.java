@@ -22,7 +22,7 @@ package de.qaware.seu.as.code.plugins.credentials;
  * @author lreimer
  */
 public enum OperatingSystem {
-    WINDOWS, MAC_OS;
+    LINUX, WINDOWS, MAC_OS;
 
     /**
      * Returns the current operating system we are running on.
@@ -46,6 +46,8 @@ public enum OperatingSystem {
             return WINDOWS;
         } else if (osName.contains("mac os x") || osName.contains("darwin") || osName.contains("osx")) {
             return MAC_OS;
+        } else if (osName.equals("linux")) {
+            return LINUX;
         } else {
             return null;
         }
@@ -70,9 +72,19 @@ public enum OperatingSystem {
     }
 
     /**
+     * Convenience method to check if we are on Linux.
+     *
+     * @return true if on Linux, otherwise false
+     */
+    public static boolean isLinux() {
+        return OperatingSystem.current() == LINUX;
+    }
+
+
+    /**
      * Convenience method to check if the OS is supported.
      *
-     * @return true if on Windows or MacOS, otherwise false
+     * @return true if on Windows, MacOS or Linux, otherwise false
      */
     public static boolean isSupported() {
         return OperatingSystem.current() != null;
