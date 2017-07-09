@@ -34,7 +34,7 @@ enum Platform {
      *
      * @return either windows, macos, or unix
      */
-    def String getOsFamily() {
+    String getOsFamily() {
         name().toLowerCase(Locale.ENGLISH)
     }
 
@@ -43,7 +43,7 @@ enum Platform {
      *
      * @return either x86_64 or x86
      */
-    def String getOsArch() {
+    String getOsArch() {
         is64bit() ? 'x86_64' : 'x86'
     }
 
