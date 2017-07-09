@@ -65,6 +65,7 @@ class RunHooksTask extends DefaultTask {
             binding.setVariable('logger', logger)
 
             binding.setVariable('platform', Platform.current())
+            binding.setVariable('shortcut', Shortcut.for(seuHome, seuLayout))
             binding.setVariable('ext', project.extensions.extraProperties)
             binding.setVariable('project', project)
 
