@@ -73,7 +73,7 @@ class RunHooksTask extends DefaultTask {
                 logger.debug "Running software hook $it"
                 try {
                     shell.evaluate(it)
-                } catch (any) {
+                } catch (Throwable any) {
                     logger.warn("Error running software hook $it", any)
                 }
             }
