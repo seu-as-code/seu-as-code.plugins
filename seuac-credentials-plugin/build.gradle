@@ -17,15 +17,10 @@
 dependencies {
     compile 'net.java.dev.jna:jna:4.2.0'
     compile 'net.java.dev.jna:jna-platform:4.2.0'
+
+    compile 'org.apache.commons:commons-lang3:3.4'
     compile 'commons-codec:commons-codec:1.10'
     compile 'commons-io:commons-io:2.4'
-    compile 'org.apache.commons:commons-lang3:3.4'
-}
-
-configurations.all {
-    resolutionStrategy {
-        force 'org.codehaus.groovy:groovy-all:2.4.5'
-    }
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_7
