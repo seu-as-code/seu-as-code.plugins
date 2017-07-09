@@ -15,15 +15,11 @@
  */
 package de.qaware.seu.as.code.plugins.credentials.linux;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
 import de.qaware.seu.as.code.plugins.credentials.Credentials;
 import de.qaware.seu.as.code.plugins.credentials.CredentialsException;
 import de.qaware.seu.as.code.plugins.credentials.CredentialsStorage;
+
+import java.io.*;
 
 /**
  * This is a simple initial implementation that relies on the secret-tool being
@@ -31,9 +27,9 @@ import de.qaware.seu.as.code.plugins.credentials.CredentialsStorage;
  * libsecret library to talk via dbus and the secret service API to the
  * installed keyring system (if any is installed). Currently at least
  * gnome-keyring and kwallet support this API.
- * 
+ * <p>
  * To install the secret-tool, run: sudo apt-get install libsecret-tool
- * 
+ * <p>
  * There are more elaborate options that could improve this version of the
  * credential storage:
  * <ul>
@@ -50,81 +46,79 @@ import de.qaware.seu.as.code.plugins.credentials.CredentialsStorage;
  * https://github.com/ffw/lantern/tree/master/src/main/java/org/freedesktop/Secret
  * Usage: https://searchcode.com/codesearch/view/68310988/</li>
  * </ul>
- * 
- * 
  */
 public class SecretServiceAPICredentialsStorage implements CredentialsStorage {
-	private static final String SYSTEMPREFIX = "QAcredential";
-	private static final String SERVICEID_KEY = SYSTEMPREFIX + ":serviceId";
+    private static final String SYSTEMPREFIX = "QAcredential";
+    private static final String SERVICEID_KEY = SYSTEMPREFIX + ":serviceId";
 
-	@Override
-	public void clearCredentials(String service) throws CredentialsException {
-		ProcessBuilder pb = new ProcessBuilder("secret-tool", "clear", SERVICEID_KEY, service);
+    @Override
+    public void clearCredentials(String service) throws CredentialsException {
+        ProcessBuilder pb = new ProcessBuilder("secret-tool", "clear", SERVICEID_KEY, service);
 
-		try {
-			pb.start();
-		} catch (IOException e) {
-			throw new CredentialsException(
-					"A problem occurred when attempting to delete credentials for service " + service + ":", e);
-		}
-	}
+        try {
+            pb.start();
+        } catch (IOException e) {
+            throw new CredentialsException(
+                    "A problem occurred when attempting to delete credentials for service " + service + ":", e);
+        }
+    }
 
-	@Override
-	public void setCredentials(String service, String username, char[] password) throws CredentialsException {
-		Credentials creds = new Credentials(username, String.copyValueOf(password));
-		setCredentials(service, creds);
-	}
+    @Override
+    public void setCredentials(String service, String username, char[] password) throws CredentialsException {
+        Credentials creds = new Credentials(username, String.copyValueOf(password));
+        setCredentials(service, creds);
+    }
 
-	@Override
-	public void setCredentials(String service, Credentials credentials) throws CredentialsException {
-		// The label is just a comment, to be used, for instance, by UI tools
-		// that allow human inspection of the keystore
-		String label = SYSTEMPREFIX + ":" + service;
-		ProcessBuilder pb = new ProcessBuilder("secret-tool", "store", "--label", label, SERVICEID_KEY, service);
+    @Override
+    public void setCredentials(String service, Credentials credentials) throws CredentialsException {
+        // The label is just a comment, to be used, for instance, by UI tools
+        // that allow human inspection of the keystore
+        String label = SYSTEMPREFIX + ":" + service;
+        ProcessBuilder pb = new ProcessBuilder("secret-tool", "store", "--label", label, SERVICEID_KEY, service);
 
-		Process p=null;
-		try {
-			p = pb.start();
-		} catch (IOException e) {
-			throw new CredentialsException("Error storing secure credential properties.", e);
-		}
-		
-		try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))){
-			out.write(credentials.toSecret());
-			out.close();
-			p.waitFor();
-		} catch (IOException | InterruptedException e) {
-			throw new CredentialsException("Error storing secure credential properties.", e);
-		}
+        Process p = null;
+        try {
+            p = pb.start();
+        } catch (IOException e) {
+            throw new CredentialsException("Error storing secure credential properties.", e);
+        }
 
-	}
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))) {
+            out.write(credentials.toSecret());
+            out.close();
+            p.waitFor();
+        } catch (IOException | InterruptedException e) {
+            throw new CredentialsException("Error storing secure credential properties.", e);
+        }
 
-	@Override
-	public Credentials findCredentials(String service) throws CredentialsException {
+    }
 
-		ProcessBuilder pb = new ProcessBuilder("secret-tool", "lookup", SERVICEID_KEY, service);
-		Process p = null;
+    @Override
+    public Credentials findCredentials(String service) throws CredentialsException {
 
-		try {
-			p = pb.start();
-		} catch (IOException e) {
-			throw new CredentialsException("Could not retrive credentials from store", e);
-		}
+        ProcessBuilder pb = new ProcessBuilder("secret-tool", "lookup", SERVICEID_KEY, service);
+        Process p = null;
 
-		Credentials cred = null;
-		try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-			
-			p.waitFor();
-			String secret = input.readLine();
-			if (secret != null && secret != "") {
-				cred = Credentials.fromSecret(secret);
-			}
-			
-		} catch (IOException | InterruptedException e) {
-			throw new CredentialsException("Could not retrive credentials from store", e);
-		}
+        try {
+            p = pb.start();
+        } catch (IOException e) {
+            throw new CredentialsException("Could not retrive credentials from store", e);
+        }
 
-		return cred;
-	}
+        Credentials cred = null;
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+
+            p.waitFor();
+            String secret = input.readLine();
+            if (!"".equals(secret)) {
+                cred = Credentials.fromSecret(secret);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            throw new CredentialsException("Could not retrive credentials from store", e);
+        }
+
+        return cred;
+    }
 
 }

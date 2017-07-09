@@ -16,12 +16,8 @@
 package de.qaware.seu.as.code.plugins.credentials.linux
 
 import de.qaware.seu.as.code.plugins.credentials.Credentials
-import de.qaware.seu.as.code.plugins.credentials.CredentialsException
 import spock.lang.Requires
-import spock.lang.Shared
 import spock.lang.Specification
-
-
 
 /**
  * Test spec for the MacOS Keychain credential store.
@@ -29,19 +25,19 @@ import spock.lang.Specification
  * @author lreimer
  */
 class SecretServiceAPICredentialsStorageSpec extends Specification {
- 
-    
+
+
     @Requires({ os.linux })
     def "Integration test on Linux"() {
         given:
         def storage = new SecretServiceAPICredentialsStorage()
         def credentials = new Credentials('Max', 'Mustermann')
-        
+
         when:
-        storage.setCredentials('spock',credentials)
+        storage.setCredentials('spock', credentials)
         def found = storage.findCredentials('spock')
         storage.clearCredentials('spock')
-        
+
         then:
         found?.username == credentials.username
         found?.password == credentials.password
