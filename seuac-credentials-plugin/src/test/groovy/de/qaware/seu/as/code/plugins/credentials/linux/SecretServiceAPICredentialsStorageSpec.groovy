@@ -27,7 +27,7 @@ import spock.lang.Specification
 class SecretServiceAPICredentialsStorageSpec extends Specification {
 
 
-    @Requires({ os.linux })
+    @Requires({ os.linux && !Boolean.valueOf(env['CI']) })
     def "Integration test on Linux"() {
         given:
         def storage = new SecretServiceAPICredentialsStorage()
