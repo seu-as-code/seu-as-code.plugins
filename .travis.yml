@@ -1,5 +1,5 @@
 language: groovy
-sudo: required
+sudo: false
 
 jdk:
   - openjdk7
@@ -10,8 +10,6 @@ env:
   - TERM=dumb
 
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libsecret-tool
   - chmod +x gradlew
 
 script: ./gradlew build jacocoTestReport
