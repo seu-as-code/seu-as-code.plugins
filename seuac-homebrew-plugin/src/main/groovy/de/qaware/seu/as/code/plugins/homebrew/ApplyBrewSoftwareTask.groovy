@@ -43,7 +43,11 @@ class ApplyBrewSoftwareTask extends DefaultTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplyBrewSoftwareTask.class);
 
     @Input
-    Configuration source
+    Configuration brew
+
+    @Input
+    Configuration cask
+
     File homebrewBasePath
     SeuacDatastore datastore
 
@@ -52,7 +56,7 @@ class ApplyBrewSoftwareTask extends DefaultTask {
      */
     ApplyBrewSoftwareTask() {
         group = 'SEU-as-code'
-        description = 'Installs a homebrew package into the seu'
+        description = 'Install Homebrew packages into the SEU'
     }
 
     @Inject
@@ -69,16 +73,24 @@ class ApplyBrewSoftwareTask extends DefaultTask {
     void exec() {
         DatastoreProvider provider = DatastoreProviderFactory.instance.get(datastore)
         provider.init()
-        source.transitive = false
+
+        brew.transitive = false
+        cask.transitive = false
 
         // first we find all obsolete dependencies and remove associated files
-        Set<String> obsoleteDeps = provider.findAllObsoleteDeps(source.dependencies, source.name)
-        uninstallOldPackages(obsoleteDeps)
+        Set<String> obsoleteDeps = provider.findAllObsoleteDeps(brew.dependencies, brew.name)
+        uninstallOldPackages(obsoleteDeps, brew)
+
+        obsoleteDeps = provider.findAllObsoleteDeps(cask.dependencies, cask.name)
+        uninstallOldPackages(obsoleteDeps, cask)
 
         updateBrewPackages()
 
-        Set<Dependency> incomingDeps = provider.findAllIncomingDeps(source.dependencies, source.name)
-        installNewPackages(incomingDeps, provider)
+        Set<Dependency> incomingDeps = provider.findAllIncomingDeps(brew.dependencies, brew.name)
+        installNewPackages(incomingDeps, brew)
+
+        incomingDeps = provider.findAllIncomingDeps(cask.dependencies, cask.name)
+        installNewPackages(incomingDeps, cask)
     }
 
     /**
@@ -100,8 +112,9 @@ class ApplyBrewSoftwareTask extends DefaultTask {
      * Removes the given brew packages.
      *
      * @param uninstallDeps a set of home brew package names to remove
+     * @param configuration the configuration of the dependencies
      */
-    def uninstallOldPackages(Set<String> uninstallDeps) {
+    def uninstallOldPackages(Set<String> uninstallDeps, Configuration configuration) {
         if (uninstallDeps.isEmpty()) {
             return
         }
@@ -109,7 +122,11 @@ class ApplyBrewSoftwareTask extends DefaultTask {
         LOGGER.info 'Uninstall the removed brew packages: {}', uninstallDeps
 
         def uninstall = createBrewCommand()
-        uninstall.commandLine += 'uninstall'
+        if (isCask(configuration)) {
+            uninstall.commandLine += ['cask', 'uninstall']
+        } else {
+            uninstall.commandLine += 'uninstall'
+        }
         uninstallDeps.forEach({ d ->
             uninstall.commandLine += d.split(":", 3)[1]
         })
@@ -122,17 +139,25 @@ class ApplyBrewSoftwareTask extends DefaultTask {
      * the given provider.
      *
      * @param dependencies The dependencies to install.
-     * @param provider The provider to store the installed dependencies in
+     * @param configuration the configuration of the dependencies
      */
-    def installNewPackages(Set<Dependency> dependencies, DatastoreProvider provider) {
+    def installNewPackages(Set<Dependency> dependencies, Configuration configuration) {
         LOGGER.info 'Install the new brew packages'
         dependencies.forEach({ d ->
             def installTool = createBrewCommand()
-            installTool.commandLine += ['install', d.name]
+            if (isCask(configuration)) {
+                installTool.commandLine += ['cask', 'install', d.name]
+            } else {
+                installTool.commandLine += ['install', d.name]
+            }
             installTool.execute()
 
             LOGGER.info 'Finished installing brew package: {}', d.name
         })
+    }
+
+    protected boolean isCask(Configuration configuration) {
+        "cask".equals(configuration.name)
     }
 
     /**

@@ -74,7 +74,8 @@ class ApplyBrewSoftwareTaskTest extends Specification {
         ApplyBrewSoftwareTask task = project.task("applyBrewSoftwareTask", type: ApplyBrewSoftwareTask) {
             homebrewBasePath = new File(home, 'homebrew')
             datastore = defaultDatastore
-            source = project.configurations.brew
+            brew = project.configurations.brew
+            cask = project.configurations.cask
         }
         when:
         task.exec()

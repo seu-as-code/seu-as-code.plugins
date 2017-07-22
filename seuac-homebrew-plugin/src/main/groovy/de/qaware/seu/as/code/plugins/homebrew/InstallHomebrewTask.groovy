@@ -38,7 +38,7 @@ class InstallHomebrewTask extends DefaultTask {
 
     InstallHomebrewTask() {
         group = 'SEU-as-code'
-        description = 'Installs homebrew into the SEU.'
+        description = 'Installs Homebrew into the SEU.'
     }
 
     @TaskAction

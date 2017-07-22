@@ -23,7 +23,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.qaware.seu.as.code:seuac-homebrew-plugin:1.0.0'
+        classpath 'de.qaware.seu.as.code:seuac-homebrew-plugin:1.1.0'
     }
 }
 
@@ -33,7 +33,7 @@ apply plugin: 'de.qaware.seu.as.code.homebrew'
 Build script snippet for new, incubating, plugin mechanism introduced in Gradle 2.1:
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.homebrew' version '1.0.0'
+    id 'de.qaware.seu.as.code.homebrew' version '1.1.0'
 }
 ```
 ## Tasks
@@ -50,7 +50,7 @@ Task name | Depends on | Type | Description
 This short example will install Git SCM, Apache Maven and Apache Subversion into the seu using home brew. 
 ```groovy
 plugins {
-    id 'de.qaware.seu.as.code.homebrew' version '1.0.0-SNAPSHOT'
+    id 'de.qaware.seu.as.code.homebrew' version '1.1.0'
 }
 
 depdendcies {
@@ -58,11 +58,15 @@ depdendcies {
     brew ':git:'
     brew ':maven:'
     brew ':subversion:'
+    
+    // Install via brew as cask
+    cask ':minishift:'
 }
 ```
 ## Maintainer
 
-Christian Fritz (@chrfritz)
+- Christian Fritz (@chrfritz)
+- M.-Leander Reimer (@lreimer)
 
 ## License
 

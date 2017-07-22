@@ -41,10 +41,11 @@ class HomebrewPlugin implements Plugin<Project> {
         if (!project.pluginManager.hasPlugin('de.qaware.seu.as.code.base')) {
             project.pluginManager.apply 'de.qaware.seu.as.code.base'
         }
+
         createConfigurations project
 
         if (!macOs) {
-            LOGGER.info("Did not activate Homebrew Plugin. Did not run on {}", current());
+            LOGGER.info("No MacOS, currently running on {}! Did not activate Homebrew plugin.", current());
             return;
         }
 
@@ -56,7 +57,8 @@ class HomebrewPlugin implements Plugin<Project> {
 
             Task applyBrewSoftware = project.task('applyBrewSoftware', type: ApplyBrewSoftwareTask) {
                 homebrewBasePath = new File("${project.seuAsCode.layout.software}", 'homebrew')
-                source = project.configurations.brew
+                brew = project.configurations.brew
+                cask = project.configurations.cask
                 datastore = project.seuAsCode.datastore
             }
             project.tasks['applySoftware'].dependsOn << applyBrewSoftware
@@ -76,5 +78,8 @@ class HomebrewPlugin implements Plugin<Project> {
     private static void createConfigurations(Project project) {
         def brewConfig = project.configurations.create('brew')
         brewConfig.transitive = false
+
+        def caskConfig = project.configurations.create('cask')
+        caskConfig.transitive = false
     }
 }
