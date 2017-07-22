@@ -53,7 +53,7 @@ plugins {
     id 'de.qaware.seu.as.code.homebrew' version '1.1.0'
 }
 
-depdendcies {
+dependencies {
     // Install via brew
     brew ':git:'
     brew ':maven:'
