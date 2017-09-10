@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.credentials.linux;
 import de.qaware.seu.as.code.plugins.credentials.Credentials;
 import de.qaware.seu.as.code.plugins.credentials.CredentialsException;
 import de.qaware.seu.as.code.plugins.credentials.CredentialsStorage;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 
@@ -97,12 +98,12 @@ public class SecretServiceAPICredentialsStorage implements CredentialsStorage {
     public Credentials findCredentials(String service) throws CredentialsException {
 
         ProcessBuilder pb = new ProcessBuilder("secret-tool", "lookup", SERVICEID_KEY, service);
-        Process p = null;
+        Process p;
 
         try {
             p = pb.start();
         } catch (IOException e) {
-            throw new CredentialsException("Could not retrive credentials from store", e);
+            throw new CredentialsException("Could not retrieve credentials from store", e);
         }
 
         Credentials cred = null;
@@ -110,12 +111,11 @@ public class SecretServiceAPICredentialsStorage implements CredentialsStorage {
 
             p.waitFor();
             String secret = input.readLine();
-            if (!"".equals(secret)) {
+            if (!StringUtils.isBlank(secret)) {
                 cred = Credentials.fromSecret(secret);
             }
-
         } catch (IOException | InterruptedException e) {
-            throw new CredentialsException("Could not retrive credentials from store", e);
+            throw new CredentialsException("Could not retrieve credentials from store", e);
         }
 
         return cred;
