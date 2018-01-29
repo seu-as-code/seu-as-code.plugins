@@ -23,6 +23,7 @@ import spock.lang.Requires
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
+import static org.hamcrest.Matchers.hasItem
 import static org.hamcrest.Matchers.notNullValue
 import static spock.util.matcher.HamcrestSupport.expect
 
@@ -64,6 +65,7 @@ class HomebrewPluginTest extends Specification {
         expect project.tasks.storeSeuacDb, notNullValue()
 
         expect project.tasks.installBrew, notNullValue()
+        expect project.tasks.bootstrapSeu.dependsOn, hasItem(project.tasks.installBrew)
         expect project.tasks.applyBrewSoftware, notNullValue()
         expect project.tasks.storeBrewSeuacDb, notNullValue()
     }
