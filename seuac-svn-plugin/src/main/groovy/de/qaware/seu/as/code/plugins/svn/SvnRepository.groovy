@@ -26,6 +26,7 @@ class SvnRepository {
     File directory
     String username
     String password
+    String revision
 
     /**
      * Required to construct by name.
@@ -79,5 +80,14 @@ class SvnRepository {
      */
     def void password(String aPassword) {
         this.password = aPassword
+    }
+
+    /**
+     * Short hand method to assign the revision value.
+     *
+     * @param aRevision the revision
+     */
+    def void revision(String aRevision) {
+        this.revision = aRevision
     }
 }

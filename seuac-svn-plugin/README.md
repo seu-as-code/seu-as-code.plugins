@@ -59,6 +59,7 @@ Property name | Type | Default value | Description
 `directory` | File | - | The local checkout directory of the named SVN repository.
 `username` | String | - | The username used to authenticate.
 `password` | String | - | The password used to authenticate.
+`revision` | String | - | (optional) The SVN revision to check out, for instance 1234, {2018-01-30}...
 
 ### Example
 

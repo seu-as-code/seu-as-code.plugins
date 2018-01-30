@@ -62,6 +62,7 @@ class SvnPlugin implements Plugin<Project> {
                     directory = r.directory
                     username = r.username
                     password = r.password
+                    revision = r.revision
                 }
                 project.tasks.svnCheckoutAll.dependsOn checkout
 
@@ -70,6 +71,7 @@ class SvnPlugin implements Plugin<Project> {
                     directory = r.directory
                     username = r.username
                     password = r.password
+                    revision = r.revision
                 }
                 project.tasks.svnUpdateAll.dependsOn update
             }

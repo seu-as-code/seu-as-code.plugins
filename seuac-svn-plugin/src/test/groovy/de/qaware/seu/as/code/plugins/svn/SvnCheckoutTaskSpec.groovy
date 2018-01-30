@@ -47,6 +47,7 @@ class SvnCheckoutTaskSpec extends Specification {
             directory = new File("build")
             username = 'user'
             password = 'pwd'
+            revision = 'rev'
         }
 
         then: "we find the taks and the parameters have been set correctly"
@@ -57,6 +58,7 @@ class SvnCheckoutTaskSpec extends Specification {
         expect task.directory, notNullValue()
         expect task.username, equalTo('user')
         expect task.password, equalTo('pwd')
+        expect task.revision, equalTo('rev')
     }
 
     def "Execute SvnCheckoutTask with wrong URL"() {
