@@ -41,6 +41,9 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     }
 
     public String getService() {
+        if (StringUtils.isEmpty(service)) {
+            service = console.readLine("%nEnter service:");
+        }
         return service;
     }
 
