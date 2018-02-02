@@ -49,6 +49,9 @@ abstract class AbstractSvnTask extends DefaultTask {
     @Input
     String username
 
+    @Input
+    String revision
+
     /**
      * Factory method to create a new SVN update client instance. If username and password
      * are provided they will be used for authentication.

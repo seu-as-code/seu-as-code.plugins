@@ -15,6 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.svn
 
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.tmatesoft.svn.core.SVNDepth
@@ -37,8 +38,14 @@ class SvnCheckoutTask extends AbstractSvnTask {
             SVNURL repositoryURL = SVNURL.parseURIEncoded(url)
             def svnUpdateClient = createSvnUpdateClient(username, password)
 
+            SVNRevision svnRevision = (revision == null ? SVNRevision.HEAD : SVNRevision.parse(revision))
+
+            if (svnRevision == SVNRevision.UNDEFINED) {
+                throw new GradleException("Invalid SVN revision: " + this.revision)
+            }
+
             svnUpdateClient.doCheckout(repositoryURL, directory, SVNRevision.HEAD,
-                    SVNRevision.HEAD, SVNDepth.INFINITY, false)
+                    svnRevision, SVNDepth.INFINITY, false)
         }
     }
 }
