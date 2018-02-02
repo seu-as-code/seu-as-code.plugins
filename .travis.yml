@@ -3,7 +3,6 @@ sudo: false
 
 jdk:
   - openjdk7
-  - oraclejdk7
   - oraclejdk8
 
 env:
@@ -20,7 +19,8 @@ deploy:
   provider: releases
   api_key:
     secure: nBC2rJFv31Ge4ZHZE0MHsK21TFFGpM0M8LyV9Jdc2RzvNp0HxHlBaL7sERL8iSeP0BoC/WHB7H7WDgDPFPdqTIS0Uyl7+4/m+Rn/1juFEJH2+fstqHUXO3u4RKqbLSRBMwlBEEgUfw5g60K6fwN+pf6XFNKwqW9M727O9z7lwOuxk9L3cz0ysvD1f+9Hdza4HAKGA5CSzWn1DbYohNF/xhG+YkFYm3gEVCzmHTymBz+o1BelKsRMKGgLbiP+Q58wBYx3zJEVSZaTPyQkAQt5UuIbdiZsgJuXaPiFYleXWxWj2iO09m/MPzy59Z+oGWT/X4wU/1Q2/ivAJY0cksLYeRUwmDbwHvkx4+iDP9S9n37Klyxk8QfhJH5Fm/aXu1blYCl9bgJS4dPrqqtkIjqdNYA4ydMZp3DGu+OfM6FLn/KYvKijGSgoKMzGbx2pKQLqCbl/3ksuUHNgr3UX5MExy5iy6x8RiK9KzuBdoj32w/Em8kbtcJHxvegy6s1L62g4BpGv3PshQC7r/7HCkZIjew6XwYWpirKBPoyU1b3BBBhI9XNuwhFJtG6+pzLZWV0Cv/wlQhZ1BHHsC3bUQcuqh1O0+l/nq6KogLdY8B+53gxAEBPlz/eEQ/Krh0ysg6fHZtNp7XjKxBTC8LJoP0f50UprxaF7hdmXy0mSv8jEa5A=
-  file: ./build/distributions/seuac-plugins-2.5.0-bin.zip
+  file_glob: true
+  file: ./build/distributions/*
   skip_cleanup: true
   on:
     tags: true
