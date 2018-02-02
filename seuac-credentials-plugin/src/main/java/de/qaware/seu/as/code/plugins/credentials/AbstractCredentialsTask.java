@@ -40,13 +40,6 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
         this.setEnabled(OperatingSystem.isSupported());
     }
 
-    public String getService() {
-        if (StringUtils.isEmpty(service)) {
-            service = console.readLine("%nEnter service:");
-        }
-        return service;
-    }
-
     /**
      * Sets the service name. This method may also be called when
      * the service name is set via the command line option.
@@ -56,6 +49,19 @@ public abstract class AbstractCredentialsTask extends DefaultTask {
     @Option(option = "service", description = "The service the credentials are for.")
     public void setService(String service) {
         this.service = service;
+    }
+
+    /**
+     * This method will return the service name, either fro mthe command line option or
+     * it will be read from the command line.
+     *
+     * @return the service name
+     */
+    public String getService() {
+        if (StringUtils.isEmpty(service)) {
+            service = console.readLine("%nEnter service:");
+        }
+        return service;
     }
 
     /**

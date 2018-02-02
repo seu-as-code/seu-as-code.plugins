@@ -15,6 +15,11 @@
  */
 package de.qaware.seu.as.code.plugins.credentials;
 
+import java.io.BufferedReader;
+import java.io.Console;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Supports I/O opperations.
  */
@@ -28,7 +33,17 @@ public class SystemConsole {
      * @return the line read from the console
      */
     public String readLine(String prompt, Object... args) {
-        return System.console().readLine(prompt, args);
+        Console console = System.console();
+        if (console != null) {
+            return console.readLine(prompt, args);
+        } else {
+            System.out.format(prompt, args);
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+                return br.readLine();
+            } catch (IOException e) {
+                throw new CredentialsException("Unable to read line from System.in", e);
+            }
+        }
     }
 
     /**
@@ -38,16 +53,32 @@ public class SystemConsole {
      * @return the password read from the console
      */
     public char[] readPassword(String prompt) {
-        return System.console().readPassword(prompt);
+        Console console = System.console();
+        if (console != null) {
+            return console.readPassword(prompt);
+        } else {
+            System.out.format(prompt);
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+                return br.readLine().toCharArray();
+            } catch (IOException e) {
+                throw new CredentialsException("Unable to read password from System.in", e);
+            }
+        }
     }
 
     /**
-     * Output the given format string to the current system console.
+     * Output the given format string to the current system console. In case
+     * not console is attached (Gradle daemon) then SYSTEM_OUT is used.
      *
      * @param fmt  the format string to output
      * @param args any message arguments
      */
     public void format(String fmt, Object... args) {
-        System.console().format(fmt, args);
+        Console console = System.console();
+        if (console != null) {
+            console.format(fmt, args);
+        } else {
+            System.out.format(fmt, args);
+        }
     }
 }
