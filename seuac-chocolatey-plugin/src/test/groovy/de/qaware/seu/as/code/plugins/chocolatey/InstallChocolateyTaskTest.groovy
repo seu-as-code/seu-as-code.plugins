@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2015 QAware GmbH
+ *    Copyright (C) 2018 QAware GmbH
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,9 +15,7 @@
  */
 package de.qaware.seu.as.code.plugins.chocolatey
 
-import com.sun.media.jfxmedia.logging.Logger
 import de.qaware.seu.as.code.plugins.base.SeuacLayout
-import groovy.xml.XmlUtil
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Requires
