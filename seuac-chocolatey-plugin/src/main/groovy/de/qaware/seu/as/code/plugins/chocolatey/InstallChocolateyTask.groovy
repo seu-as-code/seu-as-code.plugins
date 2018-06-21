@@ -138,7 +138,7 @@ class InstallChocolateyTask extends DefaultTask {
     }
 
     private void initializeChocolatey() {
-        // first execution of chocolatey: check if .NET-Framework is installed, and writes config files
+        // first execution of chocolatey: check if .NetFramework is installed, and writes config files
         def action = getExecActionFactory().newExecAction()
         action.commandLine(Paths.get(chocolateyBasePath.path, 'bin', 'choco.exe').toString())
         action.commandLine += ['-v']
@@ -151,7 +151,7 @@ class InstallChocolateyTask extends DefaultTask {
         try {
             action.execute()
         } catch (ExecException e) {
-            LOGGER.error("Unable to run Chocolately at this time.  It is likely that .Net Framework is not installed or the installation requires a system reboot.")
+            LOGGER.error("Unable to run Chocolately at this time.  It is likely that .NetFramework is not installed or the installation requires a system reboot.")
             throw e
         }
     }
