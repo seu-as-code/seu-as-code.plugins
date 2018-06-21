@@ -170,7 +170,7 @@ distributions {
             from ('seuac-homebrew-plugin/build/libs') {
                 include '*.jar'
             }
-            from ('seuac-chocolate-plugin/build/libs') {
+            from ('seuac-chocolatey-plugin/build/libs') {
                 include '*.jar'
             }
         }
