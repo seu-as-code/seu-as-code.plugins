@@ -8,10 +8,10 @@
 
 # SEU-as-code Chocolatey Plugin
 
-A grade plugin for handling chocolatey packages inside a seu-as-code. Provides basic tasks to apply the current `choco` 
-configuation to the seu.
+A grade plugin for handling chocolatey packages inside a SEU-as-code. Provides basic tasks to apply the current `choco` 
+configuation to the SEU.
 
-A portable version of chocolatey is installed within the seu by this plugin. 
+A portable version of chocolatey is installed within the SEU by this plugin. 
 This plugin does not touch a possibly exisiting system installation of chocolatey (No user or system environment variables are set).
 
 ## Usage
