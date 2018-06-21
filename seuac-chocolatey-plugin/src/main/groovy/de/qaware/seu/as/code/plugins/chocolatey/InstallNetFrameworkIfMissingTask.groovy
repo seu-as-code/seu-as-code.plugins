@@ -21,6 +21,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecResult
 import org.gradle.process.internal.ExecActionFactory
 import org.gradle.process.internal.ExecException
 import org.slf4j.Logger
@@ -29,9 +30,7 @@ import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
 /**
- * A simple task thats installs the latest version of <a href="https://chocolatey.org/">Chocolatey</a> into the SEU.
- *
- * The target path can be configured.
+ * A simple task that installs the latest version of DotNET into the system root directory.
  */
 class InstallNetFrameworkIfMissingTask extends DefaultTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstallNetFrameworkIfMissingTask.class);
@@ -73,7 +72,15 @@ class InstallNetFrameworkIfMissingTask extends DefaultTask {
         action.commandLine('cmd', '/c', installerFile)
         action.commandLine += ['/q', '/norestart', '/repair']
         action.ignoreExitValue
-        def result = action.execute()
+
+        ExecResult result
+        try {
+            result = action.execute()
+        } catch (ExecException e) {
+            LOGGER.error("Unable to run .NetFramework installer.")
+            throw e
+        }
+
         int exitValue = result.exitValue
         if (exitValue == 0 || exitValue == 3010) {
             LOGGER.info("Installed .NetFramework successfully.")
@@ -86,12 +93,7 @@ class InstallNetFrameworkIfMissingTask extends DefaultTask {
                     "https://msdn.microsoft.com/library/ee942965(v=VS.100).aspx#troubleshooting")
             throw new GradleException("Failed to install .NetFramework")
         }
-        try {
 
-        } catch (ExecException e) {
-            LOGGER.error("Unable to run NetFramework installer.")
-            throw e
-        }
     }
 
     private File downloadInstaller() {
