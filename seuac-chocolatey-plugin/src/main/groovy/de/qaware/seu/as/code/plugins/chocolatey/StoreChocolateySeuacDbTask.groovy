@@ -37,6 +37,7 @@ class StoreChocolateySeuacDbTask extends DefaultTask {
         group = 'SEU-as-code'
         description = 'Store the current SEU chocolatey software package configuration.'
     }
+
     /**
      * Stores the SEU-as-code database for the chocolatey software configuration.
      */
