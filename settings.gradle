@@ -4,4 +4,5 @@ include 'seuac-git-plugin'
 include 'seuac-platform-plugin'
 include 'seuac-svn-plugin'
 include 'seuac-homebrew-plugin'
+include 'seuac-chocolatey-plugin'
 
