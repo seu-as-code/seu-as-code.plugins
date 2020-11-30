@@ -84,10 +84,6 @@ repositories {
 	jcenter()
 }
 dependencies {
-    // dependencies for the Groovy root classloader
-    seuac 'org.codehaus.groovy.modules.scriptom:scriptom:1.6.0'
-    seuac 'com.h2database:h2:1.4.188'
-
     // mandatory dependencies for basic SEU setup
     home 'de.qaware.seu.as.code:seuac-home:2.0.0'
     software 'de.qaware.seu.as.code:seuac-environment:2.0.0:jdk8'

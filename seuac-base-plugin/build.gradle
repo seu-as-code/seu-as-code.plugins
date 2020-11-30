@@ -15,7 +15,6 @@
  */
 
 dependencies {
-	implementation 'org.codehaus.groovy.modules.scriptom:scriptom:1.6.0'
     implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
 
     implementation 'org.mapdb:mapdb:1.0.8'

@@ -15,8 +15,6 @@
  */
 package de.qaware.seu.as.code.plugins.base
 
-import org.codehaus.groovy.scriptom.ActiveXObject
-import org.codehaus.groovy.scriptom.Scriptom
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -67,7 +65,7 @@ abstract class Shortcut {
     }
 
     /**
-     * Implementation to create a Windows specific shortcut using scriptom.
+     * Implementation to create a Windows specific shortcut.
      */
     static class WindowsShortcut extends Shortcut {
         WindowsShortcut(String seuHome, SeuacLayout layout) {
@@ -76,12 +74,33 @@ abstract class Shortcut {
 
         @Override
         void create(String name, String executable) {
-            Scriptom.inApartment {
-                def wshShell = new ActiveXObject("WScript.Shell")
-                def shortcut = wshShell.CreateShortcut("${seuHome}\\${name}.lnk")
-                shortcut.TargetPath = "${seuacLayout.software}\\${executable}.bat"
-                shortcut.WorkingDirectory = "${seuacLayout.software}"
-                shortcut.Save()
+            def script = """
+@echo off
+echo Set oWS = WScript.CreateObject("WScript.Shell") > CreateShortcut.vbs
+echo sLinkFile = "${seuHome}\\\\${name}.lnk" >> CreateShortcut.vbs
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> CreateShortcut.vbs
+echo oLink.TargetPath = "${seuacLayout.software}\\\\${executable}" >> CreateShortcut.vbs
+echo oLink.WorkingDirectory = "${seuacLayout.software}" >> CreateShortcut.vbs
+echo oLink.Save >> CreateShortcut.vbs
+cscript CreateShortcut.vbs
+del CreateShortcut.vbs
+"""
+            File file = File.createTempFile("temp", "CreateShortcut.bat")
+            file.deleteOnExit()
+            file.write script
+
+            def buffer = new StringBuffer()
+            ProcessBuilder pb = new ProcessBuilder(file.absolutePath)
+            def proc = pb.start()
+            Thread outputStreamThread = proc.consumeProcessOutputStream(buffer)
+            Thread errorStreamThread = proc.consumeProcessErrorStream(buffer)
+            def errorCode = proc.waitFor()
+            // wait for the streams to finish after process stopped
+            outputStreamThread.join(10000)
+            errorStreamThread.join(10000)
+            def output = buffer.toString().trim()
+            if (errorCode != 0) {
+                throw new IllegalStateException("Non zero error code for command ${pb.command()}: ${errorCode}\n${output}")
             }
         }
     }

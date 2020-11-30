@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.base
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.file.FileTree
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -25,6 +26,7 @@ import org.gradle.api.tasks.TaskAction
  */
 class StoreSeuacDbTask extends DefaultTask {
 
+    @Nested
     SeuacDatastore datastore
 
     /**
