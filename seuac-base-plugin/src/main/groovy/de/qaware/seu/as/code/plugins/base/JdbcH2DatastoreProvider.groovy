@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.base
 import groovy.sql.Sql
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.file.FileTree
+import org.h2.Driver
 
 /**
  * This data store provider uses SQL and an embedded H2 DB to persist the SEU configuration.
@@ -38,7 +39,17 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
     }
 
     def withDb(Closure closure) {
-        Sql.withInstance(url, user, password, 'org.h2.Driver', closure)
+        // Referencing the H2 Driver directly here, because Groovy can not find the Driver when running
+        // the plugin.
+        // The workaround described in
+        // https://stackoverflow.com/questions/6329872/how-to-add-external-jar-files-to-gradle-build-script
+        // does not work with JDK 11 anymore.
+        Properties info = new Properties();
+        info.put("user", user);
+        info.put("password", password);
+        Driver.load().connect(url, info).withCloseable {
+            closure(new Sql(it))
+        }
     }
 
     /**
