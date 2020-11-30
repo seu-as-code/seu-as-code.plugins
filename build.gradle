@@ -95,6 +95,21 @@ subprojects {
             html.enabled = true
         }
     }
+
+    publishing {
+        repositories {
+            // set the URL via -P and credentials via environment variable to publish to your company repo
+            maven {
+                url = project.hasProperty('publishRepoUrl') ? project.publishRepoUrl : ''
+                if (System.getenv("PUBLISH_REPO_USERNAME") != null) {
+                    credentials {
+                        username = System.getenv("PUBLISH_REPO_USERNAME")
+                        password = System.getenv("PUBLISH_REPO_USERNAME")
+                    }
+                }
+            }
+        }
+    }
 }
 
 task jacocoRootReport(type: JacocoReport, group: 'Coverage') {

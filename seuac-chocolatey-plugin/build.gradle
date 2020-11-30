@@ -84,16 +84,6 @@ publishing {
             }
         }
     }
-    repositories {
-        // set the properties via -P to publish to your company repo
-        maven {
-            url = project.hasProperty('nexusUrl') ? project.nexusUrl : ''
-            credentials {
-                username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
-                password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
-            }
-        }
-    }
 }
 
 bintray {
