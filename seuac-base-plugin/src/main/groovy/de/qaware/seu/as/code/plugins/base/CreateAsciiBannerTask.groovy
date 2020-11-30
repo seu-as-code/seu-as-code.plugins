@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.base
 import groovyx.net.http.HTTPBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskAction
 
 import static groovyx.net.http.ContentType.HTML
@@ -36,8 +38,9 @@ class CreateAsciiBannerTask extends DefaultTask {
 
     @Input
     String projectName
+    @InputFile
     File bannerFile
-
+    @Nested
     SeuacBanner settings
 
     /**

@@ -19,6 +19,8 @@ import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.OutputDirectory
 
@@ -30,6 +32,7 @@ import org.gradle.api.tasks.OutputDirectory
 abstract class AbstractGitTask extends DefaultTask {
 
     @Option(option = "gitTimeout", description = "The Git command timeout.")
+    @Internal
     protected int gitTimeout
 
     /**
@@ -42,7 +45,9 @@ abstract class AbstractGitTask extends DefaultTask {
     @OutputDirectory
     File directory
 
+    @Input
     String username
+    @Input
     String password
 
     protected def withExceptionHandling(String message, Closure c) {

@@ -20,6 +20,8 @@ import de.qaware.seu.as.code.plugins.base.DatastoreProviderFactory
 import de.qaware.seu.as.code.plugins.base.SeuacDatastore
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.tasks.Nested
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -27,7 +29,9 @@ import org.gradle.api.tasks.TaskAction
  */
 class StoreChocolateySeuacDbTask extends DefaultTask {
 
+    @OutputDirectory
     File chocolateyBasePath
+    @Nested
     SeuacDatastore datastore
 
     /**

@@ -15,12 +15,16 @@
  */
 package de.qaware.seu.as.code.plugins.git
 
+import org.gradle.api.tasks.Input
+
 /**
  * A holder class for personal information about the author and committer.
  *
  * @author lreimer
  */
 class GitUser {
+    @Input
     String username
+    @Input
     String email
 }

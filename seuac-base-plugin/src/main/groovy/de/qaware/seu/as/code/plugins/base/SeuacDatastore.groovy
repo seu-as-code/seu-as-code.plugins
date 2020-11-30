@@ -14,6 +14,9 @@
  *    limitations under the License.
  */
 package de.qaware.seu.as.code.plugins.base
+
+import org.gradle.api.tasks.Input
+
 /**
  * Simple data type to represent the datastore configuration.
  *
@@ -21,8 +24,11 @@ package de.qaware.seu.as.code.plugins.base
  */
 class SeuacDatastore {
 
+    @Input
     String url
+    @Input
     String user
+    @Input
     String password
 
     /**

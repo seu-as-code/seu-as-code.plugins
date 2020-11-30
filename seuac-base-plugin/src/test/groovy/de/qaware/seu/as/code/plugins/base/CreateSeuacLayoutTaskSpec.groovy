@@ -51,7 +51,6 @@ class CreateSeuacLayoutTaskSpec extends Specification {
         given: "a configured CreateSeuacLayoutTask"
         CreateSeuacLayoutTask task = project.task(TEST_CREATE_SEUAC_LAYOUT, type: CreateSeuacLayoutTask) {
             layout = testLayout
-            directories = testLayout.missingDirectories
         } as CreateSeuacLayoutTask
 
         when: "we create the layout directories"

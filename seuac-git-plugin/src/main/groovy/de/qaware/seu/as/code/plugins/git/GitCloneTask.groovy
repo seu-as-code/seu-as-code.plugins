@@ -35,10 +35,13 @@ class GitCloneTask extends AbstractGitTask {
     @Input
     boolean singleBranch
 
+    @Input
     boolean cloneAllBranches
+    @Input
     boolean cloneSubmodules
 
     @Option(option = "no-checkout", description = "Do not checkout branch after clone.")
+    @Input
     boolean noCheckout
 
     @TaskAction

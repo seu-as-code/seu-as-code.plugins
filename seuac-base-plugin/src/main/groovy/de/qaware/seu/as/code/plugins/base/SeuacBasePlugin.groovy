@@ -51,7 +51,6 @@ class SeuacBasePlugin implements Plugin<Project> {
         project.afterEvaluate {
             Task createSeuacLayout = project.task('createSeuacLayout', type: CreateSeuacLayoutTask) {
                 layout = seuAsCode.layout
-                directories = seuAsCode.layout.missingDirectories
             }
 
             Task applySoftware = project.task('applySoftware', type: ApplyConfigurationTask) {

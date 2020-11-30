@@ -15,16 +15,23 @@
  */
 package de.qaware.seu.as.code.plugins.base
 
+import org.gradle.api.tasks.Input
+
 /**
  * Simple data type to represent the ASCII art banner configuration.
  *
  * @author lreimer
  */
 class SeuacBanner {
+    @Input
     String font = 'slant'
+    @Input
     String reflection = 'no'
+    @Input
     String adjustment = 'center'
+    @Input
     String stretch = 'yes'
+    @Input
     int width = 80
 
     /**

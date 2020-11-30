@@ -17,6 +17,8 @@ package de.qaware.seu.as.code.plugins.git
 
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.Git
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
@@ -28,18 +30,24 @@ import org.gradle.api.tasks.TaskAction
 class GitCommitTask extends AbstractGitTask {
 
     @Option(option = "message", description = "The commit message.")
+    @Input
     String message = ''
 
     @Option(option = "all", description = "Automatically stage files that have been modified and deleted.")
+    @Input
     boolean all = true
 
     @Option(option = "no-verify", description = "Bypasses the pre-commit and commit-msg hooks.")
+    @Input
     boolean noVerify
 
     @Option(option = "amend", description = "Replace the tip of the current branch by creating a new commit.")
+    @Input
     boolean amend
 
+    @Nested
     GitUser committer
+    @Nested
     GitUser author
 
     @TaskAction

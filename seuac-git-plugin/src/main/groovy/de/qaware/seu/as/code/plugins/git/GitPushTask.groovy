@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.git
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.lib.Constants
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
@@ -28,18 +29,23 @@ import org.gradle.api.tasks.TaskAction
  */
 class GitPushTask extends AbstractGitTask {
 
+    @Input
     String remote = Constants.DEFAULT_REMOTE_NAME
 
     @Option(option = "dry-run", description = "Set if push operation should be a dry run.")
+    @Input
     boolean dryRun = false
 
     @Option(option = "all", description = "Push all branches.")
+    @Input
     boolean pushAll = false
 
     @Option(option = "tags", description = "Push all tags.")
+    @Input
     boolean pushTags = false
 
     @Option(option = "force", description = "Set force for push operations.")
+    @Input
     boolean force
 
     @TaskAction
