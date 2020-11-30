@@ -19,6 +19,7 @@ import spock.lang.Specification
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.notNullValue
+import static org.hamcrest.Matchers.startsWith
 import static spock.util.matcher.HamcrestSupport.expect
 import static spock.util.matcher.HamcrestSupport.that
 
@@ -34,13 +35,13 @@ class SeuacDatastoreSpec extends Specification {
         datastore = new SeuacDatastore()
     }
 
-    def "Validate default datastore"() {
-        given: "a default data store"
-        datastore = SeuacDatastore.defaultDatastore()
+    def "Validate temporary datastore"() {
+        given: "a temporary data store"
+        datastore = SeuacDatastore.temporaryDatastore()
 
         expect: "the default values"
         that datastore, notNullValue()
-        that datastore.url, equalTo('jdbc:h2:./seuac;mv_store=false')
+        that datastore.url, startsWith('jdbc:h2:')
         that datastore.user, equalTo('sa')
         that datastore.password, equalTo('sa')
     }

@@ -52,21 +52,14 @@ class SeuacDatastore {
         this.password = aPassword
     }
 
-    /**
-     * Convenience factory method to create the default datastore (H2) instance.
-     *
-     * @return a datastore configuration instance
-     */
-    static SeuacDatastore defaultDatastore() {
-        new SeuacDatastore(url: 'jdbc:h2:./seuac;mv_store=false', user: 'sa', password: 'sa')
-    }
-
     static SeuacDatastore temporaryDatastore() {
         def tmpDir = File.createTempDir()
         Runtime.runtime.addShutdownHook({ tmpDir.deleteDir() })
         def tmpSeuFile = tmpDir.toPath().resolve("seuac")
-        def datastore = defaultDatastore()
-        datastore.url = "jdbc:h2:${tmpSeuFile.toAbsolutePath()}"
-        datastore
+        new SeuacDatastore(
+                user: 'sa',
+                password: 'sa',
+                url: "jdbc:h2:${tmpSeuFile.toAbsolutePath()}"
+        )
     }
 }

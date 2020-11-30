@@ -38,7 +38,7 @@ class SeuacExtensionSpec extends Specification {
         that extension.seuHome, equalTo('S:')
         that extension.projectName, equalTo('Spock SEU')
         that extension.layout, notNullValue()
-        that extension.datastore, notNullValue()
+        that extension.datastore, nullValue()
 
         that extension.layout.codebase.absolutePath, equalTo(new File('S:/codebase/').absolutePath)
         that extension.layout.docbase.absolutePath, equalTo(new File('S:/docbase/').absolutePath)

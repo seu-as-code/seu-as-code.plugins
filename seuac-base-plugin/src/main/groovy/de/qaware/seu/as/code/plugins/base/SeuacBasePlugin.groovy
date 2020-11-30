@@ -44,6 +44,9 @@ class SeuacBasePlugin implements Plugin<Project> {
         project.extensions.add(PlatformExtension.NAME, new PlatformExtension(project, platform))
         project.extensions.create(SeuacExtension.NAME, SeuacExtension)
         SeuacExtension seuAsCode = project.seuAsCode
+        if (seuAsCode.datastore == null) {
+            seuAsCode.datastore = new SeuacDatastore(url: "jdbc:h2:${project.buildDir}/seuac;mv_store=false", user: 'sa', password: 'sa')
+        }
 
         project.afterEvaluate {
             Task createSeuacLayout = project.task('createSeuacLayout', type: CreateSeuacLayoutTask) {
