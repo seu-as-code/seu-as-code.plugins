@@ -14,7 +14,6 @@
  *    limitations under the License.
  */
 package de.qaware.seu.as.code.plugins.base
-
 /**
  * Simple data type to represent the datastore configuration.
  *
@@ -60,5 +59,14 @@ class SeuacDatastore {
      */
     static SeuacDatastore defaultDatastore() {
         new SeuacDatastore(url: 'jdbc:h2:./seuac;mv_store=false', user: 'sa', password: 'sa')
+    }
+
+    static SeuacDatastore temporaryDatastore() {
+        def tmpDir = File.createTempDir()
+        Runtime.runtime.addShutdownHook({ tmpDir.deleteDir() })
+        def tmpSeuFile = tmpDir.toPath().resolve("seuac")
+        def datastore = defaultDatastore()
+        datastore.url = "jdbc:h2:${tmpSeuFile.toAbsolutePath()}"
+        datastore
     }
 }

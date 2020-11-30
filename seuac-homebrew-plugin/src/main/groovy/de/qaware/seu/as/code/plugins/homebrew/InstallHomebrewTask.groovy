@@ -31,7 +31,7 @@ import java.nio.file.Paths
  * The target path can be configured.
  */
 class InstallHomebrewTask extends DefaultTask {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InstallHomebrewTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstallHomebrewTask.class)
 
     @Input
     File homebrewBasePath
@@ -51,6 +51,7 @@ class InstallHomebrewTask extends DefaultTask {
         homebrewBasePath.mkdirs()
 
         def tmpTar = File.createTempFile('homebrewInst', '.zip')
+        tmpTar.deleteOnExit()
 
         def download = new DownloadAction(project)
         download.src 'https://github.com/Homebrew/brew/archive/master.zip'

@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.git
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -31,16 +33,16 @@ import static spock.util.matcher.HamcrestSupport.that
  */
 class GitStatusTaskSpec extends Specification {
     static final String TEST_GIT_STATUS = 'testGitStatus'
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File directory
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        directory = File.createTempDir()
-    }
-
-    void cleanup() {
-        directory.deleteDir()
+        directory = folder.newFolder()
     }
 
     def "Define GitStatusTask"() {
@@ -53,7 +55,7 @@ class GitStatusTaskSpec extends Specification {
         }
 
         then: "we expect to find the task correctly configured"
-        GitStatusTask task = project.tasks.findByName(TEST_GIT_STATUS)
+        GitStatusTask task = project.tasks.findByName(TEST_GIT_STATUS) as GitStatusTask
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
         expect task.directory, notNullValue()
@@ -66,7 +68,7 @@ class GitStatusTaskSpec extends Specification {
         when: "we define and invoke the status task"
         GitStatusTask task = project.task(TEST_GIT_STATUS, type: GitStatusTask) {
             directory = this.directory
-        }
+        } as GitStatusTask
         task.doStatus()
 
         then: "the task is defined by threw an exception"

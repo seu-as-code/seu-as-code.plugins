@@ -20,16 +20,21 @@ import de.qaware.seu.as.code.plugins.base.JdbcH2DatastoreProvider
 import de.qaware.seu.as.code.plugins.base.SeuacDatastore
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Requires
 import spock.lang.Specification
 
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
+import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.temporaryDatastore
 
 /**
  * Unit test for the {@link StoreBrewSeuacDbTask}.
  */
 @Requires({ os.macOs })
 class StoreBrewSeuacDbTaskTest extends Specification {
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
 
     Project project
     SeuacDatastore defaultDatastore
@@ -38,19 +43,14 @@ class StoreBrewSeuacDbTaskTest extends Specification {
 
     void setup() {
         project = ProjectBuilder.builder().build()
-        home = File.createTempDir()
+        home = folder.newFolder()
 
         def maven3Dir = new File(home, 'homebrew/Cellar/maven3/')
         maven3Dir.mkdirs()
         new File(maven3Dir, 'test').createNewFile()
 
-        defaultDatastore = defaultDatastore()
-        defaultDatastore.url = 'jdbc:h2:./build/seuac'
+        defaultDatastore = temporaryDatastore()
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
-    }
-
-    void cleanup() {
-        provider.clear()
     }
 
     def "StoreBrewSeuacDb"() {
@@ -61,7 +61,7 @@ class StoreBrewSeuacDbTaskTest extends Specification {
         StoreBrewSeuacDbTask task = project.task("storeBrewSeuacDb", type: StoreBrewSeuacDbTask) {
             homebrewBasePath = new File(home, 'homebrew')
             datastore = defaultDatastore
-        }
+        } as StoreBrewSeuacDbTask
         when: "we evaluate the task"
         task.storeSeuacDb()
 

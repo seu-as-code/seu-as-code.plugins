@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.base
 import org.gradle.api.GradleException
 import spock.lang.Specification
 
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
+import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.temporaryDatastore
 import static org.hamcrest.Matchers.instanceOf
 import static org.hamcrest.Matchers.notNullValue
 import static spock.util.matcher.HamcrestSupport.expect
@@ -37,8 +37,7 @@ class PersistenceServiceFactorySpec extends Specification {
 
     def "Create a JDBC H2 PersistenceService instance"() {
         given: "a default H2 data store"
-        datastore = defaultDatastore()
-        datastore.url = 'jdbc:h2:./build/seuac'
+        datastore = temporaryDatastore()
 
         when: "we get the data store provider instance"
         DatastoreProvider service = DatastoreProviderFactory.instance.get(datastore)

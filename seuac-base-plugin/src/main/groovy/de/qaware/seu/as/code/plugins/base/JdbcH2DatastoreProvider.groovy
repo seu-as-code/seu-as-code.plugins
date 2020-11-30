@@ -34,6 +34,7 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
      */
     JdbcH2DatastoreProvider(SeuacDatastore ds) {
         super(ds)
+        init()
     }
 
     def withDb(Closure closure) {

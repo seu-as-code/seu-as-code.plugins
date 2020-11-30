@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.git
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -29,16 +31,16 @@ import static spock.util.matcher.HamcrestSupport.expect
  * @author lreimer
  */
 class GitPluginSpec extends Specification {
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File directory
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        directory = File.createTempDir()
-    }
-
-    void cleanup() {
-        directory.deleteDir()
+        directory = folder.newFolder()
     }
 
     def "Apply Git plugin to project"() {

@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.git
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -31,16 +33,16 @@ import static spock.util.matcher.HamcrestSupport.that
  */
 class GitPullTaskSpec extends Specification {
     static final String TEST_GIT_PULL = 'testGitPull'
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File directory
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        directory = File.createTempDir()
-    }
-
-    void cleanup() {
-        directory.deleteDir()
+        directory = folder.newFolder()
     }
 
     def "Define GitPullTask"() {
@@ -70,7 +72,7 @@ class GitPullTaskSpec extends Specification {
         expect task.directory, notNullValue()
 
         task.rebase == options.rebase
-        task.timeout == options.timeout
+        task.gitTimeout == options.timeout
     }
 
     def "Invoke doPull"() {
@@ -80,7 +82,7 @@ class GitPullTaskSpec extends Specification {
         when: "we defined and invoke the pull task"
         GitPullTask task = project.task(TEST_GIT_PULL, type: GitPullTask) {
             directory = this.directory
-        }
+        } as GitPullTask
         task.doPull()
 
         then: "the task is defined but threw an exception"

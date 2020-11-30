@@ -33,17 +33,17 @@ import javax.inject.Inject
  * A simple task that installs the latest version of DotNET into the system root directory.
  */
 class InstallNetFrameworkIfMissingTask extends DefaultTask {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InstallNetFrameworkIfMissingTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstallNetFrameworkIfMissingTask.class)
     public static
     final String NET_INSTALLER_URL = 'https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe'
 
 
     File netInstallationPath = new File("${System.env.SystemRoot}" +
-            "/Microsoft.Net/Framework${Platform.is64bit() ? '64' : ''}/v4.0.30319");
+            "/Microsoft.Net/Framework${Platform.is64bit() ? '64' : ''}/v4.0.30319")
 
     @Inject
     protected ExecActionFactory getExecActionFactory() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException()
     }
 
     InstallNetFrameworkIfMissingTask() {
@@ -52,7 +52,7 @@ class InstallNetFrameworkIfMissingTask extends DefaultTask {
     }
 
     @OutputDirectory
-    public File getOutputDirectory() {
+    File getOutputDirectory() {
         return netInstallationPath
     }
 
@@ -98,6 +98,7 @@ class InstallNetFrameworkIfMissingTask extends DefaultTask {
 
     private File downloadInstaller() {
         File installerFile = File.createTempFile('dotNetFx40_Client_x86_x64', '.exe')
+        installerFile.deleteOnExit()
         def download = new DownloadAction(project)
         download.src NET_INSTALLER_URL
         download.dest installerFile

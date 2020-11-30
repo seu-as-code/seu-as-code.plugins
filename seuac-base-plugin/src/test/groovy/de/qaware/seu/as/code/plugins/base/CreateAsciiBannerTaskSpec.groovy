@@ -17,6 +17,8 @@ package de.qaware.seu.as.code.plugins.base
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacBanner.defaultBanner
@@ -31,18 +33,21 @@ class CreateAsciiBannerTaskSpec extends Specification {
     Project project
     File seuHome
 
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     void setup() {
         project = ProjectBuilder.builder().build()
-        seuHome = File.createTempDir()
+        seuHome = folder.newFolder()
     }
 
     def "Define CreateAsciiBannerTask and doCreateAsciiBanner"() {
         given: "a configured CreateAsciiBannerTask"
         CreateAsciiBannerTask task = project.task("createAsciiBanner", type: CreateAsciiBannerTask) {
             projectName = 'SEU-as-code'
-            bannerFile = new File(seuHome, CreateAsciiBannerTask.DEFAULT_FILENAME)
+            bannerFile = new File(seuHome, DEFAULT_FILENAME)
             settings = defaultBanner()
-        }
+        } as CreateAsciiBannerTask
 
         when: "we create the ASCII banner"
         task.doCreateAsciiBanner()

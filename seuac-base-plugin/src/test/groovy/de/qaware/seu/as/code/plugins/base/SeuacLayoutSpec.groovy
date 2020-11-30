@@ -15,6 +15,8 @@
  */
 package de.qaware.seu.as.code.plugins.base
 
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
@@ -29,23 +31,23 @@ import static spock.util.matcher.HamcrestSupport.that
  * @author lreimer
  */
 class SeuacLayoutSpec extends Specification {
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     File seuHome
     SeuacLayout layout
 
     def setup() {
-        seuHome = File.createTempDir()
+        seuHome = folder.newFolder()
         layout = defaultLayout(seuHome)
-    }
-
-    void cleanup() {
-        seuHome.deleteDir()
     }
 
     def "Mkdirs for default SEU layout"() {
         when: "we make all SEU layout directories"
         layout.mkdirs()
 
-        then: "we epxect all directories to exist"
+        then: "we expect all directories to exist"
         notThrown(IOException)
         expect layout.codebase.exists(), is(true)
         expect layout.docbase.exists(), is(true)
@@ -68,7 +70,7 @@ class SeuacLayoutSpec extends Specification {
 
     def "Manually initialize"() {
         given: "a manually initialized layout"
-        layout = new SeuacLayout();
+        layout = new SeuacLayout()
         layout.codebase(new File(seuHome, 'code').absolutePath)
         layout.docbase(new File(seuHome, 'docs').absolutePath)
         layout.home(new File(seuHome, 'home').absolutePath)
