@@ -32,11 +32,6 @@ sourceSets {
     }
 }
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
 def pomConfig = {
 
     inceptionYear '2015'
@@ -97,8 +92,6 @@ publishing {
     publications {
         credentialsPlugin(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
 
             pom.withXml {
                 asNode().appendNode('name', project.displayName)
