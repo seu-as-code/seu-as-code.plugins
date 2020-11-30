@@ -54,7 +54,6 @@ class SeuacBasePluginSpec extends Specification {
         setup: "the plugin, apply it and configure the convention"
         project.apply plugin: 'seuac-base'
 
-        project.dependencies.add('seuac', ':h2:1.3.176')
         project.dependencies.add('software', ':seuac-test:1.0.0@zip')
 
         project.seuAsCode {

@@ -46,8 +46,6 @@ class SeuacBasePlugin implements Plugin<Project> {
         SeuacExtension seuAsCode = project.seuAsCode
 
         project.afterEvaluate {
-            initSeuacClassLoader(project)
-
             Task createSeuacLayout = project.task('createSeuacLayout', type: CreateSeuacLayoutTask) {
                 layout = seuAsCode.layout
                 directories = seuAsCode.layout.missingDirectories
@@ -82,7 +80,7 @@ class SeuacBasePlugin implements Plugin<Project> {
 
             Task createAsciiBanner = project.task('createAsciiBanner', type: CreateAsciiBannerTask) {
                 projectName = seuAsCode.projectName
-                bannerFile = new File(seuAsCode.layout.software, CreateAsciiBannerTask.DEFAULT_FILENAME)
+                bannerFile = new File(seuAsCode.layout.software, DEFAULT_FILENAME)
                 settings = seuAsCode.banner
             }
 
@@ -113,24 +111,14 @@ class SeuacBasePlugin implements Plugin<Project> {
         }
     }
 
-    private void setExtraProperties(Project project, Platform platform) {
+    private static void setExtraProperties(Project project, Platform platform) {
         project.extensions.extraProperties.set('osFamily', platform.osFamily)
         project.extensions.extraProperties.set('osClassifier', platform.osClassifier)
         project.extensions.extraProperties.set('osArch', platform.osArch)
     }
 
-    private void createConfigurations(Project project) {
-        project.configurations.create('seuac')
+    private static void createConfigurations(Project project) {
         project.configurations.create('software')
         project.configurations.create('home')
-    }
-
-    private void initSeuacClassLoader(Project project) {
-        // causes the test to fail, can not be resolved by ivy
-        // for now this needs to be set by the user, which is OK
-        // project.dependencies.add('seuac', 'com.h2database:h2:1.4.188')
-
-        def classLoader = project.gradle.class.classLoader
-        project.configurations.seuac.each { File f -> classLoader.addURL(f.toURI().toURL()) }
     }
 }
