@@ -18,7 +18,7 @@ package de.qaware.seu.as.code.plugins.git
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.lib.Constants
-import org.gradle.api.internal.tasks.options.Option
+import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -44,11 +44,11 @@ class GitPushTask extends AbstractGitTask {
 
     @TaskAction
     def doPush() {
-        Git gitRepo = null;
+        Git gitRepo = null
         withExceptionHandling('Could not push to remote Git repository.') {
-            gitRepo = Git.open(directory);
+            gitRepo = Git.open(directory)
 
-            PushCommand push = gitRepo.push();
+            PushCommand push = gitRepo.push()
             push.setDryRun(dryRun).setRemote(remote).setOutputStream(System.out)
             push.setCredentialsProvider(createCredentialsProvider())
             if (pushAll) {
@@ -57,7 +57,7 @@ class GitPushTask extends AbstractGitTask {
             if (pushTags) {
                 push.setPushTags()
             }
-            push.setTimeout(timeout)
+            push.setTimeout(gitTimeout)
             push.setForce(force)
 
             push.call()
@@ -77,7 +77,7 @@ class GitPushTask extends AbstractGitTask {
         this.dryRun = options.dryRun
         this.pushAll = options.pushAll
         this.pushTags = options.pushTags
-        this.timeout = options.timeout
+        this.gitTimeout = options.timeout
         this.force = options.force
     }
 

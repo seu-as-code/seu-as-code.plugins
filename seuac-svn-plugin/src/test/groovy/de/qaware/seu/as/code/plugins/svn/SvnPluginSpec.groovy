@@ -79,11 +79,9 @@ class SvnPluginSpec extends Specification {
         expect svnUpdateTest.username, equalTo('user')
         expect svnUpdateTest.password, equalTo('pwd')
 
-        expect svnCheckoutAll.dependsOn, hasSize(3)
         expect svnCheckoutAll.dependsOn, hasItem(svnCheckoutTest)
         expect svnCheckoutAll.dependsOn, hasItem(project.tasks.svnCheckoutTest2)
 
-        expect svnUpdateAll.dependsOn, hasSize(3)
         expect svnUpdateAll.dependsOn, hasItem(svnUpdateTest)
         expect svnUpdateAll.dependsOn, hasItem(project.tasks.svnUpdateTest1)
     }

@@ -77,7 +77,7 @@ class GitCloneTaskSpec extends Specification {
         task.cloneAllBranches == options.cloneAllBranches
         task.cloneSubmodules == options.cloneSubmodules
         task.noCheckout == options.noCheckout
-        task.timeout == options.timeout
+        task.gitTimeout == options.timeout
     }
 
     def "Invoke doClone"() {

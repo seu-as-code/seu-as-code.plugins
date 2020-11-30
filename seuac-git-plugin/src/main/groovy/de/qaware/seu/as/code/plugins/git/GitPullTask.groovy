@@ -20,8 +20,8 @@ import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.TextProgressMonitor
 import org.eclipse.jgit.merge.MergeStrategy
-import org.gradle.api.internal.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.options.Option
 
 /**
  * The task implementation to perform a Git pull operation.
@@ -38,11 +38,11 @@ class GitPullTask extends AbstractGitTask {
 
     @TaskAction
     def doPull() {
-        Git gitRepo = null;
+        Git gitRepo = null
         withExceptionHandling('Could not pull from remote Git repository.') {
-            gitRepo = Git.open(directory);
+            gitRepo = Git.open(directory)
 
-            PullCommand pull = gitRepo.pull();
+            PullCommand pull = gitRepo.pull()
             pull.setRemote(remote)
             pull.setProgressMonitor(new TextProgressMonitor(new PrintWriter(System.out)))
             pull.setCredentialsProvider(createCredentialsProvider())
@@ -50,7 +50,7 @@ class GitPullTask extends AbstractGitTask {
             // set the additional options
             pull.setStrategy(strategy)
             pull.setRebase(rebase)
-            pull.setTimeout(timeout)
+            pull.setTimeout(gitTimeout)
 
             pull.call()
         } always {
@@ -68,6 +68,6 @@ class GitPullTask extends AbstractGitTask {
     void applyOptions(GitPullOptions options) {
         this.rebase = options.rebase
         this.strategy = MergeStrategy.get(options.strategy.name())
-        this.timeout = options.timeout
+        this.gitTimeout = options.timeout
     }
 }

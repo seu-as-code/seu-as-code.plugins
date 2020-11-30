@@ -29,11 +29,11 @@ class GitStatusTask extends AbstractGitTask {
 
     @TaskAction
     def doStatus() {
-        Git gitRepo = null;
+        Git gitRepo = null
         withExceptionHandling('Could not get status for Git repository.') {
-            gitRepo = Git.open(directory);
+            gitRepo = Git.open(directory)
 
-            StatusCommand status = gitRepo.status();
+            StatusCommand status = gitRepo.status()
             status.setProgressMonitor(new TextProgressMonitor(new PrintWriter(System.out)))
             status.call()
         } always {

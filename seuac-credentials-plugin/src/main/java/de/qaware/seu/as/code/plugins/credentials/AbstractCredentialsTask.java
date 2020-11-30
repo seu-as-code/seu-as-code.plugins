@@ -17,7 +17,7 @@ package de.qaware.seu.as.code.plugins.credentials;
 
 import org.apache.commons.lang3.StringUtils;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.internal.tasks.options.Option;
+import org.gradle.api.tasks.options.Option;
 
 /**
  * Abstract base class for storage tasks.

@@ -15,18 +15,21 @@
  */
 
 dependencies {
-    compile project(':seuac-base-plugin')
-    compile 'de.undercouch:gradle-download-task:3.2.0'
+    implementation project(':seuac-base-plugin')
+    implementation 'de.undercouch:gradle-download-task:3.2.0'
 }
 
-task copyTestResources(type: Copy) {
-    from "${projectDir}/src/test/resources"
-    into "${buildDir}/classes/test"
+sourceSets {
+    main {
+        output.setResourcesDir(file("${buildDir}/classes/java/main"))
+    }
+    test {
+        output.setResourcesDir(file("${buildDir}/classes/groovy/test"))
+    }
 }
-processTestResources.dependsOn copyTestResources
 
 task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from groovydoc.destinationDir
 }
 

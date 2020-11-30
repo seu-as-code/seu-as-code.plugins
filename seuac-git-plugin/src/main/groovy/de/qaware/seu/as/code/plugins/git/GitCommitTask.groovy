@@ -17,7 +17,7 @@ package de.qaware.seu.as.code.plugins.git
 
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.Git
-import org.gradle.api.internal.tasks.options.Option
+import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -44,11 +44,11 @@ class GitCommitTask extends AbstractGitTask {
 
     @TaskAction
     def doCommit() {
-        Git gitRepo = null;
+        Git gitRepo = null
         withExceptionHandling('Could not commit changes to Git repository.') {
-            gitRepo = Git.open(directory);
+            gitRepo = Git.open(directory)
 
-            CommitCommand commit = gitRepo.commit();
+            CommitCommand commit = gitRepo.commit()
             commit.setMessage(message)
 
             // set committer and author if set

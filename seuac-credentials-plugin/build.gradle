@@ -15,26 +15,21 @@
  */
 
 dependencies {
-    compile 'net.java.dev.jna:jna:4.2.0'
-    compile 'net.java.dev.jna:jna-platform:4.2.0'
+    implementation 'net.java.dev.jna:jna:4.2.0'
+    implementation 'net.java.dev.jna:jna-platform:4.2.0'
 
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'commons-codec:commons-codec:1.10'
-    compile 'commons-io:commons-io:2.4'
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'commons-codec:commons-codec:1.10'
+    implementation 'commons-io:commons-io:2.4'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
-
-task copyTestResources(type: Copy) {
-    from "${projectDir}/src/test/resources"
-    into "${buildDir}/classes/test"
-}
-processTestResources.dependsOn copyTestResources
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+sourceSets {
+    main {
+        output.setResourcesDir(file("${buildDir}/classes/java/main"))
+    }
+    test {
+        output.setResourcesDir(file("${buildDir}/classes/groovy/test"))
+    }
 }
 
 artifacts {
