@@ -27,12 +27,6 @@ import org.gradle.api.file.FileTree
 class JdbcH2DatastoreProvider extends DatastoreProvider {
 
     /**
-     * The SQL database instance. Will be lazily initialized on first access.
-     */
-    @Lazy
-    protected Sql database = { Sql.newInstance(url, user, password, 'org.h2.Driver') }()
-
-    /**
      * Convenience constructor via a SeuacDatastore instance. Registers a shutdown hook when
      * instance is created that closes. the internal H2 DB automatically.
      *
@@ -40,7 +34,10 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
      */
     JdbcH2DatastoreProvider(SeuacDatastore ds) {
         super(ds)
-        addShutdownHook { database.close() }
+    }
+
+    def withDb(Closure closure) {
+        Sql.withInstance(url, user, password, 'org.h2.Driver', closure)
     }
 
     /**
@@ -48,7 +45,7 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
      */
     @Override
     void clear() {
-        database.execute 'drop table if exists dependencies'
+        withDb { sql -> sql.execute 'drop table if exists dependencies' }
     }
 
     /**
@@ -56,15 +53,17 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
      */
     @Override
     void init() {
-        database.execute 'create table if not exists dependencies(configuration varchar(255), dependency varchar(255), file varchar(255))'
+        withDb { sql -> sql.execute 'create table if not exists dependencies(configuration varchar(255), dependency varchar(255), file varchar(255))' }
     }
 
     @Override
     void storeDependency(Dependency dependency, List<FileTree> files, String configuration) {
-        files.each {
-            it.visit { element ->
-                def params = [configuration, getDependencyId(dependency), element.relativePath.toString()]
-                database.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)', params
+        withDb { sql ->
+            files.each { fileTree ->
+                fileTree.visit { element ->
+                    def params = [configuration, getDependencyId(dependency), element.relativePath.toString()]
+                    sql.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)', params
+                }
             }
         }
     }
@@ -73,8 +72,10 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
     Set<String> findAllObsoleteDeps(Set<Dependency> dependencies, String configuration) {
         def obsoleteDeps = []
         def params = [c: configuration]
-        database.eachRow('select distinct dependency from dependencies where configuration=:c', params) {
-            obsoleteDeps << it.dependency
+        withDb { sql ->
+            sql.eachRow('select distinct dependency from dependencies where configuration=:c', params) {
+                obsoleteDeps << it.dependency
+            }
         }
 
         obsoleteDeps = obsoleteDeps as Set
@@ -85,10 +86,12 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
     @Override
     Set<String> findAllFiles(Set<String> dependencyIds, String configuration) {
         def files = []
-        dependencyIds.each {
-            def params = [c: configuration, d: it]
-            database.eachRow('select file from dependencies where configuration=:c and dependency=:d', params) {
-                files << it.file
+        withDb { sql ->
+            dependencyIds.each {
+                def params = [c: configuration, d: it]
+                sql.eachRow('select file from dependencies where configuration=:c and dependency=:d', params) {
+                    files << it.file
+                }
             }
         }
         files
@@ -96,10 +99,14 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
 
     @Override
     Set<Dependency> findAllIncomingDeps(Set<Dependency> dependencies, String configuration) {
-        dependencies.findAll { Dependency d ->
-            def params = [c: configuration, d: getDependencyId(d)]
-            def rows = database.rows 'select * from dependencies where configuration=:c and dependency=:d', params
-            rows.isEmpty()
+        def deps = []
+        withDb { sql ->
+            deps = dependencies.findAll { Dependency d ->
+                def params = [c: configuration, d: getDependencyId(d)]
+                def rows = sql.rows 'select * from dependencies where configuration=:c and dependency=:d', params
+                rows.isEmpty()
+            }
         }
+        deps
     }
 }

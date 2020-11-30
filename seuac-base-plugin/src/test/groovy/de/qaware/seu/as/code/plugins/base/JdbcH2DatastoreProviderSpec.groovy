@@ -47,11 +47,15 @@ class JdbcH2DatastoreProviderSpec extends Specification {
         provider = new JdbcH2DatastoreProvider(datastore)
         provider.reset()
 
-        provider.database.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
-                ['software', 'de.qaware.seu:seuac-base:1.0.0', 'set-env.cmd']
+        provider.withDb { sql ->
+            sql.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
+                    ['software', 'de.qaware.seu:seuac-base:1.0.0', 'set-env.cmd']
+        }
 
-        provider.database.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
-                ['home', 'de.qaware.seu:seuac-home:1.0.0', '.bashrc']
+        provider.withDb { sql ->
+            sql.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
+                    ['home', 'de.qaware.seu:seuac-home:1.0.0', '.bashrc']
+        }
     }
 
     def "Check for correct simple dependencyId"() {
