@@ -16,7 +16,6 @@
 
 plugins {
     id "com.gradle.plugin-publish" version "0.12.0"
-    id "com.github.hierynomus.license" version "0.15.0"
     id "com.github.kt3k.coveralls" version "2.10.2"
     id "com.jfrog.bintray" version "1.8.5"
     id "distribution"
@@ -42,18 +41,9 @@ subprojects {
     apply plugin: 'base'
     apply plugin: 'groovy'
     apply plugin: 'java'
-    apply plugin: 'com.github.hierynomus.license'
     apply plugin: 'maven-publish'
     apply plugin: 'com.gradle.plugin-publish'
     apply plugin: 'com.jfrog.bintray'
-
-    license {
-        includes(["**/*.java", "**/*.groovy"])
-        mapping {
-            java = 'SLASHSTAR_STYLE'
-            groovy = 'SLASHSTAR_STYLE'
-        }
-    }
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
