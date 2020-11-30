@@ -36,12 +36,11 @@ class DatastoreProviderFactory {
      * @return a suitable persistence service
      */
     DatastoreProvider get(SeuacDatastore datastore) {
-        def key = keyFor(datastore)
-        if (instances[key] == null) {
+        if (instances[datastore.url] == null) {
             def providerClass = getProviderClass(datastore)
-            instances[key] = providerClass.newInstance(datastore)
+            instances[datastore.url] = providerClass.newInstance(datastore)
         }
-        instances[key]
+        instances[datastore.url]
     }
 
     Class<?> getProviderClass(SeuacDatastore datastore) {
