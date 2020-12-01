@@ -55,7 +55,7 @@ class GitCloneTaskSpec extends Specification {
         when: "we defined and configure the clone task"
         def task = (GitCloneTask) project.task(TEST_GIT_CLONE, type: GitCloneTask) {
             url = "https://github.com/qaware/QAseuac.git"
-            directory = this.directory
+            directory = new File(this.directory, "QAseuac")
             branch = 'TEST'
             username = 'user'
             password = 'secret'
@@ -88,7 +88,7 @@ class GitCloneTaskSpec extends Specification {
         project.configurations.create('jgit')
         GitCloneTask task = project.task(TEST_GIT_CLONE, type: GitCloneTask) {
             url = "https://github.com/qaware/QAseuac.git"
-            directory = this.directory
+            directory = new File(this.directory, "QAseuac")
         } as GitCloneTask
         task.doClone()
 
@@ -105,7 +105,7 @@ class GitCloneTaskSpec extends Specification {
         project.configurations.create('jgit')
         GitCloneTask task = project.task(TEST_GIT_CLONE, type: GitCloneTask) {
             url = "https://github.com/qaware/QAseuac.git"
-            directory = this.directory
+            directory = new File(this.directory, "QAseuac")
             singleBranch = true
             branch = "refs/heads/base-plugin"
         } as GitCloneTask

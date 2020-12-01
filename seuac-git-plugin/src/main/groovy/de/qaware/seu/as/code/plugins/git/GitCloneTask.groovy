@@ -46,11 +46,13 @@ class GitCloneTask extends AbstractGitTask {
 
     @TaskAction
     def doClone() {
-        CloneCommand clone = null
+        if (directory.exists()) {
+            return
+        }
         Repository repository = null
 
         withExceptionHandling('Could not clone Git repository.') {
-            clone = Git.cloneRepository()
+            CloneCommand clone = Git.cloneRepository()
 
             clone.setURI(url).setDirectory(directory).setBranch(branch).setBare(false)
             clone.setCredentialsProvider(createCredentialsProvider())
