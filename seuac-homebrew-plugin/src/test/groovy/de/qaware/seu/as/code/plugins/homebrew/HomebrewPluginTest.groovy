@@ -19,6 +19,8 @@ import de.qaware.seu.as.code.plugins.base.SeuacExtension
 import de.qaware.seu.as.code.plugins.base.SeuacLayout
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Requires
 import spock.lang.Specification
 
@@ -33,6 +35,9 @@ import static spock.util.matcher.HamcrestSupport.expect
 @Requires({ os.macOs })
 class HomebrewPluginTest extends Specification {
 
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     File home
     SeuacLayout defaultLayout
     Project project
@@ -40,7 +45,7 @@ class HomebrewPluginTest extends Specification {
     void setup() {
         project = ProjectBuilder.builder().build()
 
-        home = File.createTempDir()
+        home = folder.newFolder()
         defaultLayout = defaultLayout(home)
     }
 

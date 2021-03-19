@@ -17,6 +17,8 @@ package de.qaware.seu.as.code.plugins.base
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
@@ -36,9 +38,12 @@ class CreateSeuacLayoutTaskSpec extends Specification {
     File seuHome
     SeuacLayout testLayout
 
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     def setup() {
         project = ProjectBuilder.builder().build()
-        seuHome = File.createTempDir()
+        seuHome = folder.newFolder()
         testLayout = defaultLayout(seuHome)
     }
 
@@ -46,8 +51,7 @@ class CreateSeuacLayoutTaskSpec extends Specification {
         given: "a configured CreateSeuacLayoutTask"
         CreateSeuacLayoutTask task = project.task(TEST_CREATE_SEUAC_LAYOUT, type: CreateSeuacLayoutTask) {
             layout = testLayout
-            directories = testLayout.missingDirectories
-        }
+        } as CreateSeuacLayoutTask
 
         when: "we create the layout directories"
         task.mkdirs()

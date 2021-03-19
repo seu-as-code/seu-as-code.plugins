@@ -15,6 +15,8 @@
  */
 package de.qaware.seu.as.code.plugins.base
 
+import org.gradle.api.tasks.Input
+
 /**
  * Simple data type to represent the datastore configuration.
  *
@@ -22,8 +24,11 @@ package de.qaware.seu.as.code.plugins.base
  */
 class SeuacDatastore {
 
+    @Input
     String url
+    @Input
     String user
+    @Input
     String password
 
     /**
@@ -53,12 +58,14 @@ class SeuacDatastore {
         this.password = aPassword
     }
 
-    /**
-     * Convenience factory method to create the default datastore (H2) instance.
-     *
-     * @return a datastore configuration instance
-     */
-    static SeuacDatastore defaultDatastore() {
-        new SeuacDatastore(url: 'jdbc:h2:./seuac;mv_store=false', user: 'sa', password: 'sa')
+    static SeuacDatastore temporaryDatastore() {
+        def tmpDir = File.createTempDir()
+        Runtime.runtime.addShutdownHook({ tmpDir.deleteDir() })
+        def tmpSeuFile = tmpDir.toPath().resolve("seuac")
+        new SeuacDatastore(
+                user: 'sa',
+                password: 'sa',
+                url: "jdbc:h2:${tmpSeuFile.toAbsolutePath()}"
+        )
     }
 }

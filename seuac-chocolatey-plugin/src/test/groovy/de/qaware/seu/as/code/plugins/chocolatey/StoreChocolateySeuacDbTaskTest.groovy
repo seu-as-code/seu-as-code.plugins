@@ -20,16 +20,21 @@ import de.qaware.seu.as.code.plugins.base.JdbcH2DatastoreProvider
 import de.qaware.seu.as.code.plugins.base.SeuacDatastore
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Requires
 import spock.lang.Specification
 
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
+import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.temporaryDatastore
 
 /**
  * Unit test for the {@link StoreChocolateySeuacDbTaskTest}.
  */
 @Requires({ os.windows })
 class StoreChocolateySeuacDbTaskTest extends Specification {
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
 
     Project project
     SeuacDatastore defaultDatastore
@@ -38,19 +43,14 @@ class StoreChocolateySeuacDbTaskTest extends Specification {
 
     void setup() {
         project = ProjectBuilder.builder().build()
-        home = File.createTempDir()
+        home = folder.newFolder()
 
         def helmDir = new File(home, 'chocolatey/lib/kubernetes-helm/')
         helmDir.mkdirs()
         new File(helmDir, 'test').createNewFile()
 
-        defaultDatastore = defaultDatastore()
-        defaultDatastore.url = 'jdbc:h2:./build/seuac'
+        defaultDatastore = temporaryDatastore()
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
-    }
-
-    void cleanup() {
-        provider.clear()
     }
 
     def StoreChocolateySeuacDb() {
@@ -61,7 +61,7 @@ class StoreChocolateySeuacDbTaskTest extends Specification {
         StoreChocolateySeuacDbTask task = project.task("storeChocoSeuacDb", type: StoreChocolateySeuacDbTask) {
             chocolateyBasePath = new File(home, 'chocolatey')
             datastore = defaultDatastore
-        }
+        } as StoreChocolateySeuacDbTask
         when: "we evaluate the task"
         task.storeSeuacDb()
 

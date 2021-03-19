@@ -14,23 +14,12 @@
  *    limitations under the License.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath 'com.gradle.publish:plugin-publish-plugin:0.9.10'
-        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
-    }
+plugins {
+    id "com.gradle.plugin-publish" version "0.12.0"
+    id "com.github.kt3k.coveralls" version "2.10.2"
+    id "com.jfrog.bintray" version "1.8.5"
+    id "distribution"
 }
-
-apply plugin: 'distribution'
 
 allprojects {
     apply plugin: 'jacoco'
@@ -44,7 +33,7 @@ allprojects {
     }
 
     jacoco {
-        toolVersion = "0.7.6.201602180812"
+        toolVersion = "0.8.6"
     }
 }
 
@@ -52,63 +41,63 @@ subprojects {
     apply plugin: 'base'
     apply plugin: 'groovy'
     apply plugin: 'java'
-    apply plugin: 'com.github.hierynomus.license'
     apply plugin: 'maven-publish'
     apply plugin: 'com.gradle.plugin-publish'
     apply plugin: 'com.jfrog.bintray'
 
-    license {
-        includes(["**/*.java", "**/*.groovy"])
-        mapping {
-            java = 'SLASHSTAR_STYLE'
-            groovy = 'SLASHSTAR_STYLE'
-        }
-    }
-
-    sourceCompatibility = JavaVersion.VERSION_1_6
-    targetCompatibility = JavaVersion.VERSION_1_6
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     dependencies {
-        compile gradleApi()
-		compile 'org.codehaus.groovy:groovy-all:2.4.4'
+        implementation gradleApi()
+        implementation 'org.codehaus.groovy:groovy-all:2.5.12'
 
-        testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-		testCompile 'org.hamcrest:hamcrest-library:1.3'
-		testRuntime 'cglib:cglib-nodep:3.1'
-		testRuntime 'org.objenesis:objenesis:2.1'
-		testCompile 'com.athaydes:spock-reports:1.2.5'
+        testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
+        testImplementation 'org.hamcrest:hamcrest-library:1.3'
+        testRuntimeOnly 'cglib:cglib-nodep:3.2.9'
+        testRuntimeOnly 'org.objenesis:objenesis:2.6'
+        testImplementation 'com.athaydes:spock-reports:1.2.10'
     }
 
-	test {
-		reports {
-			junitXml.enabled = false
-			html.enabled = true
-		}
-	}
-
-    // This disables the pedantic doclint feature of JDK8
-    if (JavaVersion.current().isJava8Compatible()) {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-quiet')
+    test {
+        reports {
+            junitXml.enabled = false
+            html.enabled = true
         }
     }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
+    // This disables the pedantic doclint feature of JDK8
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
     }
 
     jacocoTestReport {
         group = 'Coverage'
         description = 'Generate Jacoco coverage report for subproject'
 
-        additionalSourceDirs = project.files(sourceSets.main.allSource.srcDirs)
-        sourceDirectories = project.files(sourceSets.main.allSource.srcDirs)
-        classDirectories =  project.files(sourceSets.main.output)
-
         reports {
             xml.enabled = true
             html.enabled = true
+        }
+    }
+
+    publishing {
+        repositories {
+            // set the URL via -P and credentials via environment variable to publish to your company repo
+            maven {
+                url = project.hasProperty('publishRepoUrl') ? project.publishRepoUrl : ''
+                if (System.getenv("PUBLISH_REPO_USERNAME") != null) {
+                    credentials {
+                        username = System.getenv("PUBLISH_REPO_USERNAME")
+                        password = System.getenv("PUBLISH_REPO_USERNAME")
+                    }
+                }
+            }
         }
     }
 }
@@ -117,18 +106,13 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage') {
     description = 'Generates aggregate Jacoco coverage report from all subprojects'
     dependsOn(subprojects.test)
 
-    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(subprojects.sourceSets.main.output)
-    executionData = files(subprojects.jacocoTestReport.executionData)
-
     reports {
         html.enabled = true
         xml.enabled = true
     }
 
     doFirst {
-        executionData = files(executionData.findAll { it.exists() })
+        executionData(files(executionData.findAll { it.exists() }))
     }
 }
 
@@ -147,36 +131,34 @@ tasks.coveralls {
 }
 
 distributions {
-    main {
-    }
     release {
-        baseName = 'seuac-plugins'
+        distributionBaseName = 'seuac-plugins'
         contents {
-            from ('seuac-base-plugin/build/libs') {
+            from('seuac-base-plugin/build/libs') {
                 include '*.jar'
             }
-            from ('seuac-credentials-plugin/build/libs') {
+            from('seuac-credentials-plugin/build/libs') {
                 include '*.jar'
             }
-            from ('seuac-git-plugin/build/libs') {
+            from('seuac-git-plugin/build/libs') {
                 include '*.jar'
             }
-            from ('seuac-svn-plugin/build/libs') {
+            from('seuac-svn-plugin/build/libs') {
                 include '*.jar'
             }
-            from ('seuac-platform-plugin/build/libs') {
+            from('seuac-platform-plugin/build/libs') {
                 include '*.jar'
             }
-            from ('seuac-homebrew-plugin/build/libs') {
+            from('seuac-homebrew-plugin/build/libs') {
                 include '*.jar'
             }
-            from ('seuac-chocolatey-plugin/build/libs') {
+            from('seuac-chocolatey-plugin/build/libs') {
                 include '*.jar'
             }
         }
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.14.1'
+tasks.named('wrapper') {
+    distributionType = Wrapper.DistributionType.ALL
 }

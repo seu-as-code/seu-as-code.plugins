@@ -17,9 +17,11 @@ package de.qaware.seu.as.code.plugins.base
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
+import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.temporaryDatastore
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
 import static org.hamcrest.Matchers.is
 import static spock.util.matcher.HamcrestSupport.expect
@@ -32,6 +34,9 @@ import static spock.util.matcher.HamcrestSupport.expect
 class DetroySeuTaskSpec extends Specification {
     static final String TEST_DESTROY_SEU = 'testDestroySeu'
 
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File seuHome
 
@@ -40,13 +45,11 @@ class DetroySeuTaskSpec extends Specification {
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        seuHome = File.createTempDir()
-
+        seuHome = folder.newFolder()
         testLayout = defaultLayout(seuHome)
         testLayout.mkdirs()
 
-        testDatastore = defaultDatastore()
-        testDatastore.url = 'jdbc:h2:./build/destroy'
+        testDatastore = temporaryDatastore()
     }
 
     def "Define DestroySeuTask and destroy a SEU layout"() {
@@ -54,7 +57,7 @@ class DetroySeuTaskSpec extends Specification {
         DestroySeuTask task = project.task(TEST_DESTROY_SEU, type: DestroySeuTask) {
             layout = testLayout
             datastore = testDatastore
-        }
+        } as DestroySeuTask
 
         when: "we destroy the SEU"
         task.destroy()

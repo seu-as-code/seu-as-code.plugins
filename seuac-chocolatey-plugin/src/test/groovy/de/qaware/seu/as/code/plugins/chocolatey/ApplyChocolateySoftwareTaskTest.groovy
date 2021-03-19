@@ -22,6 +22,8 @@ import de.qaware.seu.as.code.plugins.base.SeuacLayout
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Requires
 import spock.lang.Specification
 
@@ -30,6 +32,9 @@ import spock.lang.Specification
  */
 @Requires({ os.windows })
 class ApplyChocolateySoftwareTaskTest extends Specification {
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
 
     Project project
     SeuacDatastore defaultDatastore
@@ -43,7 +48,7 @@ class ApplyChocolateySoftwareTaskTest extends Specification {
     void setup() {
         project = ProjectBuilder.builder().build()
 
-        home = File.createTempDir()
+        home = folder.newFolder()
         defaultLayout = SeuacLayout.defaultLayout(home)
 
         project.apply plugin: 'seuac-chocolatey'
@@ -52,8 +57,7 @@ class ApplyChocolateySoftwareTaskTest extends Specification {
         // explicit version
         kubernetesDependency = project.dependencies.add('choco', ':kubernetes-cli:1.10.1')
 
-        defaultDatastore = SeuacDatastore.defaultDatastore()
-        defaultDatastore.url = 'jdbc:h2:./build/seuac'
+        defaultDatastore = SeuacDatastore.temporaryDatastore()
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
 
         project.seuAsCode {
@@ -72,17 +76,13 @@ class ApplyChocolateySoftwareTaskTest extends Specification {
 
     }
 
-    void cleanup() {
-        provider.clear()
-    }
-
     def "Exec"() {
         setup:
         ApplyChocolateySoftwareTask task = project.task("applyChocolateySoftwareTask", type: ApplyChocolateySoftwareTask) {
             chocolateyBasePath = new File(home, 'chocolatey')
             datastore = defaultDatastore
             choco = project.configurations.choco
-        }
+        } as ApplyChocolateySoftwareTask
         when:
         task.exec()
         provider.storeDependency(helmDependency, [project.fileTree(new File("$home/chocolatey/lib/kubernetes-helm/"))], 'choco')

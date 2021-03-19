@@ -18,6 +18,7 @@ package de.qaware.seu.as.code.plugins.base
 import groovy.sql.Sql
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.file.FileTree
+import org.h2.Driver
 
 /**
  * This data store provider uses SQL and an embedded H2 DB to persist the SEU configuration.
@@ -27,12 +28,6 @@ import org.gradle.api.file.FileTree
 class JdbcH2DatastoreProvider extends DatastoreProvider {
 
     /**
-     * The SQL database instance. Will be lazily initialized on first access.
-     */
-    @Lazy
-    protected Sql database = { Sql.newInstance(url, user, password, 'org.h2.Driver') }()
-
-    /**
      * Convenience constructor via a SeuacDatastore instance. Registers a shutdown hook when
      * instance is created that closes. the internal H2 DB automatically.
      *
@@ -40,7 +35,21 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
      */
     JdbcH2DatastoreProvider(SeuacDatastore ds) {
         super(ds)
-        addShutdownHook { database.close() }
+        init()
+    }
+
+    def withDb(Closure closure) {
+        // Referencing the H2 Driver directly here, because Groovy can not find the Driver when running
+        // the plugin.
+        // The workaround described in
+        // https://stackoverflow.com/questions/6329872/how-to-add-external-jar-files-to-gradle-build-script
+        // does not work with JDK 11 anymore.
+        Properties info = new Properties();
+        info.put("user", user);
+        info.put("password", password);
+        Driver.load().connect(url, info).withCloseable {
+            closure(new Sql(it))
+        }
     }
 
     /**
@@ -48,7 +57,7 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
      */
     @Override
     void clear() {
-        database.execute 'drop table if exists dependencies'
+        withDb { sql -> sql.execute 'drop table if exists dependencies' }
     }
 
     /**
@@ -56,15 +65,17 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
      */
     @Override
     void init() {
-        database.execute 'create table if not exists dependencies(configuration varchar(255), dependency varchar(255), file varchar(255))'
+        withDb { sql -> sql.execute 'create table if not exists dependencies(configuration varchar(255), dependency varchar(255), file varchar(255))' }
     }
 
     @Override
     void storeDependency(Dependency dependency, List<FileTree> files, String configuration) {
-        files.each {
-            it.visit { element ->
-                def params = [configuration, getDependencyId(dependency), element.relativePath.toString()]
-                database.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)', params
+        withDb { sql ->
+            files.each { fileTree ->
+                fileTree.visit { element ->
+                    def params = [configuration, getDependencyId(dependency), element.relativePath.toString()]
+                    sql.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)', params
+                }
             }
         }
     }
@@ -73,8 +84,10 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
     Set<String> findAllObsoleteDeps(Set<Dependency> dependencies, String configuration) {
         def obsoleteDeps = []
         def params = [c: configuration]
-        database.eachRow('select distinct dependency from dependencies where configuration=:c', params) {
-            obsoleteDeps << it.dependency
+        withDb { sql ->
+            sql.eachRow('select distinct dependency from dependencies where configuration=:c', params) {
+                obsoleteDeps << it.dependency
+            }
         }
 
         obsoleteDeps = obsoleteDeps as Set
@@ -85,10 +98,12 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
     @Override
     Set<String> findAllFiles(Set<String> dependencyIds, String configuration) {
         def files = []
-        dependencyIds.each {
-            def params = [c: configuration, d: it]
-            database.eachRow('select file from dependencies where configuration=:c and dependency=:d', params) {
-                files << it.file
+        withDb { sql ->
+            dependencyIds.each {
+                def params = [c: configuration, d: it]
+                sql.eachRow('select file from dependencies where configuration=:c and dependency=:d', params) {
+                    files << it.file
+                }
             }
         }
         files
@@ -96,10 +111,14 @@ class JdbcH2DatastoreProvider extends DatastoreProvider {
 
     @Override
     Set<Dependency> findAllIncomingDeps(Set<Dependency> dependencies, String configuration) {
-        dependencies.findAll { Dependency d ->
-            def params = [c: configuration, d: getDependencyId(d)]
-            def rows = database.rows 'select * from dependencies where configuration=:c and dependency=:d', params
-            rows.isEmpty()
+        def deps = []
+        withDb { sql ->
+            deps = dependencies.findAll { Dependency d ->
+                def params = [c: configuration, d: getDependencyId(d)]
+                def rows = sql.rows 'select * from dependencies where configuration=:c and dependency=:d', params
+                rows.isEmpty()
+            }
         }
+        deps
     }
 }

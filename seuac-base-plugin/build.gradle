@@ -15,28 +15,22 @@
  */
 
 dependencies {
-	compile 'org.codehaus.groovy.modules.scriptom:scriptom:1.6.0'
-    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-	
-    compile 'org.mapdb:mapdb:1.0.8'
-    compile 'com.h2database:h2:1.4.188'
+    implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+
+    implementation 'org.mapdb:mapdb:1.0.8'
+    implementation 'com.h2database:h2:1.4.200'
 }
 
-task copyTestResources(type: Copy) {
-    from "${projectDir}/src/test/resources"
-    into "${buildDir}/classes/test"
-}
-processTestResources.dependsOn copyTestResources
-
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'javadoc'
-    from groovydoc.destinationDir
+sourceSets {
+    main {
+        output.setResourcesDir(file("${buildDir}/classes/java/main"))
+    }
+    test {
+        output.setResourcesDir(file("${buildDir}/classes/groovy/test"))
+    }
 }
 
-artifacts {
-    archives sourcesJar
-    archives groovydocJar
-}
+javadocJar.from(groovydoc.outputs)
 
 def pomConfig = {
 
@@ -82,8 +76,6 @@ publishing {
     publications {
         basePlugin(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact groovydocJar
 
             pom.withXml {
                 asNode().appendNode('name', project.displayName)
@@ -91,16 +83,6 @@ publishing {
                 asNode().appendNode('url', project.websiteUrl)
 
                 asNode().children().last() + pomConfig
-            }
-        }
-    }
-    repositories {
-        // set the properties via -P to publish to your company repo
-        maven {
-            url = project.hasProperty('nexusUrl') ? project.nexusUrl : ''
-            credentials {
-                username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
-                password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
             }
         }
     }

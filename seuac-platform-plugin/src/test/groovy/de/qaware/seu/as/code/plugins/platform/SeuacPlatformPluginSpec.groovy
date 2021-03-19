@@ -44,17 +44,17 @@ class SeuacPlatformPluginSpec extends Specification {
         project.platform {
             win {
                 dependencies {
-                    testCompile group: 'junit', name: 'junit', version: '4.12'
+                    testImplementation group: 'junit', name: 'junit', version: '4.12'
                 }
             }
             mac {
                 dependencies {
-                    testCompile group: 'junit', name: 'junit', version: '4.12'
+                    testImplementation group: 'junit', name: 'junit', version: '4.12'
                 }
             }
             unix {
                 dependencies {
-                    testCompile group: 'junit', name: 'junit', version: '4.12'
+                    testImplementation group: 'junit', name: 'junit', version: '4.12'
                 }
             }
         }

@@ -38,14 +38,14 @@ import java.nio.file.Paths
  * The target path can be configured.
  */
 class InstallChocolateyTask extends DefaultTask {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InstallChocolateyTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstallChocolateyTask.class)
 
     @Input
     File chocolateyBasePath
 
     @Inject
     protected ExecActionFactory getExecActionFactory() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException()
     }
 
     InstallChocolateyTask() {
@@ -54,7 +54,7 @@ class InstallChocolateyTask extends DefaultTask {
     }
 
     @OutputFile
-    public File getOutputFile() {
+    File getOutputFile() {
         // set-env-choco.cmd is created as last step during installation
         // It can be used to check wheter an valid installation exists or not
         return new File(chocolateyBasePath.getParent(),"set-env-choco.cmd")
@@ -122,6 +122,7 @@ class InstallChocolateyTask extends DefaultTask {
 
     private File downloadChocolatey() {
         File tmpZip = File.createTempFile('chocolatey', '.zip')
+        tmpZip.deleteOnExit()
         def download = new DownloadAction(project)
         download.src 'https://chocolatey.org/api/v2/package/chocolatey/'
         download.dest tmpZip
@@ -158,7 +159,7 @@ class InstallChocolateyTask extends DefaultTask {
 
     private void disableNonElevatedRightsWarning() {
         def configFile = new File(chocolateyBasePath, 'config/chocolatey.config')
-        def chocolatey = new XmlSlurper().parse(configFile);
+        def chocolatey = new XmlSlurper().parse(configFile)
         def nonElevatedWarnings = chocolatey.features.feature.find {
             it.@name="showNonElevatedWarnings"
         }

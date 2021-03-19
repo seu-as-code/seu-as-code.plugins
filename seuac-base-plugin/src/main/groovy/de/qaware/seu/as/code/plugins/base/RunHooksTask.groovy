@@ -19,6 +19,7 @@ import groovy.io.FileType
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -31,13 +32,16 @@ class RunHooksTask extends DefaultTask {
     @Input
     String seuHome
 
+    @Input
     String projectName
 
+    @Nested
     SeuacLayout seuLayout
 
     @InputDirectory
     File target
 
+    @Input
     boolean deleteHooks = true
 
     /**

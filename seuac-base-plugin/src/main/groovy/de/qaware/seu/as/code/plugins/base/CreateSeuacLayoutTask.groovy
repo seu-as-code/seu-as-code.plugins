@@ -17,7 +17,7 @@ package de.qaware.seu.as.code.plugins.base
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.tasks.OutputDirectories
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -27,10 +27,8 @@ import org.gradle.api.tasks.TaskAction
  */
 class CreateSeuacLayoutTask extends DefaultTask {
 
+    @Nested
     SeuacLayout layout
-
-    @OutputDirectories
-    def directories
 
     /**
      * Initialize the group and description for this task.

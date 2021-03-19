@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.git
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -31,16 +33,16 @@ import static spock.util.matcher.HamcrestSupport.that
  */
 class GitCommitTaskSpec extends Specification {
     static final String TEST_GIT_COMMIT = 'testGitCommit'
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File directory
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        directory = File.createTempDir()
-    }
-
-    void cleanup() {
-        directory.deleteDir()
+        directory = folder.newFolder()
     }
 
     def "Define GitCommitTask"() {
@@ -82,7 +84,7 @@ class GitCommitTaskSpec extends Specification {
         when: "we define and invoke the commit task"
         GitCommitTask task = project.task(TEST_GIT_COMMIT, type: GitCommitTask) {
             directory = this.directory
-        }
+        } as GitCommitTask
         task.doCommit()
 
         then: "the task is defined but threw an exception"

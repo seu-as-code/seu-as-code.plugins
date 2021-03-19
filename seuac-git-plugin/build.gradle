@@ -15,20 +15,12 @@
  */
 
 dependencies {
-    compile 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'
-    compile 'org.eclipse.jgit:org.eclipse.jgit.ant:3.7.1.201504261725-r'
-    compile 'com.jcraft:jsch:0.1.53'
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'
+    implementation 'org.eclipse.jgit:org.eclipse.jgit.ant:3.7.1.201504261725-r'
+    implementation 'com.jcraft:jsch:0.1.53'
 }
 
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'javadoc'
-    from groovydoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives groovydocJar
-}
+javadocJar.from(groovydoc.outputs)
 
 def pomConfig = {
 
@@ -74,8 +66,6 @@ publishing {
     publications {
         gitPlugin(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact groovydocJar
 
             pom.withXml {
                 asNode().appendNode('name', project.displayName)
@@ -83,16 +73,6 @@ publishing {
                 asNode().appendNode('url', project.websiteUrl)
 
                 asNode().children().last() + pomConfig
-            }
-        }
-    }
-    repositories {
-        // set the properties via -P to publish to your company repo
-        maven {
-            url = project.hasProperty('nexusUrl') ? project.nexusUrl : ''
-            credentials {
-                username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
-                password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
             }
         }
     }

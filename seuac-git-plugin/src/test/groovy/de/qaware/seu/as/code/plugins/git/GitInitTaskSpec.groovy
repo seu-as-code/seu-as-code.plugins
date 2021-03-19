@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.git
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -31,16 +33,16 @@ import static spock.util.matcher.HamcrestSupport.that
  */
 class GitInitTaskSpec extends Specification {
     static final String TEST_GIT_INIT = 'testGitInit'
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File directory
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        directory = File.createTempDir()
-    }
-
-    void cleanup() {
-        directory.deleteDir()
+        directory = folder.newFolder()
     }
 
     def "Define GitInitTask"() {
@@ -53,7 +55,7 @@ class GitInitTaskSpec extends Specification {
         }
 
         then: "we expect to find the task correctly configured"
-        GitInitTask task = project.tasks.findByName(TEST_GIT_INIT)
+        GitInitTask task = project.tasks.findByName(TEST_GIT_INIT) as GitInitTask
         expect task, notNullValue()
         expect task.group, equalTo('Version Control')
         expect task.directory, notNullValue()
@@ -67,7 +69,7 @@ class GitInitTaskSpec extends Specification {
         project.configurations.create('jgit')
         GitInitTask task = project.task(TEST_GIT_INIT, type: GitInitTask) {
             directory = this.directory
-        }
+        } as GitInitTask
         task.doInit()
 
         then: "the task is defined and a new repo has been initialized"

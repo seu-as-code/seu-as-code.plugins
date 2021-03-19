@@ -16,7 +16,6 @@
 package de.qaware.seu.as.code.plugins.base
 
 import static de.qaware.seu.as.code.plugins.base.SeuacBanner.defaultBanner
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
 
 /**
@@ -88,20 +87,19 @@ class SeuacExtension {
     /**
      * Short hand method to set the datastore.
      *
-     * @param aLayout the datastore
+     * @param aDatastore the datastore
      */
     void datastore(SeuacDatastore aDatastore) {
         this.datastore = aDatastore
     }
 
     /**
-     * Get the datastore for this extension. If no datastore has been
-     * set explicitly, we will return the default.
+     * Get the datastore for this extension.
      *
-     * @return the SeuacLayout
+     * @return the datestore
      */
     SeuacDatastore getDatastore() {
-        datastore ?: defaultDatastore()
+        datastore
     }
 
     /**

@@ -17,9 +17,11 @@ package de.qaware.seu.as.code.plugins.base
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
+import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.temporaryDatastore
 
 /**
  * Test specification for the ApplyConfigurationTask functionality.
@@ -34,20 +36,22 @@ class ApplyConfigurationTaskSpec extends Specification {
     File repo
     DatastoreProvider provider
 
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     def setup() {
         project = ProjectBuilder.builder().build()
         project.configurations.create('software')
 
-        repo = new File(RunHooksTaskSpec.getResource("/").toURI())
+        repo = new File(ApplyConfigurationTaskSpec.getResource("/").toURI())
         project.repositories.flatDir {
             dirs repo
         }
         project.dependencies.add('software', ':seuac-test:1.0.0@zip')
 
-        seuHome = File.createTempDir()
+        seuHome = folder.newFolder()
 
-        defaultDatastore = defaultDatastore()
-        defaultDatastore.url = 'jdbc:h2:./build/seuac'
+        defaultDatastore = temporaryDatastore()
 
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
         provider.reset()
@@ -60,7 +64,7 @@ class ApplyConfigurationTaskSpec extends Specification {
             target = seuHome
             datastore = defaultDatastore
             withEmptyDirs = false
-        }
+        } as ApplyConfigurationTask
 
         when: "we apply the software configuration"
         task.doApply()

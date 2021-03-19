@@ -15,18 +15,10 @@
  */
 
 dependencies {
-    compile 'org.tmatesoft.svnkit:svnkit:1.8.10'
+    implementation 'org.tmatesoft.svnkit:svnkit:1.8.10'
 }
 
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'javadoc'
-    from groovydoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives groovydocJar
-}
+javadocJar.from(groovydoc.outputs)
 
 def pomConfig = {
 
@@ -72,8 +64,6 @@ publishing {
     publications {
         svnPlugin(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact groovydocJar
 
             pom.withXml {
                 asNode().appendNode('name', project.displayName)
@@ -81,16 +71,6 @@ publishing {
                 asNode().appendNode('url', project.websiteUrl)
 
                 asNode().children().last() + pomConfig
-            }
-        }
-    }
-    repositories {
-        // set the properties via -P to publish to your company repo
-        maven {
-            url = project.hasProperty('nexusUrl') ? project.nexusUrl : ''
-            credentials {
-                username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
-                password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
             }
         }
     }

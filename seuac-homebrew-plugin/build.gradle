@@ -15,25 +15,20 @@
  */
 
 dependencies {
-    compile project(':seuac-base-plugin')
-    compile 'de.undercouch:gradle-download-task:3.2.0'
+    implementation project(':seuac-base-plugin')
+    implementation 'de.undercouch:gradle-download-task:3.2.0'
 }
 
-task copyTestResources(type: Copy) {
-    from "${projectDir}/src/test/resources"
-    into "${buildDir}/classes/test"
-}
-processTestResources.dependsOn copyTestResources
-
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'javadoc'
-    from groovydoc.destinationDir
+sourceSets {
+    main {
+        output.setResourcesDir(file("${buildDir}/classes/java/main"))
+    }
+    test {
+        output.setResourcesDir(file("${buildDir}/classes/groovy/test"))
+    }
 }
 
-artifacts {
-    archives sourcesJar
-    archives groovydocJar
-}
+javadocJar.from(groovydoc.outputs)
 
 def pomConfig = {
 
@@ -79,8 +74,6 @@ publishing {
     publications {
         homebrewPlugin(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact groovydocJar
 
             pom.withXml {
                 asNode().appendNode('name', project.displayName)
@@ -88,16 +81,6 @@ publishing {
                 asNode().appendNode('url', project.websiteUrl)
 
                 asNode().children().last() + pomConfig
-            }
-        }
-    }
-    repositories {
-        // set the properties via -P to publish to your company repo
-        maven {
-            url = project.hasProperty('nexusUrl') ? project.nexusUrl : ''
-            credentials {
-                username = project.hasProperty('nexusUsername') ? project.nexusUsername : ''
-                password = project.hasProperty('nexusPassword') ? project.nexusPassword : ''
             }
         }
     }

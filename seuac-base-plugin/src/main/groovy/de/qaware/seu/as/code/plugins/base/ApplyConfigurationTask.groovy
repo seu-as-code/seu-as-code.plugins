@@ -19,6 +19,8 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Nested
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -29,10 +31,13 @@ import org.gradle.api.tasks.TaskAction
  */
 class ApplyConfigurationTask extends DefaultTask {
 
-    @Input
+    @Nested
     Configuration source
+    @OutputDirectory
     File target
+    @Input
     boolean withEmptyDirs = true
+    @Nested
     SeuacDatastore datastore
 
     /**

@@ -20,7 +20,7 @@ import org.gradle.api.artifacts.Dependency
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
+import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.temporaryDatastore
 import static org.hamcrest.Matchers.*
 import static spock.util.matcher.HamcrestSupport.expect
 import static spock.util.matcher.HamcrestSupport.that
@@ -42,16 +42,19 @@ class JdbcH2DatastoreProviderSpec extends Specification {
         dependency = Mock(Dependency)
         testFile = new File(RunHooksTaskSpec.getResource("/seuac-test-1.0.0.zip").toURI())
 
-        def datastore = defaultDatastore()
-        datastore.url = 'jdbc:h2:./build/seuac'
+        def datastore = temporaryDatastore()
         provider = new JdbcH2DatastoreProvider(datastore)
         provider.reset()
 
-        provider.database.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
-                ['software', 'de.qaware.seu:seuac-base:1.0.0', 'set-env.cmd']
+        provider.withDb { sql ->
+            sql.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
+                    ['software', 'de.qaware.seu:seuac-base:1.0.0', 'set-env.cmd']
+        }
 
-        provider.database.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
-                ['home', 'de.qaware.seu:seuac-home:1.0.0', '.bashrc']
+        provider.withDb { sql ->
+            sql.execute 'insert into dependencies (configuration, dependency, file) values (?, ?, ?)',
+                    ['home', 'de.qaware.seu:seuac-home:1.0.0', '.bashrc']
+        }
     }
 
     def "Check for correct simple dependencyId"() {

@@ -27,7 +27,7 @@ class DatastoreProviderFactory {
 
     private def providers = ['jdbc:h2': JdbcH2DatastoreProvider, 'file:mapdb': MapDbDatastoreProvider]
 
-    private def instances = [:]
+    private Map<String, DatastoreProvider> instances = [:]
 
     /**
      * Creates a suitable PersistenceService instance for the given data store config.
@@ -36,18 +36,26 @@ class DatastoreProviderFactory {
      * @return a suitable persistence service
      */
     DatastoreProvider get(SeuacDatastore datastore) {
-        def key = keyFor(datastore)
-
-        if (instances[key] == null) {
-            def providerClass = providers[keyFor(datastore)]
-            if (providerClass == null) throw new GradleException("Unsupported PersistenceService for $datastore.url")
-            instances[key] = providerClass.newInstance(datastore)
+        if (instances[datastore.url] == null) {
+            def providerClass = getProviderClass(datastore)
+            instances[datastore.url] = providerClass.newInstance(datastore)
         }
-        instances[key]
+        instances[datastore.url]
+    }
+
+    Class<?> getProviderClass(SeuacDatastore datastore) {
+        def key = keyFor(datastore)
+        def providerClass = providers[key]
+        if (providerClass == null) throw new GradleException("Unsupported PersistenceService for $datastore.url")
+        return providerClass
     }
 
     private String keyFor(SeuacDatastore datastore) {
-        def url = datastore.url
-        url.substring(0, url.lastIndexOf(':'))
+        for (def key : providers.keySet()) {
+            if (datastore.url.startsWith(key)) {
+                return key
+            }
+        }
+        return ""
     }
 }

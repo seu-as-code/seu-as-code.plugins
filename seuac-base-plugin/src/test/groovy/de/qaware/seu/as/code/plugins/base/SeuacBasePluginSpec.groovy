@@ -17,6 +17,8 @@ package de.qaware.seu.as.code.plugins.base
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
@@ -31,6 +33,9 @@ import static spock.util.matcher.HamcrestSupport.expect
  */
 class SeuacBasePluginSpec extends Specification {
 
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     File home
     SeuacLayout defaultLayout
     Project project
@@ -41,7 +46,7 @@ class SeuacBasePluginSpec extends Specification {
             dirs new File(RunHooksTaskSpec.getResource("/").toURI())
         }
 
-        home = File.createTempDir()
+        home = folder.newFolder()
         defaultLayout = defaultLayout(home)
     }
 
@@ -49,7 +54,6 @@ class SeuacBasePluginSpec extends Specification {
         setup: "the plugin, apply it and configure the convention"
         project.apply plugin: 'seuac-base'
 
-        project.dependencies.add('seuac', ':h2:1.3.176')
         project.dependencies.add('software', ':seuac-test:1.0.0@zip')
 
         project.seuAsCode {

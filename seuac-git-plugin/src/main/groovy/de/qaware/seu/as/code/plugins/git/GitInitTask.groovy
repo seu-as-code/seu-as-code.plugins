@@ -28,9 +28,9 @@ class GitInitTask extends AbstractGitTask {
     @TaskAction
     def doInit() {
         withExceptionHandling('Could not initialize Git repository.') {
-            InitCommand init = Git.init();
-            init.setBare(false).setDirectory(directory);
-            init.call();
+            InitCommand init = Git.init()
+            init.setBare(false).setDirectory(directory)
+            init.call()
         }
     }
 }

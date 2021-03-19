@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.git
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -31,16 +33,16 @@ import static spock.util.matcher.HamcrestSupport.that
  */
 class GitCloneTaskSpec extends Specification {
     static final String TEST_GIT_CLONE = 'testGitClone'
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File directory
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        directory = File.createTempDir()
-    }
-
-    void cleanup() {
-        directory.deleteDir()
+        directory = folder.newFolder()
     }
 
     def "Define GitCloneTask"() {
@@ -75,7 +77,7 @@ class GitCloneTaskSpec extends Specification {
         task.cloneAllBranches == options.cloneAllBranches
         task.cloneSubmodules == options.cloneSubmodules
         task.noCheckout == options.noCheckout
-        task.timeout == options.timeout
+        task.gitTimeout == options.timeout
     }
 
     def "Invoke doClone"() {
@@ -87,7 +89,7 @@ class GitCloneTaskSpec extends Specification {
         GitCloneTask task = project.task(TEST_GIT_CLONE, type: GitCloneTask) {
             url = "https://github.com/qaware/QAseuac.git"
             directory = this.directory
-        }
+        } as GitCloneTask
         task.doClone()
 
         then: "the task is defined but threw an exception"
@@ -106,7 +108,7 @@ class GitCloneTaskSpec extends Specification {
             directory = this.directory
             singleBranch = true
             branch = "refs/heads/base-plugin"
-        }
+        } as GitCloneTask
         task.doClone()
 
         then:

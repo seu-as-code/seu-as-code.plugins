@@ -19,7 +19,7 @@ import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
-import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.defaultDatastore
+import static de.qaware.seu.as.code.plugins.base.SeuacDatastore.temporaryDatastore
 
 /**
  * Test specification for the StoreSeuacDbTask.
@@ -35,7 +35,7 @@ class StoreSeuacDbTaskSpec extends Specification {
     void setup() {
         project = ProjectBuilder.builder().build()
         project.repositories.flatDir {
-            dirs new File(RunHooksTaskSpec.getResource("/").toURI())
+            dirs new File(StoreSeuacDbTaskSpec.getResource("/").toURI())
         }
 
         project.configurations.create('software')
@@ -44,8 +44,7 @@ class StoreSeuacDbTaskSpec extends Specification {
         project.configurations.create('home')
         project.dependencies.add('home', ':seuac-test:1.0.0@zip')
 
-        defaultDatastore = defaultDatastore()
-        defaultDatastore.url = 'jdbc:h2:./build/seuac'
+        defaultDatastore = temporaryDatastore()
         provider = new JdbcH2DatastoreProvider(defaultDatastore)
     }
 
@@ -53,7 +52,7 @@ class StoreSeuacDbTaskSpec extends Specification {
         given: "a configured StoreSeuacDbTask"
         StoreSeuacDbTask task = project.task("storeSeuacDb", type: StoreSeuacDbTask) {
             datastore = defaultDatastore
-        }
+        } as StoreSeuacDbTask
 
         when: "we store the DB"
         task.storeSeuacDb()

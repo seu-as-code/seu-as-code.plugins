@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.git
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.*
@@ -29,16 +31,16 @@ import static spock.util.matcher.HamcrestSupport.expect
  * @author lreimer
  */
 class GitPluginSpec extends Specification {
+
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     Project project
     File directory
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        directory = File.createTempDir()
-    }
-
-    void cleanup() {
-        directory.deleteDir()
+        directory = folder.newFolder()
     }
 
     def "Apply Git plugin to project"() {
@@ -102,7 +104,7 @@ class GitPluginSpec extends Specification {
         expect gitCloneCode.singleBranch, is(true)
         expect gitCloneCode.cloneSubmodules, is(true)
         expect gitCloneCode.noCheckout, is(true)
-        expect gitCloneCode.timeout, is(300)
+        expect gitCloneCode.gitTimeout, is(300)
 
         def gitCloneWiki = project.tasks.gitCloneWiki
         expect gitCloneWiki, notNullValue()
@@ -113,23 +115,18 @@ class GitPluginSpec extends Specification {
         expect gitCloneWiki.password, nullValue()
         expect gitCloneWiki.directory, notNullValue()
 
-        expect gitInitAll.dependsOn, hasSize(3)
         expect gitInitAll.dependsOn, hasItem(project.tasks.gitInitCode)
         expect gitInitAll.dependsOn, hasItem(project.tasks.gitInitWiki)
 
-        expect gitCloneAll.dependsOn, hasSize(3)
         expect gitCloneAll.dependsOn, hasItem(gitCloneCode)
         expect gitCloneAll.dependsOn, hasItem(gitCloneWiki)
 
-        expect gitPullAll.dependsOn, hasSize(3)
         expect gitPullAll.dependsOn, hasItem(project.tasks.gitPullCode)
         expect gitPullAll.dependsOn, hasItem(project.tasks.gitPullWiki)
 
-        expect gitPushAll.dependsOn, hasSize(3)
         expect gitPushAll.dependsOn, hasItem(project.tasks.gitPushCode)
         expect gitPushAll.dependsOn, hasItem(project.tasks.gitPushWiki)
 
-        expect gitStatusAll.dependsOn, hasSize(3)
         expect gitStatusAll.dependsOn, hasItem(project.tasks.gitStatusCode)
         expect gitStatusAll.dependsOn, hasItem(project.tasks.gitStatusWiki)
 

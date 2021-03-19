@@ -18,6 +18,8 @@ package de.qaware.seu.as.code.plugins.chocolatey
 import de.qaware.seu.as.code.plugins.base.SeuacLayout
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Requires
 import spock.lang.Specification
 
@@ -29,6 +31,9 @@ import static de.qaware.seu.as.code.plugins.base.SeuacLayout.defaultLayout
 @Requires({ os.windows })
 class InstallChocolateyTaskTest extends Specification {
 
+    @Rule
+    TemporaryFolder folder = new TemporaryFolder()
+
     File home
     SeuacLayout defaultLayout
     Project project
@@ -36,7 +41,7 @@ class InstallChocolateyTaskTest extends Specification {
     void setup() {
         project = ProjectBuilder.builder().build()
 
-        home = File.createTempDir()
+        home = folder.newFolder()
         defaultLayout = defaultLayout(home)
 
         project.apply plugin: 'seuac-chocolatey'
@@ -53,7 +58,7 @@ class InstallChocolateyTaskTest extends Specification {
         setup:
         InstallChocolateyTask task = project.task("installChocoTask", type: InstallChocolateyTask) {
             chocolateyBasePath = new File(home, 'chocolatey')
-        }
+        } as InstallChocolateyTask
         when:
         doInstallSave(task)
         then:
@@ -67,14 +72,14 @@ class InstallChocolateyTaskTest extends Specification {
         chocolateyPath.mkdirs()
         InstallChocolateyTask task = project.task("installChocoTask", type: InstallChocolateyTask) {
             chocolateyBasePath = new File(home, 'chocolatey')
-        }
+        } as InstallChocolateyTask
         when:
         doInstallSave(task)
         then:
         assert !new File(home, 'chocolatey/lib/chocolatey.nupkg').exists()
     }
 
-    private void doInstallSave(InstallChocolateyTask task) {
+    private static void doInstallSave(InstallChocolateyTask task) {
         try {
             task.doInstall()
         } catch (org.gradle.api.resources.ResourceException e) {
@@ -84,7 +89,7 @@ class InstallChocolateyTaskTest extends Specification {
 
     private boolean isElevatedRightwarningDisabled() {
         def configFile = new File(home, 'chocolatey/config/chocolatey.config')
-        def chocolatey = new XmlSlurper().parse(configFile);
+        def chocolatey = new XmlSlurper().parse(configFile)
         def nonElevatedWarnings = chocolatey.features.feature.find {
             it.@name="showNonElevatedWarnings"
         }

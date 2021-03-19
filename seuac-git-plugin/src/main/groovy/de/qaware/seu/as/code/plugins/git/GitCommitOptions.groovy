@@ -15,19 +15,28 @@
  */
 package de.qaware.seu.as.code.plugins.git
 
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Nested
+
 /**
  * Simple data class to model additional options for the GitCommitTask.
  *
  * @author lreimer
  */
 class GitCommitOptions {
+    @Input
     String message = ''
 
+    @Input
     boolean all = true
+    @Input
     boolean noVerify
+    @Input
     boolean amend
 
+    @Nested
     private GitUser author
+    @Nested
     private GitUser committer
 
     /**

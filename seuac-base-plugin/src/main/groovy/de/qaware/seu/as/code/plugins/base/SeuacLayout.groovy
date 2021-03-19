@@ -15,17 +15,26 @@
  */
 package de.qaware.seu.as.code.plugins.base
 
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputDirectory
+
 /**
  * Simple data type to represent the directory layout of a SEU.
  *
  * @author lreimer
  */
 class SeuacLayout {
+    @OutputDirectory
     File codebase
+    @OutputDirectory
     File docbase
+    @OutputDirectory
     File home
+    @OutputDirectory
     File repository
+    @OutputDirectory
     File software
+    @OutputDirectory
     File temp
 
     /**
@@ -142,7 +151,7 @@ class SeuacLayout {
      * @throws IOException in case if I/O problems
      */
     void mkdirs() throws IOException {
-        getMissingDirectories().each { File d -> d.mkdirs() }
+        getDirectories().each { d -> d.mkdirs() }
     }
 
     /**
@@ -151,7 +160,7 @@ class SeuacLayout {
      * @throws IOException in case if I/O problems
      */
     void rmdirs() throws IOException {
-        getDirectories().each { File d -> d.deleteDir() }
+        getDirectories().each { d -> d.deleteDir() }
     }
 
     /**
@@ -176,6 +185,7 @@ class SeuacLayout {
      *
      * @return the directory list
      */
+    @Internal
     def getDirectories() {
         def directories = []
 
@@ -185,24 +195,6 @@ class SeuacLayout {
         if (repository) directories << repository
         if (software) directories << software
         if (temp) directories << temp
-
-        directories
-    }
-
-    /**
-     * Returns the list of missing directories for this layout.
-     *
-     * @return the directory list
-     */
-    def getMissingDirectories() {
-        def directories = []
-
-        if (codebase && !codebase.exists()) directories << codebase
-        if (docbase && !docbase.exists()) directories << docbase
-        if (home && !home.exists()) directories << home
-        if (repository && !repository.exists()) directories << repository
-        if (software && !software.exists()) directories << software
-        if (temp && !temp.exists()) directories << temp
 
         directories
     }
