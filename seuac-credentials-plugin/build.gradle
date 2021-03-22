@@ -15,8 +15,8 @@
  */
 
 dependencies {
-    implementation 'net.java.dev.jna:jna:4.2.0'
-    implementation 'net.java.dev.jna:jna-platform:4.2.0'
+    implementation 'net.java.dev.jna:jna:5.7.0'
+    implementation 'net.java.dev.jna:jna-platform:5.7.0'
 
     implementation 'org.apache.commons:commons-lang3:3.4'
     implementation 'commons-codec:commons-codec:1.10'
